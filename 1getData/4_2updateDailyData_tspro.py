@@ -54,10 +54,10 @@ stocks_inter=sorted(list(set(stocks_now).intersection(set(stocks_old))))
 count = 40
 for i in range(0, len(stocks_inter)):
     print('stocks_inter:'+str(i))
-    count -= 1
-    if count < 0:
-        time.sleep(30)
-        count = 40
+    # count -= 1
+    # if count < 0:
+    #     time.sleep(30)
+    #     count = 40
     ts_code = stocks_inter[i]
     name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
     print(name)
