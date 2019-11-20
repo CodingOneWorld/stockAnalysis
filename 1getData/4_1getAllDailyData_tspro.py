@@ -37,7 +37,9 @@ count = 40
 
 # 连接sqlite数据库
 conn = sqlite3.connect('P:/Money/stocks.db')
+c = conn.cursor()
 print("Opened database successfully")
+
 for i in range(0, len(stocks)):
     ts_code = stocks[i]
     print(i)
@@ -55,13 +57,12 @@ for i in range(0, len(stocks)):
     df2.reset_index(drop=True, inplace=True)
     df2['name'] = [name] * len(df2)
     # print(df2)
-    # 写入数据库
+    # 写入csv
     # df2.to_csv("D:/Money/stocks/" + ts_code + ".csv",index=None)
     data = df2.values
     # 创建表
     table_name = 'S' + data[0][0].split('.')[0]+'_daily'
     print(table_name)
-    c = conn.cursor()
     c.execute('''CREATE TABLE ''' + table_name + '''
                        (trade_date INT PRIMARY KEY     NOT NULL,
                        ts_code  TEXT,

@@ -25,14 +25,6 @@ stock_basic = pro.stock_basic(exchange='', list_status='L')
 print(stock_basic)
 stock_basic = stock_basic.values
 # print(stock_basic)
-# 获取所有正常上市的
-stocks = stock_basic['ts_code'].values
-stocks=[x[0:7] for x in stocks]
-print(stocks)
-
-# 查询股票的基本信息数据-tushare
-data = ts.get_stock_basics()
-data=data.values
 
 
 # 连接sqlite数据库
@@ -48,44 +40,16 @@ c.execute('''CREATE TABLE ''' + table_name + '''
                        area        TEXT,
                        industry     TEXT,
                        market   TEXT,
-                       list_date   INT,
-                       pe       DOUBLE,
-                       pb  DOUBLE,
-                       outstanding  DOUBLE,
-                       totals       DOUBLE,
-                       totalAssets  DOUBLE,
-                       liquidAssets DOUBLE,
-                       fixedAssets  DOUBLE,
-                       reserved DOUBLE,
-                       reservedPerShare DOUBLE,
-                       esp   DOUBLE,
-                       bvps    DOUBLE,
-                       timeToMarket      TEXT,
-                       undp  DOUBLE,
-                       perundp     DOUBLE,
-                       rev   DOUBLE,
-                       profit    DOUBLE,
-                       gpr   DOUBLE,
-                       npr    DOUBLE,
-                       holders INT)''')
+                       list_date   INT)''')
 conn.commit()
 for i in range(len(stock_basic)):
     print("Table created successfully")
     c.execute(
         "INSERT INTO " + table_name +
-        " (ts_code,symbol,code,name,area,industry,market,list_date,pe,outstanding,totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
-        esp,bvps,pb,timeToMarket,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
-        ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}',\
-                                      '{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}')".format(
-            stock_basic[i][0],data[i][0], data[i][1],
-            data[i][2], data[i][3],
-            data[i][4], data[i][5],
-            data[i][6], data[i][7],
-            data[i][8], data[i][9],
-            data[i][10], data[i][11],
-            data[i][12], data[i][13],
-            data[i][14], data[i][15],
-            data[i][16], data[i][17],
-            data[i][18], data[i][19],
-            data[i][20], data[i][21]))
+        " (ts_code,symbol,name,area,industry,market,list_date) VALUES \
+        ('{0}','{1}','{2}','{3}','{4}','{5}','{6}')".format(
+            stock_basic[i][0], stock_basic[i][0], stock_basic[i][1],
+            stock_basic[i][2], stock_basic[i][3],
+            stock_basic[i][4], stock_basic[i][5],
+            stock_basic[i][6]))
     conn.commit()
