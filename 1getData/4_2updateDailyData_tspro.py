@@ -61,15 +61,15 @@ for i in range(0, len(stocks_inter)):
     ts_code = stocks_inter[i]
     name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
     print(name)
-    # 查询日线数据
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date='20191116')
-    if df is None:
-        continue
-    df2 = df.sort_index(ascending=False)
+    # # 查询日线数据
+    # df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date='20191116')
+    # if df is None:
+    #     continue
+    # df2 = df.sort_index(ascending=False)
+    # # print(df2)
+    # df2.reset_index(drop=True, inplace=True)
+    # df2['name'] = [name] * len(df2)
     # print(df2)
-    df2.reset_index(drop=True, inplace=True)
-    df2['name'] = [name] * len(df2)
-    print(df2)
     # data = df2.values
     # # 向表中插入数据
     # table_name = 'S' + ts_code.split('.')[0]+'_daily'
