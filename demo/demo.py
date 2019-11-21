@@ -29,5 +29,14 @@ stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
 stocks_now = stock_basic['ts_code'].values
 print(stocks_now)
 
-if '000018.SZ' in set(stocks_now):
+# 查询股票的基本信息数据-tushare
+data = ts.get_stock_basics()
+stocks_ts=set(data.index)
+s_stocks=set(stocks_now).intersection(stocks_ts)
+
+
+if '600747.SH' in set(stocks_now):
+    print('true')
+
+if '600747.SH' in stocks_ts:
     print('true')
