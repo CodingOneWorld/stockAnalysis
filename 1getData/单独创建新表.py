@@ -33,6 +33,7 @@ stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
 
 ts_code ="688300.SH"
 
+
 name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
 df = ts.pro_bar(ts_code=ts_code, adj='qfq')
 df2 = df.sort_index(ascending=False)
