@@ -42,8 +42,13 @@ print(stocks_tspro)
 
 # ts
 data = ts.get_stock_basics()
-stocks_ts=set(data.index)
-
+stocks_ts=set([])
+for s in set(data.index):
+    if s.startswith('0') or s.startswith('3'):
+        stocks_ts.add(s+".SZ")
+    else:
+        stocks_ts.add(s+".SH")
+stocks_now=set(stocks_tspro).intersection(stocks_ts)
 
 # 查询数据库中已有的股票列表
 cursor = c.execute("SELECT ts_code,name from stock_basic_list")
@@ -53,7 +58,7 @@ for row in cursor:
 
 ## 针对数据库中已有的股票，进行数据追加写入
 # 最新股票列表与数据库中股票列表的交集
-stocks_inter=sorted(list(set(stocks_now).intersection(set(stocks_old))))
+stocks_inter=sorted(list(stocks_now.intersection(set(stocks_old))))
 
 # 基础积分每分钟内最多调取200次，每次4000条数据
 # 加入计数和睡眠，计数为200，睡眠一段时间
@@ -87,7 +92,7 @@ for i in range(0, len(stocks_inter)):
 
 ## 针对新上市的股票，建表，插入数据
 
-stocks_new=sorted(list(set(stocks_now).difference(set(stocks_old))))
+stocks_new=sorted(list(stocks_now.difference(set(stocks_old))))
 for i in range(0, len(stocks_new)):
     print('stocks_new:'+str(i))
     ts_code = stocks_new[i]
