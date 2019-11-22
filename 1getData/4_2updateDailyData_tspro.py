@@ -20,7 +20,6 @@ pd.set_option('expand_frame_repr', False)
 
 # 参数
 update_date="20191121"
-
 # path
 filepath = 'D:/Money/stocks/'
 
