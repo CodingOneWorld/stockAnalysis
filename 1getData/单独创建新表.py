@@ -27,6 +27,7 @@ print("Opened database successfully")
 # 查询最新的股票列表
 pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
+
 # 查询当前所有正常上市交易的股票列表
 stock_basic = pro.stock_basic(exchange='', list_status='L')
 stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
