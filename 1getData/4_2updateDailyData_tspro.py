@@ -18,6 +18,9 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
+# 参数
+update_date="20191121"
+
 # path
 filepath = 'D:/Money/stocks/'
 
@@ -62,18 +65,18 @@ stocks_inter=sorted(list(stocks_now.intersection(set(stocks_old))))
 
 # 基础积分每分钟内最多调取200次，每次4000条数据
 # 加入计数和睡眠，计数为200，睡眠一段时间
-count = 40
+count = 80
 for i in range(0, len(stocks_inter)):
     print('stocks_inter:'+str(i))
     count -= 1
     if count < 0:
-        time.sleep(30)
-        count = 40
+        time.sleep(10)
+        count = 80
     ts_code = stocks_inter[i]
     name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
     print(name)
     # 查询日线数据
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date='20191116')
+    df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date=update_date)
     if df is None:
         continue
     df2 = df.sort_index(ascending=False)
@@ -99,8 +102,8 @@ for i in range(0, len(stocks_new)):
     print(ts_code)
     count -= 1
     if count < 0:
-        time.sleep(30)
-        count = 40
+        time.sleep(10)
+        count = 80
     name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
     print(name)
     df = ts.pro_bar(ts_code=ts_code, adj='qfq')
