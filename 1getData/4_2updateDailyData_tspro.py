@@ -32,12 +32,18 @@ ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 # 查询最新的股票列表
 pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
-# 查询当前所有正常上市交易的股票列表
+# 查询当前所有正常上市交易的股票列表-是ts_pro与ts的股票列表的交集
+# ts_pro
 stock_basic = pro.stock_basic(exchange='', list_status='L')
 stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
 # print(stock_basic)
-stocks_now = stock_basic['ts_code'].values
-print(stocks_now)
+stocks_tspro = stock_basic['ts_code'].values
+print(stocks_tspro)
+
+# ts
+data = ts.get_stock_basics()
+stocks_ts=set(data.index)
+
 
 # 查询数据库中已有的股票列表
 cursor = c.execute("SELECT ts_code,name from stock_basic_list")
