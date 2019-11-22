@@ -1,0 +1,66 @@
+# -*- coding: utf-8 -*-
+
+import tushare as ts
+import pandas as pd
+import matplotlib.pyplot as plt
+import time
+import os
+import sqlite3
+
+# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+pd.set_option('display.max_columns', None)
+# 显示所有列
+pd.set_option('display.max_rows', None)
+# 设置数据的显示长度，默认为50
+pd.set_option('max_colwidth', 200)
+# 禁止自动换行(设置为Flase不自动换行，True反之)
+pd.set_option('expand_frame_repr', False)
+
+# path
+filepath = 'D:/Money/stocks/'
+
+# 连接sqlite数据库
+conn = sqlite3.connect('P:/Money/stocks.db')
+c = conn.cursor()
+print("Opened database successfully")
+
+# 查询最新的股票列表
+pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+
+
+# 查询当前所有正常上市交易的股票列表
+stock_basic = pro.stock_basic(exchange='', list_status='L')
+stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
+
+ts_code ="688300.SH"
+
+name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
+df = ts.pro_bar(ts_code=ts_code, adj='qfq')
+df2 = df.sort_index(ascending=False)
+# print(df2)
+df2.reset_index(drop=True, inplace=True)
+df2['name'] = [name] * len(df2)
+# print(df2)
+data = df2.values
+# 创建表
+table_name = 'S' + ts_code.split('.')[0] + '_daily'
+print(table_name)
+c.execute('''CREATE TABLE ''' + table_name + '''
+                       (trade_date INT PRIMARY KEY     NOT NULL,
+                       ts_code  TEXT,
+                       name     TEXT,
+                       open     DOUBLE,
+                       high        DOUBLE,
+                       low     DOUBLE,
+                       close   DOUBLE,
+                       pre_close   DOUBLE,
+                       change  DOUBLE,
+                       pct_chg DOUBLE,
+                       vol     DOUBLE,
+                       amount   DOUBLE)''')
+conn.commit()
+# 批量插入数据
+sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+c.executemany(sql, data)
+conn.commit()
+print(table_name + ' done')
