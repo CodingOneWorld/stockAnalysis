@@ -32,25 +32,12 @@ ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 # 查询最新的股票列表
 pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
-# 查询当前所有正常上市交易的股票列表-是ts_pro与ts得到的股票列表的交集
-# ts_pro
+# 查询当前所有正常上市交易的股票列表
 stock_basic = pro.stock_basic(exchange='', list_status='L')
 stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
 # print(stock_basic)
-stocks_tspro = stock_basic['ts_code'].values
-print(stocks_tspro)
-
-# 查询股票的基本信息数据-tushare
-data = ts.get_stock_basics()
-stocks_ts=set([])
-for s in list(data.index):
-    if s.startwith('0') or s.startwith('3'):
-        s=s+".SZ"
-        stocks_ts.add(s)
-    else:
-        s=s+".SH"
-        stocks_ts.add(s)
-stocks_now=set(stocks_tspro).intersection(stocks_ts)
+stocks_now = stock_basic['ts_code'].values
+print(stocks_now)
 
 # 查询数据库中已有的股票列表
 cursor = c.execute("SELECT ts_code,name from stock_basic_list")
@@ -60,37 +47,37 @@ for row in cursor:
 
 ## 针对数据库中已有的股票，进行数据追加写入
 # 最新股票列表与数据库中股票列表的交集
-stocks_inter=sorted(list(stocks_now.intersection(set(stocks_old))))
+stocks_inter=sorted(list(set(stocks_now).intersection(set(stocks_old))))
 
 # 基础积分每分钟内最多调取200次，每次4000条数据
 # 加入计数和睡眠，计数为200，睡眠一段时间
 count = 40
 for i in range(0, len(stocks_inter)):
-    print('stocks_inter:' + str(i))
-    count -= 1
-    if count < 0:
-        time.sleep(30)
-        count = 40
-    ts_code = stocks_inter[i]
-    name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
-    print(name)
-    # 查询日线数据
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq', start_date='20191116')
-    if df is None:
-        continue
-    df2 = df.sort_index(ascending=False)
+    print('stocks_inter:'+str(i))
+    # count -= 1
+    # if count < 0:
+    #     time.sleep(30)
+    #     count = 40
+    # ts_code = stocks_inter[i]
+    # name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
+    # print(name)
+    # # 查询日线数据
+    # df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date='20191116')
+    # if df is None:
+    #     continue
+    # df2 = df.sort_index(ascending=False)
+    # # print(df2)
+    # df2.reset_index(drop=True, inplace=True)
+    # df2['name'] = [name] * len(df2)
     # print(df2)
-    df2.reset_index(drop=True, inplace=True)
-    df2['name'] = [name] * len(df2)
-    print(df2)
-    data = df2.values
-    # 向表中插入数据
-    table_name = 'S' + ts_code.split('.')[0] + '_daily'
-    # 批量插入数据
-    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-    c.executemany(sql, data)
-    conn.commit()
-    print(table_name + ' done')
+    # data = df2.values
+    # # 向表中插入数据
+    # table_name = 'S' + ts_code.split('.')[0]+'_daily'
+    # # 批量插入数据
+    # sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    # c.executemany(sql, data)
+    # conn.commit()
+    # print(table_name + ' done')
 
 ## 针对新上市的股票，建表，插入数据
 
