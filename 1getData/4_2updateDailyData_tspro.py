@@ -19,13 +19,13 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 # 参数
-update_date="20191121"
+update_date="20191123"
 
 # path
-filepath = 'D:/Money/stocks/'
+filepath = 'P:/Money/'
 
 # 连接sqlite数据库
-conn = sqlite3.connect('P:/Money/stocks.db')
+conn = sqlite3.connect(filepath+'stocks.db')
 c = conn.cursor()
 print("Opened database successfully")
 
@@ -66,7 +66,7 @@ stocks_inter=sorted(list(stocks_now.intersection(set(stocks_old))))
 # 基础积分每分钟内最多调取200次，每次4000条数据
 # 加入计数和睡眠，计数为200，睡眠一段时间
 count = 80
-for i in range(0, len(stocks_inter)):
+for i in range(110, len(stocks_inter)):
     print('stocks_inter:'+str(i))
     count -= 1
     if count < 0:
