@@ -98,45 +98,45 @@ for i in range(2393, len(stocks_inter)):
 stocks_new=sorted(list(stocks_now.difference(set(stocks_old))))
 for i in range(1, len(stocks_new)):
     print('stocks_new:'+str(i))
-    ts_code = stocks_new[i]
-    print(ts_code)
-    count -= 1
-    if count < 0:
-        time.sleep(10)
-        count = 80
-    name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
-    print(name)
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq')
-    if df is None:
-        continue
-    df2 = df.sort_index(ascending=False)
-    # print(df2)
-    df2.reset_index(drop=True, inplace=True)
-    df2['name'] = [name] * len(df2)
-    # print(df2)
-    data = df2.values
-    # 创建表
-    table_name = 'S' + ts_code.split('.')[0]+'_daily'
-    print(table_name)
-    c.execute('''CREATE TABLE ''' + table_name + '''
-                       (trade_date INT PRIMARY KEY     NOT NULL,
-                       ts_code  TEXT,
-                       name     TEXT,
-                       open     DOUBLE,
-                       high        DOUBLE,
-                       low     DOUBLE,
-                       close   DOUBLE,
-                       pre_close   DOUBLE,
-                       change  DOUBLE,
-                       pct_chg DOUBLE,
-                       vol     DOUBLE,
-                       amount   DOUBLE)''')
-    conn.commit()
-    # 批量插入数据
-    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-    c.executemany(sql, data)
-    conn.commit()
-    print(table_name+' done')
+    # ts_code = stocks_new[i]
+    # print(ts_code)
+    # count -= 1
+    # if count < 0:
+    #     time.sleep(10)
+    #     count = 80
+    # name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
+    # print(name)
+    # df = ts.pro_bar(ts_code=ts_code, adj='qfq')
+    # if df is None:
+    #     continue
+    # df2 = df.sort_index(ascending=False)
+    # # print(df2)
+    # df2.reset_index(drop=True, inplace=True)
+    # df2['name'] = [name] * len(df2)
+    # # print(df2)
+    # data = df2.values
+    # # 创建表
+    # table_name = 'S' + ts_code.split('.')[0]+'_daily'
+    # print(table_name)
+    # c.execute('''CREATE TABLE ''' + table_name + '''
+    #                    (trade_date INT PRIMARY KEY     NOT NULL,
+    #                    ts_code  TEXT,
+    #                    name     TEXT,
+    #                    open     DOUBLE,
+    #                    high        DOUBLE,
+    #                    low     DOUBLE,
+    #                    close   DOUBLE,
+    #                    pre_close   DOUBLE,
+    #                    change  DOUBLE,
+    #                    pct_chg DOUBLE,
+    #                    vol     DOUBLE,
+    #                    amount   DOUBLE)''')
+    # conn.commit()
+    # # 批量插入数据
+    # sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    # c.executemany(sql, data)
+    # conn.commit()
+    # print(table_name+' done')
 
 ## 针对原有的已退市的股票，删表
 stocks_del=set(stocks_old).difference(set(stocks_now))
