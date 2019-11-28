@@ -139,7 +139,7 @@ for i in range(1, len(stocks_new)):
     print(table_name+' done')
 
 ## 针对原有的已退市的股票，删表
-stocks_del=set(stocks_old).difference(set(stocks_now))
+stocks_del=list(set(stocks_old).difference(set(stocks_now)))
 for i in range(0, len(stocks_del)):
     print('stocks_del:'+stocks_del[i])
     table_name='S' + stocks_del[i].split('.')[0]+'_daily'
