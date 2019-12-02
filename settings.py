@@ -4,10 +4,9 @@ import sqlalchemy as sqla
 
 
 # 连接数据库
-def conSqlite():
-    conn = sqlite3.connect('P:/Money/stocks.db')
-    c = conn.cursor()
-    return c
+def conSqlite(path):
+    conn = sqlite3.connect(path)
+    return conn
 
 # pandas连接数据库
 def get_engine(path):
