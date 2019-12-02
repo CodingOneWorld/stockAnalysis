@@ -96,7 +96,7 @@ for i in range(2393, len(stocks_inter)):
 ## 针对新上市的股票，建表，插入数据
 
 stocks_new=sorted(list(stocks_now.difference(set(stocks_old))))
-for i in range(0, len(stocks_new)):
+for i in range(1, len(stocks_new)):
     print('stocks_new:'+str(i))
     ts_code = stocks_new[i]
     print(ts_code)
