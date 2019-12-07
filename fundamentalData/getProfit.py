@@ -12,6 +12,9 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
+
+#
+
 df1 = ts.get_profit_data(2018, 1).loc[:,['code', 'name', 'net_profits']]
 df1.rename(columns={'net_profits':'net_profits181'},inplace = True)
 
