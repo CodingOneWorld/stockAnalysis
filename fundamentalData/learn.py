@@ -47,6 +47,6 @@ df=ts.get_report_data(2019,3)
 # targ,总资产增长率
 # epsg,每股收益增长率
 # seg,股东权益增长率
-# df=ts.get_growth_data(2019,3)
+df=ts.get_growth_data(2019,3)
 print()
 print(df.head())

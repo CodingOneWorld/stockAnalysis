@@ -22,12 +22,12 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 获取股票的日线数据-前复权数据
-def updateDailyData_tspro(update_date, filepath):
+def updateDailyData_tspro(update_date, filepath,cou_inner,cou_new,cou_del):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     # 数据库连接
-    conn, c = conSqlite(filepath)
+    conn = conSqlite(filepath)
     print("Opened database successfully")
     c = conn.cursor()
     # 查询最新的股票列表
@@ -62,7 +62,7 @@ def updateDailyData_tspro(update_date, filepath):
     # 基础积分每分钟内最多调取200次，每次4000条数据
     # 加入计数和睡眠，计数为200，睡眠一段时间
     count = 80
-    for i in range(0, len(stocks_inter)):
+    for i in range(cou_inner, len(stocks_inter)):
         print('stocks_inter:' + str(i))
         count -= 1
         if count < 0:
@@ -91,7 +91,7 @@ def updateDailyData_tspro(update_date, filepath):
 
     ## 针对新上市的股票，建表，插入数据
     stocks_new = sorted(list(stocks_now.difference(set(stocks_old))))
-    for i in range(1, len(stocks_new)):
+    for i in range(cou_new, len(stocks_new)):
         print('stocks_new:' + str(i))
         ts_code = stocks_new[i]
         print(ts_code)
@@ -135,7 +135,7 @@ def updateDailyData_tspro(update_date, filepath):
 
     ## 针对原有的已退市的股票，删表
     stocks_del = list(set(stocks_old).difference(set(stocks_now)))
-    for i in range(0, len(stocks_del)):
+    for i in range(cou_del, len(stocks_del)):
         print('stocks_del:' + stocks_del[i])
         table_name = 'S' + stocks_del[i].split('.')[0] + '_daily'
         c.execute("drop table " + table_name)
