@@ -9,5 +9,5 @@ update_date = "20191219"
 # db path
 filepath = 'P:/Money/stocks.db'
 
-updateDailyData_tspro(update_date,filepath,2184,0,0)
+updateDailyData_tspro(update_date,filepath,0,0,0)
 getStockBasicList()
