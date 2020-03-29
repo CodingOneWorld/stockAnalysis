@@ -18,12 +18,12 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def getStockBasicList():
+def getStockBasicList(filepath):
     # ts_pro token
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
     # 连接sqlite数据库
-    conn = sqlite3.connect('P:/Money/stocks.db')
+    conn = sqlite3.connect(filepath)
     print("Opened database successfully")
 
     # 查询当前所有正常上市交易的股票列表
@@ -93,3 +93,7 @@ def getStockBasicList():
                     line[18], line[19], line[20], line[21]))
             conn.commit()
     conn.close()
+
+
+filepath = 'E:/Money/stocks.db'
+getStockBasicList(filepath)

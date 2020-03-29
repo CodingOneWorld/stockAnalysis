@@ -22,7 +22,7 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 获取股票的日线数据-前复权数据
-def updateDailyData_tspro(update_date, filepath,cou_inner,cou_new,cou_del):
+def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
