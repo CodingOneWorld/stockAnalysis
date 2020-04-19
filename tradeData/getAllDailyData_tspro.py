@@ -61,7 +61,7 @@ for i in range(0, len(stocks)):
     # df2.to_csv("D:/Money/stocks/" + ts_code + ".csv",index=None)
     data = df2.values
     # 创建表
-    table_name = 'S' + data[0][0].split('.')[0]+'_daily'
+    table_name = 'S' + data[0][0].split('.')[0] + '_daily'
     print(table_name)
     c.execute('''CREATE TABLE ''' + table_name + '''
                        (trade_date INT PRIMARY KEY     NOT NULL,
@@ -99,5 +99,5 @@ for i in range(0, len(stocks)):
     sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
     c.executemany(sql, data)
     conn.commit()
-    print(table_name+' done')
+    print(table_name + ' done')
 conn.close()
