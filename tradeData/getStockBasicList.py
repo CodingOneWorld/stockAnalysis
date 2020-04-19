@@ -72,8 +72,8 @@ def getStockBasicList(filepath):
                            npr    DOUBLE,
                            holders INT)''')
     conn.commit()
+    print("Table created successfully")
     for i in range(len(stock_basic)):
-        print("Table created successfully")
         print(stock_basic[i])
         code = stock_basic[i][1]
         if code in s_stocks:
@@ -95,5 +95,5 @@ def getStockBasicList(filepath):
     conn.close()
 
 
-filepath = 'E:/Money/stocks.db'
-getStockBasicList(filepath)
+# filepath = 'E:/Money/stocks.db'
+# getStockBasicList(filepath)

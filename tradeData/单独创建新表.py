@@ -14,9 +14,9 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 # path
-filepath = 'P:/Money/stocks.db'
+filepath = 'E:/Money/stocks.db'
 # 股票代码
-ts_code = "688181.SH"
+ts_code = "688222.SH"
 
 
 def createDailyTableonOneStock(ts_code, filepath):
@@ -62,4 +62,5 @@ def createDailyTableonOneStock(ts_code, filepath):
     conn.commit()
     print(table_name + ' done')
 
-createDailyTableonOneStock(ts_code,filepath)
+
+createDailyTableonOneStock(ts_code, filepath)

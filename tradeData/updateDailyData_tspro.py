@@ -55,19 +55,19 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     for row in cursor:
         stocks_old.append(row[0])
 
-    ## 针对数据库中已有的股票，进行数据追加写入
+    # 针对数据库中已有的股票，进行数据追加写入
     # 最新股票列表与数据库中股票列表的交集
     stocks_inter = sorted(list(stocks_now.intersection(set(stocks_old))))
 
     # 基础积分每分钟内最多调取200次，每次4000条数据
     # 加入计数和睡眠，计数为200，睡眠一段时间
-    count = 80
+    count = 100
     for i in range(cou_inner, len(stocks_inter)):
         print('stocks_inter:' + str(i))
         count -= 1
         if count < 0:
             time.sleep(10)
-            count = 80
+            count = 100
         ts_code = stocks_inter[i]
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
@@ -84,12 +84,13 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
         # 向表中插入数据
         table_name = 'S' + ts_code.split('.')[0] + '_daily'
         # 批量插入数据
-        sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+        sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg" \
+                                            ",vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
         c.executemany(sql, data)
         conn.commit()
         print(table_name + ' done')
 
-    ## 针对新上市的股票，建表，插入数据
+    # 针对新上市的股票，建表，插入数据
     stocks_new = sorted(list(stocks_now.difference(set(stocks_old))))
     for i in range(cou_new, len(stocks_new)):
         print('stocks_new:' + str(i))
@@ -128,12 +129,13 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
                            amount   DOUBLE)''')
         conn.commit()
         # 批量插入数据
-        sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+        sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol," \
+                                            "amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
         c.executemany(sql, data)
         conn.commit()
         print(table_name + ' done')
 
-    ## 针对原有的已退市的股票，删表
+    # 针对原有的已退市的股票，删表
     stocks_del = list(set(stocks_old).difference(set(stocks_now)))
     for i in range(cou_del, len(stocks_del)):
         print('stocks_del:' + stocks_del[i])
