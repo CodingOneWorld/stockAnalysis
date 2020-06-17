@@ -29,11 +29,17 @@ def getStockBasicList(filepath):
     # 查询当前所有正常上市交易的股票列表
     stock_basic = pro.stock_basic(exchange='', list_status='L')
     # stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
+    # 删除当前日期之后的股票信息
+    # 获取当前日期
+    localdate = time.strftime("%Y%m%d", time.localtime())
+    stock_basic = stock_basic[stock_basic['list_date'] < localdate]
     print(stock_basic)
     # print(stock_basic)
     # 获取ts_pro的股票列表
     stocks_pro = stock_basic['symbol'].values
     stocks_pro = set(stocks_pro)
+    # 部分股票信息在该列表里
+    # ts_code  symbol    name  area industry market list_date
     stock_basic = stock_basic.values
 
     # 查询股票的基本信息数据-tushare
@@ -73,25 +79,44 @@ def getStockBasicList(filepath):
                            holders INT)''')
     conn.commit()
     print("Table created successfully")
+    batchdata = []
     for i in range(len(stock_basic)):
         print(stock_basic[i])
         code = stock_basic[i][1]
         if code in s_stocks:
+            # line = data.loc[code].values
+            # data.append([stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
+            #              stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
+            #              line[6], line[7], line[8], line[9], line[10], line[11],
+            #              line[12], line[13], line[15], line[16], line[17],
+            #              line[18], line[19], line[20], line[21]])
+            # c.execute(
+            #     "INSERT INTO " + table_name +
+            #     " (ts_code,symbol,name,area,industry,market,list_date,pe,outstanding,\
+            #     totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
+            #     esp,bvps,pb,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
+            #     ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}',\
+            #     '{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}','{23}','{24}')".format(
+            #         stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
+            #         stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
+            #         line[6], line[7], line[8], line[9], line[10], line[11],
+            #         line[12], line[13], line[15], line[16], line[17],
+            #         line[18], line[19], line[20], line[21]))
+
+            # 批量插入
             line = data.loc[code].values
-            print(line)
-            c.execute(
-                "INSERT INTO " + table_name +
-                " (ts_code,symbol,name,area,industry,market,list_date,pe,outstanding,\
-                totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
-                esp,bvps,pb,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
-                ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}',\
-                '{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}','{23}','{24}')".format(
-                    stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
-                    stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
-                    line[6], line[7], line[8], line[9], line[10], line[11],
-                    line[12], line[13], line[15], line[16], line[17],
-                    line[18], line[19], line[20], line[21]))
-            conn.commit()
+            batchdata.append([stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
+                         stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
+                         line[6], line[7], line[8], line[9], line[10], line[11],
+                         line[12], line[13], line[15], line[16], line[17],
+                         line[18], line[19], line[20], line[21]])
+    sql = "INSERT INTO " + table_name + \
+              " (ts_code,symbol,name,area,industry,market,list_date,pe,outstanding,\
+              totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
+              esp,bvps,pb,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
+              (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    c.executemany(sql, batchdata)
+    conn.commit()
     conn.close()
 
 
