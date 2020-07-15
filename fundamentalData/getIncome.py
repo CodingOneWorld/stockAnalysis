@@ -31,8 +31,8 @@ def getIncome(year1):
                 print(df1.head())
                 df_profile = df_profile.merge(df1)
         for mon in range(mon2):
-            df1 = ts.get_profit_data(year2, mon2).loc[:, ['code', 'name', 'business_income']]
-            df1.rename(columns={'business_income': 'business_income' + str(year2) + str(mon2)}, inplace=True)
+            df1 = ts.get_profit_data(year2, mon).loc[:, ['code', 'name', 'business_income']]
+            df1.rename(columns={'business_income': 'business_income' + str(year2) + str(mon)}, inplace=True)
             print()
             print(df1.head())
             df_profile = df_profile.merge(df1)
