@@ -114,6 +114,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
         # 创建表
         table_name = 'S' + ts_code.split('.')[0] + '_daily'
         print(table_name)
+        # c.execute("drop table " + table_name)
         c.execute('''CREATE TABLE ''' + table_name + '''
                            (trade_date INT PRIMARY KEY     NOT NULL,
                            ts_code  TEXT,

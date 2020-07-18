@@ -105,20 +105,20 @@ def getStockBasicList(filepath):
 
             # 批量插入
             line = data.loc[code].values
-            batchdata.append([stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
-                         stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
-                         line[6], line[7], line[8], line[9], line[10], line[11],
-                         line[12], line[13], line[15], line[16], line[17],
-                         line[18], line[19], line[20], line[21]])
+            batchdata.append(
+                [stock_basic[i][0], stock_basic[i][1], stock_basic[i][2], stock_basic[i][3], stock_basic[i][4],
+                 stock_basic[i][5], stock_basic[i][6], line[3], line[4], line[5],
+                 line[6], line[7], line[8], line[9], line[10], line[11],
+                 line[12], line[13], line[15], line[16], line[17],
+                 line[18], line[19], line[20], line[21]])
     sql = "INSERT INTO " + table_name + \
-              " (ts_code,symbol,name,area,industry,market,list_date,pe,outstanding,\
-              totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
-              esp,bvps,pb,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
-              (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+          " (ts_code,symbol,name,area,industry,market,list_date,pe,outstanding,\
+          totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
+          esp,bvps,pb,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
+          (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
     c.executemany(sql, batchdata)
     conn.commit()
     conn.close()
-
 
 # filepath = 'E:/Money/stocks.db'
 # getStockBasicList(filepath)

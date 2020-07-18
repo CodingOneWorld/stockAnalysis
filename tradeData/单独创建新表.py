@@ -16,7 +16,7 @@ pd.set_option('expand_frame_repr', False)
 # path
 filepath = 'E:/Money/stocks.db'
 # 股票代码
-ts_code = "688126.SH"
+ts_code = "300846.SZ"
 
 
 def createDailyTableonOneStock(ts_code, filepath):
