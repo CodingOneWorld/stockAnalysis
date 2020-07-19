@@ -24,7 +24,7 @@ pd.set_option('expand_frame_repr', False)
 # profits_yoy,净利润同比(%)
 # distrib,分配方案
 # report_date,发布日期
-df=ts.get_report_data(2019,3)
+# df = ts.get_report_data(2019, 4)
 
 # 盈利能力
 # code,代码
@@ -36,7 +36,7 @@ df=ts.get_report_data(2019,3)
 # esp,每股收益
 # business_income,营业收入(百万元)
 # bips,每股主营业务收入(元)
-# df=ts.get_profit_data(2019,3)
+df=ts.get_profit_data(2019,3)
 
 # 成长能力
 # code,代码
@@ -47,6 +47,6 @@ df=ts.get_report_data(2019,3)
 # targ,总资产增长率
 # epsg,每股收益增长率
 # seg,股东权益增长率
-df=ts.get_growth_data(2019,3)
+# df = ts.get_growth_data(2020, 1)
 print()
 print(df.head())
