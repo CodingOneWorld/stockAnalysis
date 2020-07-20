@@ -4,6 +4,7 @@ import tushare as ts
 import pandas as pd
 from datetime import date
 import sqlite3
+from util.utilsCommon import code2ts_code
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -55,13 +56,7 @@ def getIncomeOf5Year(filepath):
     year2 = date.today().year - 1
     year1 = year2 - 4
 
-    # ts_code转化
-    def code2ts_code(s):
-        if s.startswith('0') or s.startswith('3'):
-            return s + ".SZ"
-        else:
-            return s + ".SH"
-
+    # ts_code转化 code2ts_code(x)
     # 获取第一年的收入数据
     df_profile = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
     df_profile['ts_code'] = df_profile['code'].apply(lambda x: code2ts_code(x))
