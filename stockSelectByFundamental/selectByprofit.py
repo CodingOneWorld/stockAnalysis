@@ -40,9 +40,13 @@ def selectByProfit():
             profitData['change4'] > 0]
     print(data.count())
     # 筛选5年净利润增长率持续增长的股票
+    # data2 = \
+    #     data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
+    #         data['pct_change2'] > data['pct_change1']]
+    # 筛选5年净利润增长一直大于9%的股票
     data2 = \
-        data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
-            data['pct_change2'] > data['pct_change1']]
+        data.loc[data['pct_change4'] >= 0.2].loc[data['pct_change3'] >= 0.2].loc[
+            data['pct_change2'] >= 0.2].loc[data['pct_change1'] >= 0.2]
     # print(data2)
     return data2['code'].values
 

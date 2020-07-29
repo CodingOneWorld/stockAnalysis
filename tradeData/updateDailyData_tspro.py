@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import time
 import os
 import sqlite3
-from settings import conSqlite
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -27,7 +26,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     # 数据库连接
-    conn = conSqlite(filepath)
+    conn = sqlite3.connect(filepath)
     print("Opened database successfully")
     c = conn.cursor()
     # 查询最新的股票列表
