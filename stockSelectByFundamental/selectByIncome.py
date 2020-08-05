@@ -45,8 +45,8 @@ def selectByIncome():
             data['pct_change2'] > data['pct_change1']]
     # 筛选5年收入增长一直大于20%的股票
     data2 = \
-        data.loc[data['pct_change4'] >= 0.2].loc[data['pct_change3'] >= 0.2].loc[
-            data['pct_change2'] >= 0.2].loc[data['pct_change1'] >= 0.2]
+        data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
+            data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
     # print(data2)
     return data2['code'].values
 

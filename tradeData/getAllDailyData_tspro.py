@@ -78,25 +78,10 @@ for i in range(0, len(stocks)):
                        amount   DOUBLE)''')
     conn.commit()
     # 插入数据
-    # for line in data:
-    #     print(line[1])
-    #     c.execute("INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) \
-    #               VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}')".format(line[0],
-    #                                                                                                          line[1],
-    #                                                                                                          line[2],
-    #                                                                                                          line[3],
-    #                                                                                                          line[4],
-    #                                                                                                          line[5],
-    #                                                                                                          line[6],
-    #                                                                                                          line[7],
-    #                                                                                                          line[8],
-    #                                                                                                          line[9],
-    #                                                                                                          line[10],
-    #                                                                                                          line[11]))
-    #     conn.commit()
 
     # 批量插入数据
-    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol," \
+                                        "amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
     c.executemany(sql, data)
     conn.commit()
     print(table_name + ' done')

@@ -9,7 +9,7 @@ stocksOfProfit = selectByProfit()
 
 stocks = set(stocksOfIncome).intersection(set(stocksOfProfit))
 
-print(stocks.__len__())
+print(len(stocks))
 
 for s in stocks:
     print(s)
