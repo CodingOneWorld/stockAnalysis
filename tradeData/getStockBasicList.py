@@ -37,6 +37,7 @@ def getStockBasicList(filepath):
     # print(stock_basic)
     # 获取ts_pro的股票列表
     stocks_pro = stock_basic['symbol'].values
+
     stocks_pro = set(stocks_pro)
     # 部分股票信息在该列表里
     # ts_code  symbol    name  area industry market list_date
