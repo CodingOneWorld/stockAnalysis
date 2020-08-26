@@ -66,13 +66,13 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
 
     # 基础积分每分钟内最多调取200次，每次4000条数据
     # 加入计数和睡眠，计数为200，睡眠一段时间
-    count = 100
+    count = 200
     for i in range(cou_inner, len(stocks_inter)):
         print('stocks_inter:' + str(i))
         count -= 1
         if count < 0:
             time.sleep(10)
-            count = 100
+            count = 200
         ts_code = stocks_inter[i]
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
