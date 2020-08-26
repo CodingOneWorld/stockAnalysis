@@ -151,7 +151,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     conn.close()
 
 
-update_date = "20200822"
-filepath = 'E:/Money/stocks.db'
-
-updateDailyData_tspro(update_date, filepath, 0, 0, 0)
+# update_date = "20200822"
+# filepath = 'E:/Money/stocks.db'
+#
+# updateDailyData_tspro(update_date, filepath, 0, 0, 0)

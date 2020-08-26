@@ -119,5 +119,5 @@ def getStockBasicList(filepath):
     conn.close()
 
 
-filepath = 'E:/Money/stocks.db'
-getStockBasicList(filepath)
+# filepath = 'E:/Money/stocks.db'
+# getStockBasicList(filepath)
