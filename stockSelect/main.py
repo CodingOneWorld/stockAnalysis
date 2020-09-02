@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from stockSelectByFundamental.selectByIncome import selectByIncome
-from stockSelectByFundamental.selectByprofit import selectByProfit
+from stockSelect.selectByIncome import selectByIncome
+from stockSelect.selectByprofit import selectByProfit
 
 stocksOfIncome = selectByIncome()
 stocksOfProfit = selectByProfit()

@@ -4,7 +4,7 @@ from tradeData.updateDailyData_tspro import updateDailyData_tspro
 from tradeData.getStockBasicList import getStockBasicList
 
 # 参数
-update_date = "20200827"
+update_date = "20200903"
 
 # db path
 filepath = 'E:/Money/stocks.db'

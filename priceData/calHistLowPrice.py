@@ -30,8 +30,4 @@ print(stocks)
 
 # 获取所有股票的所有收盘价数据,并计算股价数据，最高价，最低价
 # path
-filepath = 'D:/Money/stocks/'
-for ts_code in stocks:
-    filename = filepath + ts_code + ".csv"
-    data=pd.read_csv(filename)
-    print(data.head())
+filepath = 'E:/Money/stocks/'
