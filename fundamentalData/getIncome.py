@@ -18,7 +18,7 @@ pd.set_option('expand_frame_repr', False)
 
 # 获取收入数据
 # 获取某年到现在的年收入数据
-def getIncome(year1):
+def getIncomeSince(year1):
     year2 = date.today().year - 1
 
     # ts_code转化 code2ts_code(x)
@@ -38,7 +38,7 @@ def getIncome(year1):
     print(df_profile)
 
 
-getIncome(2016)
+getIncomeSince(2016)
 
 
 # 获取最近5年的年收入数据
