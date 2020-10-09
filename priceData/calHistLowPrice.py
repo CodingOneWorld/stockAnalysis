@@ -1,7 +1,7 @@
-
 # -*- coding: utf-8 -*-
 
-# 选取低价
+# 遍历数据库，查询股票的价格数据，最低价，最高价，当前价格
+import sqlite3
 
 import tushare as ts
 import pandas as pd
@@ -18,16 +18,31 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-# 获取所有股票列表
-pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+filepath = 'E:/Money/stocks.db'
 
-# 查询当前所有正常上市交易的股票列表
-stock_basic = pro.stock_basic(exchange='', list_status='L')
-stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
-print(stock_basic)
-stocks = stock_basic['ts_code'].values
-print(stocks)
 
-# 获取所有股票的所有收盘价数据,并计算股价数据，最高价，最低价
-# path
-filepath = 'E:/Money/stocks/'
+def calHistPrice():
+    # pandas连接数据库
+    conn = sqlite3.connect(filepath)
+    # 读取股票基本信息表
+    stockListData = pd.read_sql('select * from stock_basic_list', conn)
+    print(stockListData.head())
+    stockList=stockListData['symbol'].values
+    print(stockList)
+    # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
+    # for stock in stockList:
+    #     table_name=
+
+
+def calHistPriceofStock(ts_code):
+    # pandas连接数据库
+    conn = sqlite3.connect(filepath)
+    # 读取相应的交易数据表
+    table_name = 'S' + ts_code.split('.')[0] + '_daily'
+    # 读取股票基本信息表
+    stock_trade_data = pd.read_sql('select * from '+table_name, conn)
+    print(stock_trade_data.head())
+    stock_price = stock_trade_data['close'].values
+    print(stock_price)
+
+calHistPriceofStock('000001.SZ')
