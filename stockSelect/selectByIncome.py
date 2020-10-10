@@ -39,17 +39,17 @@ def selectByIncome():
             incomeData['change3'] > 0].loc[
             incomeData['change4'] > 0]
     print(data.count())
-    # 筛选5年收入增长率越来越高的股票
-    data2 = \
-        data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
-            data['pct_change2'] > data['pct_change1']]
-    # 筛选5年收入增长一直大于20%的股票
-    data2 = \
-        data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
-            data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
+    # # 筛选5年收入增长率越来越高的股票
+    # data2 = \
+    #     data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
+    #         data['pct_change2'] > data['pct_change1']]
+    # # 筛选5年收入一直增长的股票
+    # data2 = \
+    #     data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
+    #         data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
     # print(data2)
-    return data2['code'].values
+    return data['code'].values
 
 
-stocks = selectByIncome()
-print(stocks)
+# stocks = selectByIncome()
+# print(stocks)

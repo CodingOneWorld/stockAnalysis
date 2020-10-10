@@ -38,7 +38,7 @@ def getIncomeSince(year1):
     print(df_profile)
 
 
-getIncomeSince(2016)
+# getIncomeSince(2016)
 
 
 # 获取最近5年的年收入数据

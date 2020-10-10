@@ -21,11 +21,11 @@ pd.set_option('expand_frame_repr', False)
 filepath = 'E:/Money/stocks.db'
 
 
-def calHistPriceofStock(ts_code):
+def calHistPriceofStock(stock):
     # pandas连接数据库
     conn = sqlite3.connect(filepath)
     # 读取相应的交易数据表
-    table_name = 'S' + ts_code.split('.')[0] + '_daily'
+    table_name = 'S' + str(stock) + '_daily'
     # 读取股票基本信息表
     stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     # print(stock_trade_data.head())
@@ -33,38 +33,41 @@ def calHistPriceofStock(ts_code):
     # plt.show()
     stock_price = stock_trade_data['close'].values
     # print(stock_price)
+    # for i in stock_price:
+    #     print(i)
     max_price = max(stock_price)
     # print(max_price)
     min_price = min(stock_price)
     # print(min_price)
     current_price = stock_price[len(stock_price) - 1]
     # print(current_price)
-    return [ts_code,max_price, min_price, current_price]
+    # print([stock, max_price, min_price, current_price])
+    return [stock, max_price, min_price, current_price]
 
 
 def calHistPriceofAllStocks():
     # pandas连接数据库
     conn = sqlite3.connect(filepath)
     # 读取股票基本信息表
-    stockListData = pd.read_sql('select * from stock_basic_list', conn)
-    print(stockListData.head())
-    stockList = stockListData['ts_code'].values
-    print(stockList)
+    stock_list_data = pd.read_sql('select * from stock_basic_list', conn)
+    print(stock_list_data.head())
+    stock_list = stock_list_data['symbol'].values
+    print(stock_list)
     # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
     price_array = []
-    for ts_code in stockList:
-        price = calHistPriceofStock(ts_code)
+    for stock in stock_list:
+        price = calHistPriceofStock(stock)
         # print(price)
         price_array.append(price)
-    df = pd.DataFrame(price_array, columns=['max_price', 'min_price', 'current_price'])
+    df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
     print(df.head())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(filepath)
     print("Open database successfully")
-    df.to_sql('stockHistoryPrice', con=conn, if_exists='append', index=False)
+    df.to_sql('stockHistoryPrice', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
-# calHistPriceofStock('000001.SZ')
-calHistPriceofAllStocks()
+calHistPriceofStock('000938')
+# calHistPriceofAllStocks()

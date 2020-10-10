@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import sqlite3
 
 import tushare as ts
 import pandas as pd
-from settings import conSqlite
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -16,7 +16,7 @@ pd.set_option('expand_frame_repr', False)
 # path
 filepath = 'E:/Money/stocks.db'
 # 股票代码
-ts_code = "300846.SZ"
+ts_code = "600017.SH"
 
 
 def createDailyTableonOneStock(ts_code, filepath):
@@ -24,7 +24,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
     # 连接sqlite数据库
-    conn = conSqlite(filepath)
+    conn = sqlite3.connect(filepath)
     c = conn.cursor()
     print("Opened database successfully")
 
@@ -40,7 +40,8 @@ def createDailyTableonOneStock(ts_code, filepath):
     # print(df2)
     data = df2.values
     # 创建表
-    table_name = 'S' + ts_code.split('.')[0] + '_daily'
+    # table_name = 'S' + ts_code.split('.')[0] + '_daily'
+    table_name = 'S' + ts_code.split('.')[0] + '_daily_test'
     print(table_name)
     c.execute('''CREATE TABLE ''' + table_name + '''
                            (trade_date INT PRIMARY KEY     NOT NULL,
@@ -57,7 +58,8 @@ def createDailyTableonOneStock(ts_code, filepath):
                            amount   DOUBLE)''')
     conn.commit()
     # 批量插入数据
-    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount" \
+                                        ",name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
     c.executemany(sql, data)
     conn.commit()
     print(table_name + ' done')
