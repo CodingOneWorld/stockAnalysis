@@ -43,12 +43,12 @@ def selectByProfit():
     # data2 = \
     #     data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
     #         data['pct_change2'] > data['pct_change1']]
-    # # 筛选5年净利润增长一直大于9%的股票
-    # data2 = \
-    #     data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
-    #         data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
-    # print(data2)
-    return data['code'].values
+    # 筛选5年净利润增长一直大于9%的股票
+    data2 = \
+        data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
+            data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
+    print(data2)
+    return data2['code'].values
 
 
 # stocks = selectByProfit()
