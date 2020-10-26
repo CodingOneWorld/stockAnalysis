@@ -61,6 +61,25 @@ def calHistPriceofAllStocks():
         price_array.append(price)
     df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
     print(df.head())
+    return df
+
+
+def calHistPriceofAllStocks2database():
+    # pandas连接数据库
+    conn = sqlite3.connect(filepath)
+    # 读取股票基本信息表
+    stock_list_data = pd.read_sql('select * from stock_basic_list', conn)
+    print(stock_list_data.head())
+    stock_list = stock_list_data['symbol'].values
+    print(stock_list)
+    # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
+    price_array = []
+    for stock in stock_list:
+        price = calHistPriceofStock(stock)
+        # print(price)
+        price_array.append(price)
+    df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
+    print(df.head())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(filepath)
