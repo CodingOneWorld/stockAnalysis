@@ -69,5 +69,5 @@ def calHistPriceofAllStocks():
     print("insert database successfully")
 
 
-calHistPriceofStock('000938')
+# calHistPriceofStock('000938')
 # calHistPriceofAllStocks()
