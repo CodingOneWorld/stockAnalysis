@@ -57,7 +57,7 @@ def calHistPriceofAllStocks():
     price_array = []
     for stock in stock_list:
         price = calHistPriceofStock(stock)
-        # print(price)
+        print(price)
         price_array.append(price)
     df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
     print(df.head())
