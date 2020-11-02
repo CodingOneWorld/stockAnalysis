@@ -16,6 +16,7 @@ pd.set_option('expand_frame_repr', False)
 # path
 filepath = 'E:/Money/stocks.db'
 # 股票代码
+
 ts_code = "605169.SH"
 
 
@@ -40,8 +41,8 @@ def createDailyTableonOneStock(ts_code, filepath):
     # print(df2)
     data = df2.values
     # 创建表
+    table_name = 'S' + ts_code.split('.')[0] + '_daily'
     # table_name = 'S' + ts_code.split('.')[0] + '_daily'
-    table_name = 'S' + ts_code.split('.')[0] + '_daily_test'
     print(table_name)
     c.execute('''CREATE TABLE ''' + table_name + '''
                            (trade_date INT PRIMARY KEY     NOT NULL,

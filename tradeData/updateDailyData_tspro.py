@@ -11,6 +11,8 @@ import os
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from tradeData.getStockBasicList import getStockBasicList
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -90,7 +92,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             # print(df2)
             df2.reset_index(drop=True, inplace=True)
             df2['name'] = [name] * len(df2)
-            # print(df2)
+            print(df2)
             data = df2.values
             # 向表中插入数据
             table_name = 'S' + ts_code.split('.')[0] + '_daily'
@@ -123,7 +125,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             # print(df2)
             df2.reset_index(drop=True, inplace=True)
             df2['name'] = [name] * len(df2)
-            # print(df2)
+            print(df2)
             data = df2.values
             # 创建表
             table_name = 'S' + ts_code.split('.')[0] + '_daily'
@@ -160,6 +162,9 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
         c.execute("drop table " + table_name)
 
     conn.close()
+
+    # 写入最新的股票列表
+    getStockBasicList(filepath)
 
 # update_date = "20200822"
 # filepath = 'E:/Money/stocks.db'
