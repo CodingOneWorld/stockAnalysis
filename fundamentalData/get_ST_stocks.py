@@ -14,8 +14,10 @@ def get_ST_stocks():
     stock_list = stock_list_data[['symbol', 'name']].values
     ST_list = []
     for stock in stock_list:
-        if stock[1].find('ST') > 0:
+        # print(stock)
+        if stock[1].find('ST') >= 0:
             ST_list.append(stock[0])
+            # print("1")
     # for s in ST_list:
     #     print(s)
     print("ST股票个数")
