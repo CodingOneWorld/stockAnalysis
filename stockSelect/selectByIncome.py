@@ -20,7 +20,7 @@ def selectByIncome():
     # pandas连接数据库
     conn = sqlite3.connect(filepath)
     incomeData = pd.read_sql('select * from incomeIn5years', conn)
-    print(incomeData.head())
+    # print(incomeData.head())
 
     # 计算每年的收入增长幅度
     # 计算每年的收入增长率
@@ -31,14 +31,14 @@ def selectByIncome():
         # 增长率
         incomeData['pct_change' + str(i + 1)] = (incomeData['business_income' + str(2015 + i + 1)] - incomeData[
             'business_income' + str(2015 + i)]) / incomeData['business_income' + str(2015 + i + 1)]
-    print(incomeData.head())
+    # print(incomeData.head())
 
     # 筛选近五年收入持续增长的股票
     data = \
         incomeData.loc[incomeData['change1'] > 0].loc[incomeData['change2'] > 0].loc[
             incomeData['change3'] > 0].loc[
             incomeData['change4'] > 0]
-    print(data.count())
+    # print(data.count())
     # # 筛选5年收入增长率越来越高的股票
     # data2 = \
     #     data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
@@ -47,7 +47,7 @@ def selectByIncome():
     data2 = \
         data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
             data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
-    print(data2)
+    # print(data2)
     return data2['code'].values
 
 
