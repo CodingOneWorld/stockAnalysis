@@ -11,8 +11,6 @@ import os
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from tradeData.getStockBasicList import getStockBasicList
-
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -151,6 +149,17 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
         c.execute("drop table " + table_name)
 
     conn.close()
+
+
+if __name__ == '__main__':
+    update_date = "20200822"
+    filepath = 'E:/Money/stocks.db'
+
+    # updateDailyData_tspro(update_date, filepath, 0, 0, 0)
+
+
+
+
 
 
 # # 已废弃
@@ -297,8 +306,3 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
 #
 #     # 写入最新的股票列表
 #     getStockBasicList(filepath)
-
-# update_date = "20200822"
-# filepath = 'E:/Money/stocks.db'
-#
-# updateDailyData_tspro(update_date, filepath, 0, 0, 0)

@@ -39,6 +39,15 @@ def getStockBasicList_tspro(filepath):
     print("insert database successfully")
 
 
+if __name__ == '__main__':
+    filepath = 'E:/Money/stocks.db'
+    # getStockBasicList(filepath)
+    # getStockBasicList_tspro(filepath)
+
+
+
+
+
 # 股票列表来自ts与ts_pro的股票列表的交集
 # 股票的基本信息部分来自ts，部分来自ts_pro
 # def getStockBasicList(filepath):
@@ -137,8 +146,3 @@ def getStockBasicList_tspro(filepath):
 #     # c.executemany(sql, batchdata)
 #     conn.commit()
 #     conn.close()
-
-
-filepath = 'E:/Money/stocks.db'
-# getStockBasicList(filepath)
-# getStockBasicList_tspro(filepath)

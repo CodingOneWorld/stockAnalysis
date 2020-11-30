@@ -24,24 +24,14 @@ pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 # 查询最新的股票列表
 # 查询当前所有正常上市交易的股票列表-是ts_pro与ts的股票列表的交集
 # ts_pro
-# stock_basic = pro.stock_basic(exchange='', list_status='L')
-stock_basic = pro.query('stock_basic', exchange='', list_status='L')
+stock_basic = pro.stock_basic(exchange='', list_status='L')
 # stock_basic = stock_basic[stock_basic['list_date'] < '20201129']
 print(stock_basic)
 stocks_tspro = stock_basic['ts_code'].values
 print(stocks_tspro)
 
-# # 查询数据库中已有的股票列表
-# # 数据库连接
-# filepath = 'E:/Money/stocks.db'
-# conn = sqlite3.connect(filepath)
-# print("Opened database successfully")
-# c = conn.cursor()
-# cursor = c.execute("SELECT ts_code,name from stock_basic_list")
-# stocks_old = []
-# for row in cursor:
-#     stocks_old.append(row[0])
-# stocks_old=set(stocks_old)
-#
-# print(stocks_old)
-# print(len(stocks_old))
+# 获取交易数据
+df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='19910404', end_date='20201130')
+print(df)
+
+
