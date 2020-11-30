@@ -21,5 +21,5 @@ for s in stocks:
         price = calHistPriceofStock(s)
         # print(price)
         pct = (price[3] + price[2]) / price[1]
-        if pct > 0.2 and pct < 0.5:
+        if 0.2 < pct < 0.5:
             print(s)

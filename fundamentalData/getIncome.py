@@ -64,8 +64,9 @@ def getIncomeOf5Year(filepath):
     # 连接sqlite数据库
     conn = sqlite3.connect(filepath)
     print("Open database successfully")
-    df_profile.to_sql('incomeIn5years', con=conn, if_exists='append', index=False)
+    df_profile.to_sql('incomeIn5years', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
-# filepath = 'E:/Money/stocks.db'
-# getIncomeOf5Year(filepath)
+
+filepath = 'E:/Money/stocks.db'
+getIncomeOf5Year(filepath)
