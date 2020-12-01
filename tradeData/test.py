@@ -25,13 +25,13 @@ pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 # 查询当前所有正常上市交易的股票列表-是ts_pro与ts的股票列表的交集
 # ts_pro
 stock_basic = pro.stock_basic(exchange='', list_status='L')
-# stock_basic = stock_basic[stock_basic['list_date'] < '20201129']
+stock_basic = stock_basic[stock_basic['list_date'] < '20201201']
 print(stock_basic)
 stocks_tspro = stock_basic['ts_code'].values
-print(stocks_tspro)
+print(len(stocks_tspro))
 
 # 获取交易数据
 df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='19910404', end_date='20201130')
-print(df)
+# print(df)
 
 

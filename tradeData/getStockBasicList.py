@@ -42,7 +42,7 @@ def getStockBasicList_tspro(filepath):
 if __name__ == '__main__':
     filepath = 'E:/Money/stocks.db'
     # getStockBasicList(filepath)
-    # getStockBasicList_tspro(filepath)
+    getStockBasicList_tspro(filepath)
 
 
 
