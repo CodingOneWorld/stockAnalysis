@@ -49,7 +49,7 @@ def calHistPriceofAllStocks():
     # pandas连接数据库
     conn = sqlite3.connect(filepath)
     # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stock_basic_list', conn)
+    stock_list_data = pd.read_sql('select * from stockList', conn)
     print(stock_list_data.head())
     stock_list = stock_list_data['symbol'].values
     print(stock_list)
@@ -68,7 +68,7 @@ def calHistPriceofAllStocks2database():
     # pandas连接数据库
     conn = sqlite3.connect(filepath)
     # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stock_basic_list', conn)
+    stock_list_data = pd.read_sql('select * from stockList', conn)
     print(stock_list_data.head())
     stock_list = stock_list_data['symbol'].values
     print(stock_list)
@@ -76,7 +76,7 @@ def calHistPriceofAllStocks2database():
     price_array = []
     for stock in stock_list:
         price = calHistPriceofStock(stock)
-        # print(price)
+        print(price)
         price_array.append(price)
     df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
     print(df.head())
@@ -90,3 +90,4 @@ def calHistPriceofAllStocks2database():
 
 # calHistPriceofStock('000938')
 # calHistPriceofAllStocks()
+calHistPriceofAllStocks2database()

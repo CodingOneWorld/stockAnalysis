@@ -68,5 +68,13 @@ def getIncomeOf5Year(filepath):
     print("insert database successfully")
 
 
+# 获取所有股票的全部历史收入信息
+def getIncomeofALLStocks():
+    # 获取股票列表及其上市时间
+    # pandas连接数据库
+    conn = sqlite3.connect(filepath)
+    stock_list = pd.read_sql('select * from stockList', conn)
+
+
 filepath = 'E:/Money/stocks.db'
 getIncomeOf5Year(filepath)
