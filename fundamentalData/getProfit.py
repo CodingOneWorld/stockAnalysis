@@ -33,7 +33,7 @@ def getProfitSince(year1):
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_profit = df_profit.merge(df1, how="right")
+        df_profit = df_profit.merge(df1, how="outer")
         # df_profile.drop_duplicates()
         print()
         print(df_profit.head())
