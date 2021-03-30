@@ -2,12 +2,12 @@
 import sqlite3
 import pandas as pd
 
-filepath = 'E:/Money/stocks.db'
+from contants.commonContants import DB_PATH
 
 
 def get_ST_stocks():
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
     stock_list_data = pd.read_sql('select * from stock_basic_list', conn)
     # print(stock_list_data.head())

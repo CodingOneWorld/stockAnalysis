@@ -3,7 +3,7 @@
 import sqlite3
 
 # 连接sqlite数据库
-conn=sqlite3.connect('D:/Money/stocks.db')
+conn = sqlite3.connect('D:/Money/stocks.db')
 print("Opened database successfully")
 
 # 创建表

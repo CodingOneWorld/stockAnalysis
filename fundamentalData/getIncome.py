@@ -4,6 +4,8 @@ import tushare as ts
 import pandas as pd
 from datetime import date
 import sqlite3
+
+from contants.commonContants import DB_PATH
 from util.utilsCommon import code2ts_code
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
@@ -23,19 +25,24 @@ def getIncomeSince(year1):
 
     # ts_code转化 code2ts_code(x)
     # 获取第一年的收入数据
-    df_profile = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
-    df_profile['ts_code'] = df_profile['code'].apply(lambda x: code2ts_code(x))
+    df_Income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
+    df_Income['ts_code'] = df_Income['code'].apply(lambda x: code2ts_code(x))
 
-    for year in range(year1, year2 + 1):
+    for year in range(year1, year2+1):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
+        df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_profile = df_profile.merge(df1)
+        df_Income = df_Income.merge(df1, how="outer")
         # df_profile.drop_duplicates()
         print()
-        print(df_profile.head())
-    df_profile = df_profile.drop_duplicates(['code'])
-    print(df_profile)
+        print(df_Income.head())
+        df_Income.drop_duplicates()
+    df_Income = df_Income.fillna(method="backfill", axis=1)
+    df_Income = df_Income.fillna(method="pad", axis=1)
+    df_Income = df_Income.drop_duplicates(['code'])
+    print(df_Income)
+    return df_Income
 
 
 # getIncomeSince(2016)
@@ -48,23 +55,25 @@ def getIncomeOf5Year(filepath):
 
     # ts_code转化 code2ts_code(x)
     # 获取第一年的收入数据
-    df_profile = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
-    df_profile['ts_code'] = df_profile['code'].apply(lambda x: code2ts_code(x))
+    df_Income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
+    df_Income['ts_code'] = df_Income['code'].apply(lambda x: code2ts_code(x))
 
     for year in range(year1, year2 + 1):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
         df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_profile = df_profile.merge(df1)
+        df_Income = df_Income.merge(df1)
+        df_Income.drop_duplicates()
         print()
-        print(df_profile.head())
-    df_profile.drop_duplicates()
-    print(df_profile.head())
+        print(df_Income.head())
+
+    df_Income.drop_duplicates()
+    print(df_Income.head())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(filepath)
     print("Open database successfully")
-    df_profile.to_sql('incomeIn5years', con=conn, if_exists='replace', index=False)
+    df_Income.to_sql('incomeIn5years', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
@@ -72,9 +81,19 @@ def getIncomeOf5Year(filepath):
 def getIncomeofALLStocks():
     # 获取股票列表及其上市时间
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
-    stock_list = pd.read_sql('select * from stockList', conn)
+    year = 1989
+    print(year)
+    df_Income = getIncomeSince(year)
+
+    # 连接sqlite数据库
+    conn = sqlite3.connect(DB_PATH)
+    print("Open database successfully")
+    df_Income.to_sql('incomeSince1989', con=conn, if_exists='replace', index=False)
+    print("insert database successfully")
 
 
-filepath = 'E:/Money/stocks.db'
-getIncomeOf5Year(filepath)
+# getIncomeOf5Year(filepath)
+getIncomeofALLStocks()
+
+# df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name']]
+# print(df_Income.shape)

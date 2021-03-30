@@ -5,6 +5,8 @@ import tushare as ts
 import pandas as pd
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from contants.commonContants import DB_PATH
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -14,9 +16,8 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 # path
-filepath = 'E:/Money/stocks.db'
-# 股票代码
 
+# 股票代码
 ts_code = "605169.SH"
 
 
@@ -66,4 +67,4 @@ def createDailyTableonOneStock(ts_code, filepath):
     print(table_name + ' done')
 
 
-createDailyTableonOneStock(ts_code, filepath)
+createDailyTableonOneStock(ts_code, DB_PATH)

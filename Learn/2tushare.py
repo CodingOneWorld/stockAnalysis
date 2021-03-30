@@ -14,9 +14,8 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-
 # 获取股票列表
-data=ts.get_stock_basics()
+data = ts.get_stock_basics()
 print(data)
 
 ## 获取历史数据
@@ -44,7 +43,7 @@ print(data)
 # • v_ma20:20日均量
 # • turnover:换手率[注：指数无此项]
 # 使用该接口并不能获取股票自上市以来的所有日线数据
-data=ts.get_hist_data('300032')
+data = ts.get_hist_data('300032')
 print(data)
 # print(data.info())
 # data['close'].plot.bar()

@@ -10,6 +10,8 @@ import time
 import os
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from contants.commonContants import DB_PATH
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -18,12 +20,9 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-filepath = 'E:/Money/stocks.db'
-
-
 def calHistPriceofStock(stock):
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
     table_name = 'S' + str(stock) + '_daily'
     # 读取股票基本信息表
@@ -47,7 +46,7 @@ def calHistPriceofStock(stock):
 
 def calHistPriceofAllStocks():
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
     stock_list_data = pd.read_sql('select * from stockList', conn)
     print(stock_list_data.head())
@@ -66,7 +65,7 @@ def calHistPriceofAllStocks():
 
 def calHistPriceofAllStocks2database():
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
     stock_list_data = pd.read_sql('select * from stockList', conn)
     print(stock_list_data.head())
@@ -82,7 +81,7 @@ def calHistPriceofAllStocks2database():
     print(df.head())
 
     # 连接sqlite数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     print("Open database successfully")
     df.to_sql('stockHistoryPrice', con=conn, if_exists='replace', index=False)
     print("insert database successfully")

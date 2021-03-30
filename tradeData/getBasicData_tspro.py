@@ -9,6 +9,8 @@ import time
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from contants.commonContants import DB_PATH
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -31,7 +33,7 @@ print(stocks)
 # 加入计数和睡眠，计数为200，睡眠1分钟
 count = 40
 
-conn = sqlite3.connect('D:/Money/stocks_basic_data.db')
+conn = sqlite3.connect(DB_PATH)
 # 连接sqlite数据库
 print("Opened database successfully")
 for i in range(0, len(stocks)):
@@ -55,7 +57,7 @@ for i in range(0, len(stocks)):
     # df2.to_csv("D:/Money/stocks/" + ts_code + ".csv",index=None)
     data = df2.values
     # 创建表
-    table_name = 'S' + data[0][0].split('.')[0]+'_basic'
+    table_name = 'S' + data[0][0].split('.')[0] + '_basic'
     print(table_name)
     c = conn.cursor()
     c.execute('''CREATE TABLE ''' + table_name + '''
@@ -77,9 +79,10 @@ for i in range(0, len(stocks)):
                         circ_mv 	DOUBLE)''')
     conn.commit()
     # 批量插入数据
-    sql = "INSERT INTO " + table_name + " (trade_date,ts_code,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps," \
-                                        "ps_ttm,total_share,float_share,free_share,total_mv,circ_mv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    sql = "INSERT INTO " + table_name + " (trade_date,ts_code,close,turnover_rate,turnover_rate_f,volume_ratio,pe," \
+                                        "pe_ttm,pb,ps,ps_ttm,total_share,float_share,free_share,total_mv,circ_mv) " \
+                                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
     c.executemany(sql, data)
     conn.commit()
-    print(table_name+' done')
+    print(table_name + ' done')
 conn.close()

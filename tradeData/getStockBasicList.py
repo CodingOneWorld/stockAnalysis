@@ -9,6 +9,8 @@ import time
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from contants.commonContants import DB_PATH
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -40,9 +42,8 @@ def getStockBasicList_tspro(filepath):
 
 
 if __name__ == '__main__':
-    filepath = 'E:/Money/stocks.db'
     # getStockBasicList(filepath)
-    getStockBasicList_tspro(filepath)
+    getStockBasicList_tspro(DB_PATH)
 
 
 

@@ -3,8 +3,10 @@
 import pandas as pd
 import tushare as ts
 import sqlite3
+from contants.commonContants import DB_PATH
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -13,12 +15,10 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-filepath = 'E:/Money/stocks.db'
-
 
 def selectByProfit():
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     profitData = pd.read_sql('select * from profitIn5years', conn)
     # print(profitData.head())
 
