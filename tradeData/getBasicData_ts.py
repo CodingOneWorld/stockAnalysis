@@ -10,6 +10,8 @@ import time
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from contants.commonContants import DB_PATH
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -22,10 +24,8 @@ data = ts.get_stock_basics()
 # print(data)
 
 # 连接sqlite数据库
-conn = sqlite3.connect('P:/Money/stocks.db')
+conn = sqlite3.connect(DB_PATH)
 print("Opened database successfully")
-
-
 
 # 创建表
 table_name = 'stocks_basic'
@@ -56,7 +56,7 @@ c.execute('''CREATE TABLE ''' + table_name + '''
                        holders INT )''')
 conn.commit()
 
-code=data.index
+code = data.index
 data = data.values
 print(data[0])
 for i in range(len(data)):
@@ -67,7 +67,7 @@ for i in range(len(data)):
         esp,bvps,pb,timeToMarket,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
         ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}',\
                                       '{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}')".format(
-            code[i],data[i][0], data[i][1],
+            code[i], data[i][0], data[i][1],
             data[i][2], data[i][3],
             data[i][4], data[i][5],
             data[i][6], data[i][7],

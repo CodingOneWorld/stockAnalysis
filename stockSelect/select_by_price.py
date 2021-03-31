@@ -2,14 +2,14 @@
 import sqlite3
 import pandas as pd
 
+from contants.commonContants import DB_PATH
 from priceData.calHistPrice import calHistPriceofAllStocks
 from fundamentalData.get_ST_stocks import get_ST_stocks
 
-filepath = 'E:/Money/stocks.db'
 
 if __name__ == '__main__':
     # pandas连接数据库
-    conn = sqlite3.connect(filepath)
+    conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
     stock_price_df = pd.read_sql('select * from stockHistoryPrice', conn)
     # stock_price_df = calHistPriceofAllStocks()

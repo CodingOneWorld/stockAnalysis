@@ -2,7 +2,6 @@
 
 # 获取所有股票的代码，下载所有股票的日线信息
 
-
 import tushare as ts
 import pandas as pd
 import matplotlib.pyplot as plt
