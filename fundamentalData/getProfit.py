@@ -28,20 +28,30 @@ def getProfitSince(year1):
     df_profit = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
     df_profit['ts_code'] = df_profit['code'].apply(lambda x: code2ts_code(x))
 
-    for year in range(year1, year2 + 1):
+    for year in range(year1, year2):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'net_profits']]
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_profit = df_profit.merge(df1, how="outer")
+        df_profit = df_profit.merge(df1, how="right")
         # df_profile.drop_duplicates()
         print()
         print(df_profit.head())
-        df_profit.drop_duplicates()
+        df_profit.drop_duplicates(['name'],inplace=True)
+
+    # 最后一年数据可能不全，单独处理并做外连接
+    df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'net_profits']]
+    # df1['code'] = df1['code'].apply(lambda x: str(x))
+    df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
+    df1.rename(columns={'net_profits': 'net_profits' + str(year2)}, inplace=True)
+    # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
+    df_profit = df_profit.merge(df1, how="outer")
+    df_profit.drop_duplicates(['name'],inplace=True)
+
+    # 缺失值处理，先向后填充，再填充0
     df_profit = df_profit.fillna(method="backfill", axis=1)
-    df_profit = df_profit.fillna(method="pad", axis=1)
-    df_profit = df_profit.drop_duplicates(['code'])
-    print(df_profit)
+    df_profit = df_profit.fillna(0)
+    print(df_profit[['code','name']])
     return df_profit
 
 
@@ -82,7 +92,7 @@ def getProfitofALLStocks():
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     print("Open database successfully")
-    df_profit.to_sql('profitSince1989', con=conn, if_exists='replace', index=False)
+    df_profit.to_sql('profit_since1989', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
