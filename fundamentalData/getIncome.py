@@ -55,7 +55,7 @@ def getIncomeSince(year1):
     # 缺失值处理，先向后填充，再填充0
     df_Income = df_Income.fillna(method="backfill", axis=1)
     df_Income = df_Income.fillna(0)
-    df_Income=df_Income.T
+    df_Income = df_Income.fillna(method="pad", axis=1)
     print(df_Income[['code','name']])
     return df_Income
 
@@ -108,9 +108,8 @@ def getIncomeofALLStocks():
 
 
 # getIncomeOf5Year(filepath)
-# getIncomeofALLStocks()
+getIncomeofALLStocks()
 
-df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
-df=df_Income[['code','name']]
-df.set_index('code',inplace=True)
-print(df.T)
+# df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
+# df=df_Income[['code','name']]
+# print(df)

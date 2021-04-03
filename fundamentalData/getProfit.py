@@ -51,6 +51,7 @@ def getProfitSince(year1):
     # 缺失值处理，先向后填充，再填充0
     df_profit = df_profit.fillna(method="backfill", axis=1)
     df_profit = df_profit.fillna(0)
+    df_Income = df_profit.fillna(method="pad", axis=1)
     print(df_profit[['code','name']])
     return df_profit
 

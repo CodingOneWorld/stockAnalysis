@@ -51,5 +51,6 @@ def selectByIncome():
     return data2['code'].values
 
 
-# stocks = selectByIncome()
-# print(stocks)
+stocks = selectByIncome()
+print(stocks)
+print(len(stocks))

@@ -51,8 +51,9 @@ def selectByProfit():
     return data2['code'].values
 
 
-# stocks = selectByProfit()
-# print(stocks)
+stocks = selectByProfit()
+print(stocks)
+print(len(stocks))
 
 
 
