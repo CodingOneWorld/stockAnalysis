@@ -37,7 +37,7 @@ def getProfitSince(year1):
         # df_profile.drop_duplicates()
         print()
         print(df_profit.head())
-        df_profit.drop_duplicates(['name'],inplace=True)
+        df_profit.drop_duplicates(['name'], inplace=True)
 
     # 最后一年数据可能不全，单独处理并做外连接
     df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'net_profits']]
@@ -46,13 +46,12 @@ def getProfitSince(year1):
     df1.rename(columns={'net_profits': 'net_profits' + str(year2)}, inplace=True)
     # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
     df_profit = df_profit.merge(df1, how="outer")
-    df_profit.drop_duplicates(['name'],inplace=True)
+    df_profit.drop_duplicates(['name'], inplace=True)
 
     # 缺失值处理，先向后填充，再填充0
     df_profit = df_profit.fillna(method="backfill", axis=1)
     df_profit = df_profit.fillna(0)
-    df_Income = df_profit.fillna(method="pad", axis=1)
-    print(df_profit[['code','name']])
+    print(df_profit[['code', 'name']])
     return df_profit
 
 

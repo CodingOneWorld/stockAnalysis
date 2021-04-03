@@ -23,5 +23,5 @@ delta_1d = datetime.timedelta(days=1)
 update_date = (day0 + delta_1d).strftime('%Y%m%d')
 print(update_date)
 
-updateDailyData_tspro(update_date, DB_PATH, 0, 0, 0)
+updateDailyData_tspro(update_date, DB_PATH, -1, 1, 0)
 getStockBasicList_tspro(DB_PATH)
