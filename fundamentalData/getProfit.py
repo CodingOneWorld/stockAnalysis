@@ -5,11 +5,11 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import sqlite3
-
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 from contants.commonContants import DB_PATH
 from util.utilsCommon import code2ts_code
 
+
+# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
