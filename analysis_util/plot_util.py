@@ -49,6 +49,6 @@ def plot_profit_line(stock_name):
     plt.show()
 
 
-plot_price_line('000001', '20200101', '20201231')
+plot_price_line('688676', '20210401', '20210414')
 # plot_income_line("潍柴重机")
 # plot_profit_line("潍柴重机")

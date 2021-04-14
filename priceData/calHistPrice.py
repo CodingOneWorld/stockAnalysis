@@ -89,4 +89,5 @@ def calHistPriceofAllStocks2database():
 
 # calHistPriceofStock('000938')
 # calHistPriceofAllStocks()
-calHistPriceofAllStocks2database()
+# calHistPriceofAllStocks2database()
+
