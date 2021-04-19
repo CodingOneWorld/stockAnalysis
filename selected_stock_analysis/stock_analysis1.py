@@ -3,19 +3,20 @@
 # 读取自选股文件
 import sqlite3
 import pandas as pd
+import tushare as ts
 from contants.commonContants import DB_PATH
 from technical_analysis.cal_stock_trend import cal_stock_trend
 
-f=open("自选股.sel","r")
+f = open("自选股.sel", "r")
 
-stock_list=[]
+stock_list = []
 for line in f:
-    line=line.split("")
+    line = line.split("")
     for l in line:
-        l=l.split("\x07!")
+        l = l.split("\x07!")
         # print(l)
         for i in l:
-            i=i.split("\x07\x16")
+            i = i.split("\x07\x16")
             # print(i)
             for s in i:
                 stock_list.append(s)
@@ -27,8 +28,13 @@ conn = sqlite3.connect(DB_PATH)
 stock_list_data = pd.read_sql('select * from stockList', conn)
 print(stock_list_data.head())
 
+# 股票收入及利润
+# df1 = ts.get_profit_data(2021, 1).loc[:, ['code', 'name', 'business_income', 'net_profits']]
+# df1 = ts.get_profit_data(2021, 1)
+# print(df1)
+
 for s in stock_list:
     # print(len(stock_list_data[stock_list_data["symbol"]==s].values))
-    k=cal_stock_trend(s, 5)
-    if k>0:
+    k = cal_stock_trend(s, 10)
+    if k > 0:
         print(s)
