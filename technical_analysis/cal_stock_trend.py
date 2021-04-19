@@ -41,9 +41,9 @@ def cal_stock_trend(stock,latest_days):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
     return model.coef_[0][0]
 
 
