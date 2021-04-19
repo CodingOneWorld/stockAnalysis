@@ -2,8 +2,8 @@
 import sqlite3
 
 from contants.commonContants import DB_PATH
-from tradeData.updateDailyTradeData import updateDailyData_tspro
-from tradeData.getStockBasicList import getStockBasicList_tspro
+from trade_data.updateDailyTradeData import updateDailyData_tspro
+from trade_data.getStockBasicList import getStockBasicList_tspro
 import pandas as pd
 import datetime
 

@@ -48,4 +48,4 @@ def cal_stock_trend(stock,latest_days):
 
 
 
-cal_stock_trend('688676',10)
+# cal_stock_trend('688676',10)

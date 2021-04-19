@@ -3,8 +3,8 @@ import sqlite3
 import pandas as pd
 
 from contants.commonContants import DB_PATH
-from priceData.calHistPrice import calHistPriceofAllStocks
-from fundamentalData.get_ST_stocks import get_ST_stocks
+from price_data.calHistPrice import calHistPriceofAllStocks
+from fundamental_data.get_ST_stocks import get_ST_stocks
 
 
 if __name__ == '__main__':

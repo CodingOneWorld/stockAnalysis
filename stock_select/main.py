@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from stockSelect.selectByIncome import selectByIncome
-from stockSelect.selectByprofit import selectByProfit
-from priceData.calHistPrice import calHistPriceofStock
+from stock_select.selectByIncome import selectByIncome
+from stock_select.selectByprofit import selectByProfit
+from price_data.calHistPrice import calHistPriceofStock
 
 stocksOfIncome = selectByIncome()
 stocksOfProfit = selectByProfit()

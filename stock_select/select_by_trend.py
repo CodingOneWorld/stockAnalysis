@@ -4,7 +4,7 @@ import sqlite3
 import pandas as pd
 
 from contants.commonContants import DB_PATH
-from technicalAnalysis.cal_stock_trend import cal_stock_trend
+from technical_analysis.cal_stock_trend import cal_stock_trend
 
 
 def select_up_trend_of_all_stocks(latest_days):
