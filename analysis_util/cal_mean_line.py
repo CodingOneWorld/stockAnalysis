@@ -28,14 +28,16 @@ def cal_mean_line(code,latest_days):
     latest_days = latest_days if len(stock_trade_data.close) > latest_days else len(stock_trade_data.close)
     start_days=len(stock_trade_data.close)-latest_days+1
     stock_trade_data=stock_trade_data.iloc[start_days:len(stock_trade_data.close), :]
-    stock_trade_data.loc[:, 'close'].plot.line()
+
+    # 绘制交易金额曲线
+    stock_trade_data.loc[:, 'low'].plot.line()
 
     # 计算移动均线，根据收盘价
     df_mean = stock_trade_data.close.rolling(window=60).mean().fillna(0)
     # print(df_mean)
     df_mean.plot.line()
 
-    df_mean = stock_trade_data.close.rolling(window=180).mean().fillna(0)
+    df_mean = stock_trade_data.close.rolling(window=140).mean().fillna(0)
     # print(df_mean)
     df_mean.plot.line()
     #
@@ -58,4 +60,4 @@ def cal_mean_line(code,latest_days):
     plt.show()
 
 
-cal_mean_line('000001',700)
+cal_mean_line('000001',300)

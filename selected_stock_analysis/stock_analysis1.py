@@ -4,7 +4,7 @@
 import sqlite3
 import pandas as pd
 from contants.commonContants import DB_PATH
-from technical_analysis.cal_stock_trend import cal_stock_trend
+from analysis_util.cal_stock_trend import cal_stock_trend
 
 f=open("自选股.sel","r")
 
