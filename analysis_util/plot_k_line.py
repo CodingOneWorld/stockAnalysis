@@ -6,11 +6,11 @@ import mplfinance as mpf
 from contants.commonContants import DB_PATH
 
 
-def load_data(code):
+def load_data(stock):
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
-    table_name = 'S' + code + '_daily'
+    table_name = 'S' + stock + '_daily'
     stock_trade_data = pd.read_sql('select * from ' + table_name, conn)[:600]
     print(stock_trade_data.head())
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(
@@ -22,8 +22,11 @@ def load_data(code):
     return stock_trade_data
 
 
-stock_trade_data = load_data('000001')
-# OHLC图
-# mpf.plot(stock_trade_data)
-# K线图，附带均线，成交量
-mpf.plot(stock_trade_data, type='candle', mav=(30, 60, 140), volume=True)
+def plot_k_line(stock):
+    stock_trade_data = load_data(stock)
+    # OHLC图
+    # mpf.plot(stock_trade_data)
+    # K线图，附带均线，成交量
+    mpf.plot(stock_trade_data, type='candle', mav=(30, 60, 140), volume=True)
+
+
