@@ -32,7 +32,7 @@ print(len(stocks_tspro))
 
 # 获取交易数据
 # df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='19910404', end_date='20201130')
-df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='20210422')
+df = ts.pro_bar(ts_code='689009.SH', adj='qfq', start_date='20210422')
 print(df)
 
 

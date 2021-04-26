@@ -41,9 +41,9 @@ def getStockBasicList_tspro(filepath):
     print("insert database successfully")
 
 
-if __name__ == '__main__':
-    # getStockBasicList(filepath)
-    getStockBasicList_tspro(DB_PATH)
+# if __name__ == '__main__':
+#     # getStockBasicList(filepath)
+#     getStockBasicList_tspro(DB_PATH)
 
 
 
