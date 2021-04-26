@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
-import sys
-
-# 参数
-print(sys.path)
-sys.path.append('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data')
-sys.path.append('/Users/beyondzq/PycharmProjects/stockAnalysis')
-sys.path.append('/Users/beyondzq/PycharmProjects/stockAnalysis/contants')
-
 
 import sqlite3
-from contants.commonContants import DB_PATH
 from trade_data.updateDailyTradeData import updateDailyData_tspro
 from trade_data.getStockBasicList import getStockBasicList_tspro
 import pandas as pd
@@ -18,7 +9,7 @@ import schedule
 import time
 
 
-def update_trade_data2_database():
+def update_trade_data2_database(DB_PATH):
     # 从数据库中直接推算日期参数
     # update_date = "20201118"
     # pandas连接数据库
@@ -37,7 +28,8 @@ def update_trade_data2_database():
 
 
 if __name__ == '__main__':
-    schedule.every().day.at("19:50").do(update_trade_data2_database)
+    DB_PATH = "/Users/beyondzq/DB/stocks.db"
+    schedule.every().day.at("18:00").do(update_trade_data2_database(DB_PATH))
     while True:
         schedule.run_pending()
         time.sleep(1)
