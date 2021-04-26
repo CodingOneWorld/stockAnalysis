@@ -22,17 +22,19 @@ ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
 
 # 查询最新的股票列表
-# 查询当前所有正常上市交易的股票列表-是ts_pro与ts的股票列表的交集
+# 查询当前所有正常上市交易的股票列表-是ts_pro
 # ts_pro
 stock_basic = pro.stock_basic(exchange='', list_status='L')
-stock_basic = stock_basic[stock_basic['list_date'] < '20201201']
+# 获取当前日期
+localdate = time.strftime("%Y%m%d", time.localtime())
+stock_basic = stock_basic[stock_basic['list_date'] < localdate]
 print(stock_basic)
 stocks_tspro = stock_basic['ts_code'].values
 print(len(stocks_tspro))
 
 # 获取交易数据
 # df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='19910404', end_date='20201130')
-df = ts.pro_bar(ts_code='000001.SZ', adj='qfq', start_date='20210422')
+df = ts.pro_bar(ts_code='688009.SH', adj='qfq', start_date='20210422')
 print(df)
 
 
