@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
-import sqlite3
+import sys
 
+# 参数
+sys.path.append('E:\\coding\\pycharmProjects\\stockAnalysis\\trade_data')
+sys.path.append('E:\\coding\\pycharmProjects\\stockAnalysis\\contants')
+sys.path.append('E:\\coding\\pycharmProjects\\stockAnalysis')
+
+
+import sqlite3
 from contants.commonContants import DB_PATH
 from trade_data.updateDailyTradeData import updateDailyData_tspro
 from trade_data.getStockBasicList import getStockBasicList_tspro
 import pandas as pd
 import datetime
 
-# 参数
-# db path
 
 # 从数据库中直接推算日期参数
 # update_date = "20201118"
