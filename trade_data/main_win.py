@@ -29,7 +29,7 @@ def update_trade_data2_database(DB_PATH):
 
 if __name__ == '__main__':
     DB_PATH = "E:/Money/stocks.db"
-    schedule.every().day.at("18:00").do(update_trade_data2_database(DB_PATH))
+    schedule.every().day.at("18:00").do(update_trade_data2_database,DB_PATH)
     while True:
         schedule.run_pending()
         time.sleep(1)
