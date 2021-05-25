@@ -92,7 +92,7 @@ def getProfitofALLStocks():
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     print("Open database successfully")
-    df_profit.to_sql('profit_since1989', con=conn, if_exists='replace', index=False)
+    df_profit.to_sql('profit_all_stocks', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
