@@ -47,5 +47,24 @@ def cal_stock_trend(stock,latest_days):
     return model.coef_[0][0]
 
 
+def cal_trend_common(data):
+    x=[i for i in range(1,len(data)+1)]
+    y=data
+    x=np.array(x).reshape(-1,1)
+    y=np.array(y).reshape(-1,1)
+
+    model = linear_model.LinearRegression()
+    model.fit(x, y)
+    # print(model.intercept_)  # 截距
+    # print(model.coef_[0][0])  # 线性模型的系数
+    y2 = model.predict(x)
+
+    # 绘制散点图与拟合直线图
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
+    return model.coef_[0][0]
+
+
 
 # cal_stock_trend('688676',10)

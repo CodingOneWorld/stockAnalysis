@@ -63,32 +63,32 @@ def getIncomeSince(year1):
 
 
 # 获取最近5年的年收入数据
-def getIncomeOf5Year(filepath):
-    year2 = date.today().year - 1
-    year1 = year2 - 4
-
-    # ts_code转化 code2ts_code(x)
-    # 获取第一年的收入数据
-    df_Income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
-    df_Income['ts_code'] = df_Income['code'].apply(lambda x: code2ts_code(x))
-
-    for year in range(year1, year2 + 1):
-        df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
-        df1.rename(columns={'business_income': str(year)}, inplace=True)
-        # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_Income = df_Income.merge(df1)
-        df_Income.drop_duplicates()
-        print()
-        print(df_Income.head())
-
-    df_Income.drop_duplicates()
-    print(df_Income.head())
-
-    # 连接sqlite数据库
-    conn = sqlite3.connect(filepath)
-    print("Open database successfully")
-    df_Income.to_sql('incomeIn5years', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
+# def getIncomeOf5Year(filepath):
+#     year2 = date.today().year - 1
+#     year1 = year2 - 4
+#
+#     # ts_code转化 code2ts_code(x)
+#     # 获取第一年的收入数据
+#     df_Income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
+#     df_Income['ts_code'] = df_Income['code'].apply(lambda x: code2ts_code(x))
+#
+#     for year in range(year1, year2 + 1):
+#         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
+#         df1.rename(columns={'business_income': str(year)}, inplace=True)
+#         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
+#         df_Income = df_Income.merge(df1)
+#         df_Income.drop_duplicates()
+#         print()
+#         print(df_Income.head())
+#
+#     df_Income.drop_duplicates()
+#     print(df_Income.head())
+#
+#     # 连接sqlite数据库
+#     conn = sqlite3.connect(filepath)
+#     print("Open database successfully")
+#     df_Income.to_sql('incomeIn5years', con=conn, if_exists='replace', index=False)
+#     print("insert database successfully")
 
 
 # 获取所有股票的全部历史收入信息
@@ -102,7 +102,7 @@ def getIncomeofALLStocks():
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     print("Open database successfully")
-    df_Income.to_sql('income_since1989', con=conn, if_exists='replace', index=False)
+    df_Income.to_sql('income_all_stocks', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 

@@ -28,10 +28,10 @@ def plot_income_line(stock_name):
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
     table_name = 'income_since1989'
-    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
-    print(stock_trade_data.head())
+    stock_income_data = pd.read_sql('select * from ' + table_name, conn)
+    print(stock_income_data.head())
     # stock_trade_data=stock_trade_data[stock_trade_data['trade_date']>20191215]
-    stock_trade_data[stock_trade_data['name'] == stock_name].iloc[:, 3:stock_trade_data.shape[1]].T.plot.line()
+    stock_income_data[stock_income_data['name'] == stock_name].iloc[:, 3:stock_income_data.shape[1]].T.plot.line()
     plt.show()
 
 
