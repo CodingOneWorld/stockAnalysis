@@ -51,6 +51,14 @@ def selectByIncome():
     return data2['code'].values
 
 
+def getIncome(stock,latest_years):
+    # pandas连接数据库
+    conn = sqlite3.connect(DB_PATH)
+    income_data = pd.read_sql('select * from income_all_stocks', conn)
+    income_data_stock=income_data[income_data['symbol']==stock]
+
+
+
 # stocks = selectByIncome()
 # print(stocks)
 # print(len(stocks))
