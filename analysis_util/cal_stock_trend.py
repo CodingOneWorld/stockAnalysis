@@ -19,7 +19,7 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def cal_stock_trend(stock,latest_days):
+def cal_stock_price_trend(stock,latest_days):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
@@ -60,9 +60,9 @@ def cal_trend_common(data):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    # plt.plot(x, y, 'k.')
-    # plt.plot(x, y2, 'g-')
-    # plt.show()
+    plt.plot(x, y, 'k.')
+    plt.plot(x, y2, 'g-')
+    plt.show()
     return model.coef_[0][0]
 
 
