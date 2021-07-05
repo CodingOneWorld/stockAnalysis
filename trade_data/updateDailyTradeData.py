@@ -70,7 +70,7 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             print('stocks_inter:' + str(i))
             count -= 1
             if count < 0:
-                time.sleep(10)
+                time.sleep(5)
                 count = 200
             ts_code = stocks_inter[i]
             name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
