@@ -60,4 +60,49 @@ def cal_mean_line(code,latest_days):
     plt.show()
 
 
+def plot_mean_line(code,latest_days):
+    # 连接sqlite数据库
+    conn = sqlite3.connect(DB_PATH)
+    # 读取相应的交易数据表
+    table_name = 'S' + code + '_daily'
+    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
+    stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(lambda x: str(x))
+    stock_trade_data.set_index("trade_date", inplace=True)
+
+    latest_days = latest_days if len(stock_trade_data.close) > latest_days else len(stock_trade_data.close)
+    start_days=len(stock_trade_data.close)-latest_days+1
+    stock_trade_data=stock_trade_data.iloc[start_days:len(stock_trade_data.close), :]
+
+    # 绘制交易金额曲线
+    stock_trade_data.loc[:, 'low'].plot.line()
+
+    # 计算移动均线，根据收盘价
+    df_mean = stock_trade_data.close.rolling(window=60).mean().fillna(0)
+    # print(df_mean)
+    df_mean.plot.line()
+
+    df_mean = stock_trade_data.close.rolling(window=140).mean().fillna(0)
+    # print(df_mean)
+    df_mean.plot.line()
+    #
+    # df_mean = stock_trade_data.close.rolling(window=88).mean().fillna(0)
+    # # print(df_mean)
+    # df_mean.plot.line()
+    #
+    # df_mean = stock_trade_data.close.rolling(window=120).mean().fillna(0)
+    # # print(df_mean)
+    # df_mean.plot.line()
+    #
+    # df_mean = stock_trade_data.close.rolling(window=140).mean().fillna(0)
+    # # print(df_mean)
+    # df_mean.plot.line()
+
+    # df_mean = stock_trade_data.close.rolling(window=180).mean().fillna(0)
+    # # print(df_mean)
+    # df_mean.plot.line()
+
+    plt.show()
+
+
+
 cal_mean_line('000001',300)

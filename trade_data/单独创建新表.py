@@ -42,7 +42,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     # print(df2)
     data = df2.values
     # 创建表
-    table_name = 'S' + ts_code.split('.')[0] + '_daily_test'
+    table_name = 'S' + ts_code.split('.')[0] + '_daily'
     print(table_name)
     # c.execute('''CREATE TABLE ''' + table_name + '''
     #                        (trade_date INT PRIMARY KEY     NOT NULL,

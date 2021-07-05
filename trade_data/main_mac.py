@@ -29,9 +29,22 @@ def update_trade_data2_database(DB_PATH):
 
 if __name__ == '__main__':
     DB_PATH = "/Users/beyondzq/DB/stocks.db"
-    schedule.every().day.at("18:00").do(update_trade_data2_database,DB_PATH)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-    # update_trade_data2_database(DB_PATH)
+    # schedule.every().day.at("18:00").do(update_trade_data2_database,DB_PATH)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
+    update_trade_data2_database(DB_PATH)
+
+    # # 备份数据库
+    # def testBakSqlite():
+    #     conn = sqlite3.connect(DB_PATH)
+    #     with open('stocks.back.db', 'wb+') as f:
+    #         for line in conn.iterdump():
+    #             data = line + '\n'
+    #             print(data)
+    #             data = data.encode("utf-8")
+    #             f.write(data)
+    #
+    #
+    # testBakSqlite()
 
