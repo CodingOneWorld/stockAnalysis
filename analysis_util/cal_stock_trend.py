@@ -44,6 +44,7 @@ def cal_stock_price_trend(stock,latest_days):
     # plt.plot(x, y, 'k.')
     # plt.plot(x, y2, 'g-')
     # plt.show()
+    # print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
@@ -60,11 +61,12 @@ def cal_trend_common(data):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
+    # print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
 
-# cal_stock_trend('688676',10)
+cal_stock_price_trend('600702',1000)

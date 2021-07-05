@@ -84,15 +84,15 @@ def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             df2.reset_index(drop=True, inplace=True)
             df2['name'] = [name] * len(df2)
             print(df2)
-            # data = df2.values
+            data = df2.values
             # # 向表中插入数据
             table_name = 'S' + ts_code.split('.')[0] + '_daily'
-            # # 批量插入数据
-            # sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg" \
-            #                                     ",vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-            # c.executemany(sql, data)
-            # conn.commit()
-            df2.to_sql(table_name, con=conn, if_exists='append', index=False)
+            # 批量插入数据
+            sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg" \
+                                                ",vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            c.executemany(sql, data)
+            conn.commit()
+            # df2.to_sql(table_name, con=conn, if_exists='append', index=False)
             print(table_name + ' done')
 
     # 针对新上市的股票，建表，插入数据
