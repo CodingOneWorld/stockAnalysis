@@ -19,13 +19,22 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def cal_stock_price_trend(stock,latest_days):
+# 获取某只股票的所有历史股价
+# type取值 close，high,low，控制取最低价，还是最高价还是收盘价
+def get_stock_price(stock,type):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
     table_name = 'S' + str(stock) + '_daily'
     stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
-    stock_price = stock_trade_data['close'].values
+    stock_price = stock_trade_data[type].values
+    return stock_price
+
+
+def cal_stock_price_trend(stock,latest_days):
+    # 获取股票历史价格
+    stock_price=get_stock_price(stock,'close')
+
     # 构建线性回归样本，计算斜率
     latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
     x=[i for i in range(1,latest_days+1)]
