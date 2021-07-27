@@ -68,9 +68,18 @@ def cal_mean_line(code, latest_days):
     df_mean = stock_trade_data.close.rolling(window=180).mean().fillna(0)
     mean_180_latest = df_mean.values[-1]
     # print(mean_180_latest)
-    return (
-    mean_10_latest, mean_20_latest, mean_30_latest, mean_60_latest, mean_88_latest, mean_120_latest, mean_140_latest,
-    mean_180_latest)
+
+    # 存入字典
+    mean_dict = {}
+    mean_dict['10'] = mean_10_latest
+    mean_dict['20'] = mean_20_latest
+    mean_dict['30'] = mean_30_latest
+    mean_dict['60'] = mean_60_latest
+    mean_dict['88'] = mean_88_latest
+    mean_dict['120'] = mean_120_latest
+    mean_dict['140'] = mean_140_latest
+    mean_dict['180'] = mean_180_latest
+    return mean_dict
 
 
 def plot_mean_line(code, latest_days):
@@ -120,4 +129,3 @@ def plot_mean_line(code, latest_days):
 if __name__ == '__main__':
     mean_list = cal_mean_line('000001', 300)
     print(mean_list)
-
