@@ -34,7 +34,7 @@ def mean_price_compare(stock_code):
     return stock_code+'/'+str(k)+'/'+','.join(stock_mean_list)
 
 if __name__ == '__main__':
-    stock_mean=mean_price_compare('000002')
+    stock_mean=mean_price_compare('000004')
     print(stock_mean)
 
 

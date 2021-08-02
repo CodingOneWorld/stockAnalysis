@@ -7,4 +7,4 @@ def cal_low_price_stock(stock):
     # print(price)
     pct = (price[3] + price[2]) / price[1]
     if 0.2 < pct < 0.5:
-        print(s)
+        print(stock)
