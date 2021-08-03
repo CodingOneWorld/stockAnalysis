@@ -5,7 +5,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import tushare as ts
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend,cal_trend_common
 
 

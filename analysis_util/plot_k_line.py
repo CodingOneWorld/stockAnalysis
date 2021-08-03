@@ -3,7 +3,7 @@ import datetime
 import sqlite3
 import pandas as pd
 import mplfinance as mpf
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 
 def load_data(stock):

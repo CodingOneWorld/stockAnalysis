@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-from trade_data.updateDailyTradeData import updateDailyData_tspro
-from trade_data.getStockBasicList import getStockBasicList_tspro
+from trade_data.update_daily_trade_data import update_daily_data_tspro
+from trade_data.get_stock_basic_list import get_stock_basic_list_tspro
 import pandas as pd
 import datetime
 import schedule
@@ -23,8 +23,8 @@ def update_trade_data2_database(DB_PATH):
     update_date = (day0 + delta_1d).strftime('%Y%m%d')
     print(update_date)
 
-    updateDailyData_tspro(update_date, DB_PATH, 0, 0, 0)
-    getStockBasicList_tspro(DB_PATH)
+    update_daily_data_tspro(update_date, DB_PATH, 0, 0, 0)
+    get_stock_basic_list_tspro(DB_PATH)
 
 
 if __name__ == '__main__':

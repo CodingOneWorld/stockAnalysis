@@ -5,8 +5,8 @@ import pandas as pd
 from datetime import date
 import sqlite3
 
-from contants.commonContants import DB_PATH
-from util.utilsCommon import code2ts_code
+from contants.common_contants import DB_PATH
+from util.utils_common import code2ts_code
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -22,7 +22,7 @@ pd.set_option('display.width', 1000)
 
 # 获取收入数据
 # 获取某年到现在的年收入数据
-def queryIncomeSince(year1):
+def query_income_since(year1):
     year2 = date.today().year - 1
 
     # ts_code转化 code2ts_code(x)
@@ -60,12 +60,12 @@ def queryIncomeSince(year1):
 
 
 # 获取所有股票的全部历史收入信息,并写入数据库
-def IncomeofALLStocks2sql():
+def income_of_all_stocks2sql():
     # 获取股票列表及其上市时间
     # pandas连接数据库
     year = 1989
     print(year)
-    df_Income = queryIncomeSince(year)
+    df_Income = query_income_since(year)
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
@@ -74,8 +74,16 @@ def IncomeofALLStocks2sql():
     print("insert database successfully")
 
 
+def get_income_of_latest_years(stock,latest_years):
+    # pandas连接数据库
+    conn = sqlite3.connect(DB_PATH)
+    income_data = pd.read_sql('select * from income_all_stocks', conn)
+    income_data_stock=income_data[income_data['symbol']==stock]
+
+
+
 # getIncomeOf5Year(filepath)
-IncomeofALLStocks2sql()
+income_of_all_stocks2sql()
 
 # df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
 # df=df_Income[['code','name']]

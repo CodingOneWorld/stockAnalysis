@@ -25,7 +25,7 @@ pd.set_option('expand_frame_repr', False)
 # cou_inner 对于已有的股票增量更新日线数据，如果在这运行出错，可以替换为出错的索引值；想跳过设为-1
 # cou_new 对于新加的股票，新建表记录数据，如果在这运行出错，可以替换为出错的索引值；想跳过设为-1
 # cou_del 对于已经没有的股票（退市）删表，如果在这运行出错，可以替换为出错的索引值；想跳过设为-1
-def updateDailyData_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
+def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')

@@ -5,7 +5,7 @@ import tushare as ts
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -16,7 +16,7 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def selectByIncome():
+def select_by_income():
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     incomeData = pd.read_sql('select * from incomeIn5years', conn)
@@ -51,14 +51,9 @@ def selectByIncome():
     return data2['code'].values
 
 
-def getIncome(stock,latest_years):
-    # pandas连接数据库
-    conn = sqlite3.connect(DB_PATH)
-    income_data = pd.read_sql('select * from income_all_stocks', conn)
-    income_data_stock=income_data[income_data['symbol']==stock]
 
 
 
-# stocks = selectByIncome()
+# stocks = select_by_income()
 # print(stocks)
 # print(len(stocks))

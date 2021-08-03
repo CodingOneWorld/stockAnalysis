@@ -2,7 +2,7 @@
 import sqlite3
 import pandas as pd
 
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 if __name__ == '__main__':
     # 读取全部股票数据库

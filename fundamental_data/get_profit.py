@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import sqlite3
-from contants.commonContants import DB_PATH
-from util.utilsCommon import code2ts_code
+from contants.common_contants import DB_PATH
+from util.utils_common import code2ts_code
 
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
@@ -20,7 +20,7 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 获取某年到现在的年净利润数据
-def getProfitSince(year1):
+def query_profit_since(year1):
     year2 = date.today().year - 1
 
     # ts_code转化 code2ts_code(x)
@@ -56,7 +56,7 @@ def getProfitSince(year1):
 
 
 # 获取最近5年的年收入数据
-def getProfitOf5Year(filepath):
+def get_profit_of5year(filepath):
     year2 = date.today().year - 1
     year1 = year2 - 4
 
@@ -82,12 +82,12 @@ def getProfitOf5Year(filepath):
 
 
 # 获取所有股票的全部历史净利润信息
-def getProfitofALLStocks():
+def profit_of_all_stocks2sql():
     # 获取股票列表及其上市时间
     # pandas连接数据库
     year = 1989
     print(year)
-    df_profit = getProfitSince(year)
+    df_profit = get_profit_since(year)
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
@@ -97,4 +97,4 @@ def getProfitofALLStocks():
 
 
 # getProfitOf5Year(filepath)
-getProfitofALLStocks()
+profit_of_all_stocks2sql()
