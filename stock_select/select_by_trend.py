@@ -3,8 +3,8 @@
 import sqlite3
 import pandas as pd
 
-from contants.commonContants import DB_PATH
-from analysis_util.cal_stock_trend import cal_stock_trend
+from contants.common_contants import DB_PATH
+from analysis_util.cal_stock_trend import cal_stock_price_trend
 
 
 def select_up_trend_of_all_stocks(latest_days):
@@ -18,7 +18,7 @@ def select_up_trend_of_all_stocks(latest_days):
     # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
     stock_array = []
     for stock in stock_list:
-        k=cal_stock_trend(stock,latest_days)
+        k=cal_stock_price_trend(stock,latest_days)
         if k>0:
             print(stock+":"+str(k))
             stock_array.append(stock)

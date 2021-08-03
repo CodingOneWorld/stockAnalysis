@@ -2,8 +2,8 @@
 import sqlite3
 import pandas as pd
 
-from contants.commonContants import DB_PATH
-from price_data.calHistPrice import calHistPriceofAllStocks
+from contants.common_contants import DB_PATH
+from price_data.cal_hist_price import calHistPriceofAllStocks
 from fundamental_data.get_ST_stocks import get_ST_stocks
 
 

@@ -3,7 +3,7 @@
 import pandas as pd
 import tushare as ts
 import sqlite3
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 
@@ -16,7 +16,7 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def selectByProfit():
+def select_by_profit():
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     profitData = pd.read_sql('select * from profitIn5years', conn)
@@ -51,7 +51,7 @@ def selectByProfit():
     return data2['code'].values
 
 
-# stocks = selectByProfit()
+# stocks = select_by_profit()
 # print(stocks)
 # print(len(stocks))
 

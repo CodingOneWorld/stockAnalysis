@@ -10,7 +10,7 @@ import time
 import os
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -20,7 +20,7 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-def calHistPriceofStock(stock):
+def cal_hist_price_of_stock(stock):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
@@ -44,7 +44,7 @@ def calHistPriceofStock(stock):
     return [stock, max_price, min_price, current_price]
 
 
-def calHistPriceofAllStocks():
+def cal_hist_price_of_all_stocks():
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
@@ -55,7 +55,7 @@ def calHistPriceofAllStocks():
     # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
     price_array = []
     for stock in stock_list:
-        price = calHistPriceofStock(stock)
+        price = cal_hist_price_of_stock(stock)
         print(price)
         price_array.append(price)
     df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
@@ -63,7 +63,7 @@ def calHistPriceofAllStocks():
     return df
 
 
-def calHistPriceofAllStocks2database():
+def cal_hist_price_of_all_stocks2sql():
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
@@ -74,7 +74,7 @@ def calHistPriceofAllStocks2database():
     # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
     price_array = []
     for stock in stock_list:
-        price = calHistPriceofStock(stock)
+        price = cal_hist_price_of_all_stocks(stock)
         print(price)
         price_array.append(price)
     df = pd.DataFrame(price_array, columns=['code', 'max_price', 'min_price', 'current_price'])
@@ -87,7 +87,7 @@ def calHistPriceofAllStocks2database():
     print("insert database successfully")
 
 
-# calHistPriceofStock('000938')
-# calHistPriceofAllStocks()
-# calHistPriceofAllStocks2database()
+# cal_hist_price_of_stock('000938')
+# cal_hist_price_of_all_stocks()
+# cal_hist_price_of_all_stocks2sql()
 

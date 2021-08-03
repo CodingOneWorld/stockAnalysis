@@ -9,7 +9,7 @@ import time
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -21,7 +21,7 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 股票基础信息表
-def getStockBasicList_tspro(filepath):
+def get_stock_basic_list_tspro(filepath):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')

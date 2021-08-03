@@ -2,7 +2,7 @@
 import sqlite3
 import pandas as pd
 
-from contants.commonContants import DB_PATH
+from contants.common_contants import DB_PATH
 
 
 def get_ST_stocks():

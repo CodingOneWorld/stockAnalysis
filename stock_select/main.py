@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-from stock_select.selectByIncome import selectByIncome
-from stock_select.selectByprofit import selectByProfit
-from price_data.calHistPrice import calHistPriceofStock
+from stock_select.select_by_income import select_by_income
+from stock_select.select_by_profit import select_by_profit
+from price_data.cal_hist_price import cal_hist_price_of_stock
 
-stocksOfIncome = selectByIncome()
-stocksOfProfit = selectByProfit()
+stocksOfIncome = select_by_income()
+stocksOfProfit = select_by_profit()
 
 stocks = set(stocksOfIncome).intersection(set(stocksOfProfit))
 
@@ -18,7 +18,7 @@ print(len(stocks))
 for s in stocks:
     s = str(s)
     if not s.startswith('3'):
-        price = calHistPriceofStock(s)
+        price = cal_hist_price_of_stock(s)
         # print(price)
         pct = (price[3] + price[2]) / price[1]
         if 0.2 < pct < 0.5:
