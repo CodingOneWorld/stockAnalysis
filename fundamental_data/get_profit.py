@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import sqlite3
+
+from analysis_util.cal_stock_trend import cal_trend_common
 from contants.common_contants import DB_PATH
 from util.utils_common import code2ts_code
 
@@ -82,12 +84,12 @@ def get_profit_of5year(filepath):
 
 
 # 获取所有股票的全部历史净利润信息
-def profit_of_all_stocks2sql():
+def profit_of_all_stocks2db():
     # 获取股票列表及其上市时间
     # pandas连接数据库
     year = 1989
     print(year)
-    df_profit = get_profit_since(year)
+    df_profit = query_profit_since(year)
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
@@ -96,5 +98,27 @@ def profit_of_all_stocks2sql():
     print("insert database successfully")
 
 
-# getProfitOf5Year(filepath)
-profit_of_all_stocks2sql()
+def get_profit_of_latest_years(stock_code,latest_years):
+    # pandas连接数据库
+    conn = sqlite3.connect(DB_PATH)
+    stock_profit_data = pd.read_sql('select * from profit_all_stocks', conn)
+    stock_profit_list=stock_profit_data['code'].values
+    if stock_profit_list.__contains__(stock_code):
+        profit_data = stock_profit_data[stock_profit_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
+        # print(profit_data)
+    else:
+        profit_data=[0]
+    # print(profit_data)
+    return profit_data
+
+
+
+if __name__ == '__main__':
+    # getProfitOf5Year(filepath)
+
+    profit_of_all_stocks2db()
+
+    # income_data=get_profit_of_latest_years('000002',6)
+    # k = cal_trend_common(income_data)
+    # print(k)
+

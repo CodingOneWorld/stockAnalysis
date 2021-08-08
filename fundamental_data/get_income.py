@@ -5,6 +5,7 @@ import pandas as pd
 from datetime import date
 import sqlite3
 
+from analysis_util.cal_stock_trend import cal_trend_common
 from contants.common_contants import DB_PATH
 from util.utils_common import code2ts_code
 
@@ -45,7 +46,7 @@ def query_income_since(year1):
 
     # 最后一年数据可能不全，单独处理并做外连接
     df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'business_income']]
-    # df1['code'] = df1['code'].apply(lambda x: str(x))
+    df1['code'] = df1['code'].apply(lambda x: str(x))
     df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
     df1.rename(columns={'business_income': 'business_income' + str(year2)}, inplace=True)
     # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
@@ -55,17 +56,18 @@ def query_income_since(year1):
     # 缺失值处理，先向后填充，再填充0
     df_Income = df_Income.fillna(method="backfill", axis=1)
     df_Income = df_Income.fillna(0)
-    print(df_Income[['code', 'name']])
+    # print(df_Income[['code', 'name']])
     return df_Income
 
 
 # 获取所有股票的全部历史收入信息,并写入数据库
-def income_of_all_stocks2sql():
+def income_of_all_stocks2db():
     # 获取股票列表及其上市时间
     # pandas连接数据库
     year = 1989
     print(year)
     df_Income = query_income_since(year)
+    print(df_Income.count())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
@@ -74,17 +76,32 @@ def income_of_all_stocks2sql():
     print("insert database successfully")
 
 
-def get_income_of_latest_years(stock,latest_years):
+def get_income_of_latest_years(stock_code,latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
-    income_data = pd.read_sql('select * from income_all_stocks', conn)
-    income_data_stock=income_data[income_data['symbol']==stock]
+    stock_income_data = pd.read_sql('select * from income_all_stocks', conn)
+    # 判断需要查的股票代码是否在数据库中
+    stock_income_list=stock_income_data['code'].values
+    if stock_income_list.__contains__(stock_code):
+        income_data = stock_income_data[stock_income_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
+        # print(income_data)
+    else:
+        income_data=[0]
+    return income_data
 
+if __name__ == '__main__':
+    # income_of_all_stocks2db()
 
+    income_data = get_income_of_latest_years('002210', 6)
+    k = cal_trend_common(income_data)
+    print(k)
 
-# getIncomeOf5Year(filepath)
-income_of_all_stocks2sql()
+    df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
+    df = df_Income[['code', 'name']]
+    print(df)
 
-# df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
-# df=df_Income[['code','name']]
-# print(df)
+    data = query_income_since(1989)
+    print(data.count())
+    data2 = data[data['code'] == '001207']
+    print(data2)
+
