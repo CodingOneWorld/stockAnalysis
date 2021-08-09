@@ -28,9 +28,9 @@ def query_income_since(year1):
 
     # ts_code转化 code2ts_code(x)
     # 获取第一年的收入数据，只获取股票名称
-    df_Income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
+    df_income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
     # df_Income['code'] = df_Income['code'].apply(lambda x: str(x))
-    df_Income['ts_code'] = df_Income['code'].apply(lambda x: code2ts_code(x))
+    df_income['ts_code'] = df_income['code'].apply(lambda x: code2ts_code(x))
 
     for year in range(year1, year2):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
@@ -38,11 +38,11 @@ def query_income_since(year1):
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_Income = df_Income.merge(df1, how="right")
+        df_income = df_income.merge(df1, how="right")
         # df_profile.drop_duplicates()
         print()
-        print(df_Income.head())
-        df_Income.drop_duplicates(['name'], inplace=True)
+        print(df_income.head())
+        df_income.drop_duplicates(['name'], inplace=True)
 
     # 最后一年数据可能不全，单独处理并做外连接
     df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'business_income']]
@@ -50,14 +50,14 @@ def query_income_since(year1):
     df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
     df1.rename(columns={'business_income': 'business_income' + str(year2)}, inplace=True)
     # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-    df_Income = df_Income.merge(df1, how="outer")
-    df_Income.drop_duplicates(['name'], inplace=True)
+    df_income = df_income.merge(df1, how="outer")
+    df_income.drop_duplicates(['name'], inplace=True)
 
     # 缺失值处理，先向后填充，再填充0
-    df_Income = df_Income.fillna(method="backfill", axis=1)
-    df_Income = df_Income.fillna(0)
+    df_income = df_income.fillna(method="backfill", axis=1)
+    df_income = df_income.fillna(0)
     # print(df_Income[['code', 'name']])
-    return df_Income
+    return df_income
 
 
 # 获取所有股票的全部历史收入信息,并写入数据库
@@ -66,42 +66,41 @@ def income_of_all_stocks2db():
     # pandas连接数据库
     year = 1989
     print(year)
-    df_Income = query_income_since(year)
-    print(df_Income.count())
+    df_income = query_income_since(year)
+    print(df_income.count())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     print("Open database successfully")
-    df_Income.to_sql('income_all_stocks', con=conn, if_exists='replace', index=False)
+    df_income.to_sql('income_all_stocks', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
-def get_income_of_latest_years(stock_code,latest_years):
+def get_income_of_latest_years(stock_code, latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     stock_income_data = pd.read_sql('select * from income_all_stocks', conn)
     # 判断需要查的股票代码是否在数据库中
-    stock_income_list=stock_income_data['code'].values
+    stock_income_list = stock_income_data['code'].values
     if stock_income_list.__contains__(stock_code):
-        income_data = stock_income_data[stock_income_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
+        return stock_income_data[stock_income_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
         # print(income_data)
     else:
-        income_data=[0]
-    return income_data
+        return [0]
+
 
 if __name__ == '__main__':
     # income_of_all_stocks2db()
 
-    income_data = get_income_of_latest_years('002210', 6)
-    k = cal_trend_common(income_data)
-    print(k)
+    # income_data = get_income_of_latest_years('002210', 6)
+    # k = cal_trend_common(income_data)
+    # print(k)
+    #
+    # df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
+    # df = df_Income[['code', 'name']]
+    # print(df)
 
-    df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
-    df = df_Income[['code', 'name']]
-    print(df)
-
-    data = query_income_since(1989)
-    print(data.count())
-    data2 = data[data['code'] == '001207']
-    print(data2)
-
+    data = query_income_since(2019)
+    print(data)
+    # data2 = data[data['code'] == '001207']
+    # print(data2)

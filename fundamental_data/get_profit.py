@@ -10,7 +10,6 @@ from analysis_util.cal_stock_trend import cal_trend_common
 from contants.common_contants import DB_PATH
 from util.utils_common import code2ts_code
 
-
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -98,27 +97,25 @@ def profit_of_all_stocks2db():
     print("insert database successfully")
 
 
-def get_profit_of_latest_years(stock_code,latest_years):
+def get_profit_of_latest_years(stock_code, latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     stock_profit_data = pd.read_sql('select * from profit_all_stocks', conn)
-    stock_profit_list=stock_profit_data['code'].values
+    stock_profit_list = stock_profit_data['code'].values
     if stock_profit_list.__contains__(stock_code):
         profit_data = stock_profit_data[stock_profit_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
         # print(profit_data)
     else:
-        profit_data=[0]
+        profit_data = [0]
     # print(profit_data)
     return profit_data
 
 
-
 if __name__ == '__main__':
-    # getProfitOf5Year(filepath)
+    # getProfitOf5Year(file_path)
 
     profit_of_all_stocks2db()
 
     # income_data=get_profit_of_latest_years('000002',6)
     # k = cal_trend_common(income_data)
     # print(k)
-

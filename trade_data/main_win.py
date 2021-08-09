@@ -9,11 +9,11 @@ import schedule
 import time
 
 
-def update_trade_data2_database(DB_PATH):
+def update_trade_data2_db(db_path):
     # 从数据库中直接推算日期参数
     # update_date = "20201118"
     # pandas连接数据库
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(db_path)
     # 读取相应的交易数据表
     table_name = 'S000001_daily'
     stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
@@ -23,8 +23,8 @@ def update_trade_data2_database(DB_PATH):
     update_date = (day0 + delta_1d).strftime('%Y%m%d')
     print(update_date)
 
-    update_daily_data_tspro(update_date, DB_PATH, 0, 0, 0)
-    get_stock_basic_list_tspro(DB_PATH)
+    update_daily_data_tspro(update_date, db_path, 0, 0, 0)
+    get_stock_basic_list_tspro(db_path)
 
 
 if __name__ == '__main__':
@@ -33,4 +33,4 @@ if __name__ == '__main__':
     # while True:
     #     schedule.run_pending()
     #     time.sleep(1)
-    update_trade_data2_database(DB_PATH)
+    update_trade_data2_db(DB_PATH)
