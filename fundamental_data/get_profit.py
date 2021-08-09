@@ -34,7 +34,7 @@ def query_profit_since(year1):
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_profit = df_profit.merge(df1, how="right")
+        df_profit = df_profit.merge(df1, how="outer")
         # df_profile.drop_duplicates()
         print()
         print(df_profit.head())
@@ -49,10 +49,11 @@ def query_profit_since(year1):
     df_profit = df_profit.merge(df1, how="outer")
     df_profit.drop_duplicates(['name'], inplace=True)
 
-    # 缺失值处理，先向后填充，再填充0
+    # 缺失值处理，参考同一行中NaN后面的值来填充，其他再填充0
     df_profit = df_profit.fillna(method="backfill", axis=1)
+    # df_profit = df_profit.fillna(method='pad', axis=1)
     df_profit = df_profit.fillna(0)
-    print(df_profit[['code', 'name']])
+    # print(df_profit[['code', 'name']])
     return df_profit
 
 
@@ -89,6 +90,8 @@ def profit_of_all_stocks2db():
     year = 1989
     print(year)
     df_profit = query_profit_since(year)
+    print(df_profit)
+    print(df_profit.count())
 
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)

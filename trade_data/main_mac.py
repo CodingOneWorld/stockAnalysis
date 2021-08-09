@@ -33,5 +33,5 @@ if __name__ == '__main__':
     # while True:
     #     schedule.run_pending()
     #     time.sleep(1)
-    update_trade_data2_database(DB_PATH)
+    update_trade_data2_db(DB_PATH)
 

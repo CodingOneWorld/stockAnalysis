@@ -38,7 +38,7 @@ def query_income_since(year1):
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
         df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_income = df_income.merge(df1, how="right")
+        df_income = df_income.merge(df1, how="outer")
         # df_profile.drop_duplicates()
         print()
         print(df_income.head())
@@ -53,8 +53,9 @@ def query_income_since(year1):
     df_income = df_income.merge(df1, how="outer")
     df_income.drop_duplicates(['name'], inplace=True)
 
-    # 缺失值处理，先向后填充，再填充0
+    # 缺失值处理，参考同一行中NaN前面的值来填充，其他再填充0
     df_income = df_income.fillna(method="backfill", axis=1)
+    # df_income = df_income.fillna(method='pad', axis = 1)
     df_income = df_income.fillna(0)
     # print(df_Income[['code', 'name']])
     return df_income
@@ -67,6 +68,7 @@ def income_of_all_stocks2db():
     year = 1989
     print(year)
     df_income = query_income_since(year)
+    print(df_income)
     print(df_income.count())
 
     # 连接sqlite数据库
@@ -90,17 +92,17 @@ def get_income_of_latest_years(stock_code, latest_years):
 
 
 if __name__ == '__main__':
-    # income_of_all_stocks2db()
+    income_of_all_stocks2db()
 
     # income_data = get_income_of_latest_years('002210', 6)
     # k = cal_trend_common(income_data)
     # print(k)
     #
-    # df_Income = ts.get_profit_data(2019, 4).loc[:, ['code', 'name', 'business_income']]
-    # df = df_Income[['code', 'name']]
+    # df_Income = ts.get_profit_data(2015, 4).loc[:, ['code', 'name', 'business_income']]
+    # df = df_Income[df_Income['name']=='兆易创新']
     # print(df)
 
-    data = query_income_since(2019)
-    print(data)
+    # data = query_income_since(2019)
+    # print(data)
     # data2 = data[data['code'] == '001207']
     # print(data2)
