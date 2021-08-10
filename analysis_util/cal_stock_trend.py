@@ -78,4 +78,4 @@ def cal_trend_common(data):
 
 
 
-cal_stock_price_trend('600702',1000)
+# cal_stock_price_trend('600702',1000)
