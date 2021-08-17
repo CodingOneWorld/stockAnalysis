@@ -23,7 +23,7 @@ def update_trade_data2_db(db_path):
     update_date = (day0 + delta_1d).strftime('%Y%m%d')
     print(update_date)
 
-    update_daily_data_tspro(update_date, db_path, 356, 0, 0)
+    update_daily_data_tspro(update_date, db_path, 0, 0, 0)
     get_stock_basic_list_tspro(db_path)
 
 
