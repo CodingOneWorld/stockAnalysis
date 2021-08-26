@@ -11,7 +11,7 @@ from stock_select.get_low_price_stock import cal_low_price_stock
 
 if __name__ == '__main__':
     # 获取自选股列表
-    fr = open('stock_pool.txt', 'r')
+    fr = open('stock_pool.txt', 'r',encoding="UTF-8")
     stock_list = []
     for line in fr:
         line = line.strip()
@@ -86,7 +86,8 @@ if __name__ == '__main__':
     # for s in stock_list:
     #     print(stock_income_data[stock_income_data['code'] == s]['name'].values)
     #     # print(len(stock_list_data[stock_list_data["symbol"]==s].values))
-    #     income_list=stock_income_data[stock_income_data['code'] == s].iloc[:, stock_income_data.shape[1]-5:stock_income_data.shape[1]].values[0]
+    #     income_list=stock_income_data[stock_income_data['code'] == s].iloc[:, stock_income_data. \
+    #     shape[1]-5:stock_income_data.shape[1]].values[0]
     #     # print(income_list)
     #     k=cal_trend_common(income_list)
     #
