@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import linear_model  # 表示，可以调用sklearn中的linear_model模块进行线性回归。
 
+from analysis_util.cal_stock_trend import get_stock_price
+from analysis_util.general_utils import get_stock_name
 from contants.common_contants import DB_PATH
 
 
 # 绘制股票历史交易收盘价曲线
+# 起止日，到终止日
 def plot_price_line(code, start_day, end_day):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
@@ -19,6 +24,32 @@ def plot_price_line(code, start_day, end_day):
         (stock_trade_data['trade_date'] > start_day) & (stock_trade_data['trade_date'] < end_day)]
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data.loc[:, 'close'].plot.line()
+    plt.show()
+
+
+# 绘制股票历史交易收盘价曲线
+# 最近n天数据
+def plot_stock_price_trend(stock,latest_days):
+    # 获取股票历史价格
+    stock_price=get_stock_price(stock,'close')
+
+    # 构建线性回归样本，计算斜率
+    latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
+    x=[i for i in range(1,latest_days+1)]
+    start_index=len(stock_price)-latest_days if (len(stock_price)-latest_days)>0 else 0
+    y=stock_price[start_index:len(stock_price)]
+    x=np.array(x).reshape(-1,1)
+    y=np.array(y).reshape(-1,1)
+
+    model = linear_model.LinearRegression()
+    model.fit(x, y)
+    # print(model.intercept_)  # 截距
+    # print(model.coef_[0][0])  # 线性模型的系数
+    y2 = model.predict(x)
+
+    # 绘制散点图与拟合直线图
+    plt.plot(x, y, 'k.')
+    plt.plot(x, y2, 'g-')
     plt.show()
 
 
@@ -55,6 +86,8 @@ def plot_profit_line(stock_code,latest_year):
 
 if __name__ == '__main__':
     # plot_price_line('688676', '20210401', '20210414')
-    plot_income_line("000100",5)
-    plot_profit_line("000100",5)
+    print(get_stock_name('002466'))
+    plot_stock_price_trend('002466',10)
+    # plot_income_line("000100",5)
+    # plot_profit_line("000100",5)
 
