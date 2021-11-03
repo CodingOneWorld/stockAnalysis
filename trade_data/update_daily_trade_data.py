@@ -73,9 +73,11 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
                 time.sleep(5)
                 count = 100
             ts_code = stocks_inter[i]
+            print('ts_code:' +ts_code )
             name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
             print(name)
             # 查询日线数据
+            print('update_date:'+update_date)
             df = ts.pro_bar(ts_code=ts_code, adj='qfq', start_date=update_date)
             if df is None:
                 continue
