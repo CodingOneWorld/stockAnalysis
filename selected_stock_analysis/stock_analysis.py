@@ -11,7 +11,7 @@ from stock_select.get_low_price_stock import cal_low_price_stock
 
 if __name__ == '__main__':
     # 获取自选股列表
-    fr = open('自选股.txt', 'r')
+    fr = open('自选股.txt', 'r',encoding='utf-8')
     stock_list = []
     for line in fr:
         line = line.strip()

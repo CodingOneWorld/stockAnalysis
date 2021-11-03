@@ -21,5 +21,5 @@ def get_stock_code(stock_name):
     return stock_list_data[stock_list_data['name']==stock_name]['symbol'].values[0]
 
 
-# if __name__ == '__main__':
-    # print(get_stock_code('金盘科技'))
+if __name__ == '__main__':
+    print(get_stock_code('金盘科技'))

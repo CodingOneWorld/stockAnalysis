@@ -77,5 +77,5 @@ def cal_trend_common(data):
     return model.coef_[0][0]
 
 
-if __name__ == '__main__':
-    cal_stock_price_trend('603288', 10)
+# if __name__ == '__main__':
+#     cal_stock_price_trend('603288', 10)
