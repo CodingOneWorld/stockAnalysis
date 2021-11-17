@@ -18,7 +18,7 @@ pd.set_option('expand_frame_repr', False)
 # path
 
 # 股票代码
-ts_code = "689009.SH"
+ts_code = "830832.BJ"
 
 
 def createDailyTableonOneStock(ts_code, filepath):
@@ -28,7 +28,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     # 连接sqlite数据库
     conn = sqlite3.connect(filepath)
     c = conn.cursor()
-    print("Opened database successfully")
+    # print("Opened database successfully")
 
     # 查询当前所有正常上市交易的股票列表
     stock_basic = pro.stock_basic(exchange='', list_status='L')
@@ -43,7 +43,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     data = df2.values
     # 创建表
     table_name = 'S' + ts_code.split('.')[0] + '_daily'
-    print(table_name)
+    print("create new table: "+table_name)
     # c.execute('''CREATE TABLE ''' + table_name + '''
     #                        (trade_date INT PRIMARY KEY     NOT NULL,
     #                        ts_code  TEXT,
