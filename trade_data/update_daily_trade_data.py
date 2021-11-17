@@ -11,6 +11,8 @@ import os
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from trade_data.trade_data_utils import createDailyTableonOneStock
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -92,8 +94,16 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             # 批量插入数据
             sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg" \
                                                 ",vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-            c.executemany(sql, data)
-            conn.commit()
+            status=0
+            try:
+                c.executemany(sql, data)
+                conn.commit()
+            except:
+                status=1
+            # 如果报错表不存在，则创建新表
+            if status==1:
+                createDailyTableonOneStock(ts_code,filepath)
+
             # df2.to_sql(table_name, con=conn, if_exists='append', index=False)
             print(table_name + ' done')
 
