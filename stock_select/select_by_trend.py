@@ -7,6 +7,7 @@ from contants.common_contants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend
 
 
+# 选取最近n天呈上涨趋势的股票
 def select_up_trend_of_all_stocks(latest_days):
     # 读取全部股票数据库
     conn = sqlite3.connect(DB_PATH)

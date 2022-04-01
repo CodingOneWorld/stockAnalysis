@@ -118,8 +118,8 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             print(ts_code)
             count -= 1
             if count < 0:
-                time.sleep(10)
-                count = 200
+                time.sleep(20)
+                count = 100
             name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
             print(name)
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
