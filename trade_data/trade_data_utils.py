@@ -17,8 +17,7 @@ pd.set_option('expand_frame_repr', False)
 
 # path
 
-# 股票代码
-ts_code = "830832.BJ"
+
 
 
 def createDailyTableonOneStock(ts_code, filepath):
@@ -43,7 +42,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     data = df2.values
     # 创建表
     table_name = 'S' + ts_code.split('.')[0] + '_daily'
-    print("create new table: "+table_name)
+    print("create new table: " + table_name)
     # c.execute('''CREATE TABLE ''' + table_name + '''
     #                        (trade_date INT PRIMARY KEY     NOT NULL,
     #                        ts_code  TEXT,
@@ -67,4 +66,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     print(table_name + ' done')
 
 
-createDailyTableonOneStock(ts_code, DB_PATH)
+if __name__ == '__main__':
+    # 股票代码
+    ts_code = "830832.BJ"
+    createDailyTableonOneStock(ts_code, DB_PATH)
