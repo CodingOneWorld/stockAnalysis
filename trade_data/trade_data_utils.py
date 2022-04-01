@@ -67,4 +67,4 @@ def createDailyTableonOneStock(ts_code, filepath):
     print(table_name + ' done')
 
 
-createDailyTableonOneStock(ts_code, DB_PATH)
+# createDailyTableonOneStock(ts_code, DB_PATH)
