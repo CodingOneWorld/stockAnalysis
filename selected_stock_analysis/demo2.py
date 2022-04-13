@@ -5,7 +5,7 @@ import sqlite3
 import pandas as pd
 import tushare as ts
 from contants.common_contants import DB_PATH
-from analysis_util.cal_stock_trend import cal_stock_trend
+from analysis_util.cal_stock_trend import cal_stock_price_trend
 
 f = open("自选股.sel", "r")
 
@@ -35,6 +35,6 @@ print(stock_list_data.head())
 
 for s in stock_list:
     # print(len(stock_list_data[stock_list_data["symbol"]==s].values))
-    k = cal_stock_trend(s, 10)
+    k = cal_stock_price_trend(s, 10)
     if k > 0:
         print(s)
