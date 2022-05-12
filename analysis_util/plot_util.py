@@ -29,7 +29,7 @@ def plot_price_line(code, start_day, end_day):
 
 # 绘制股票历史交易收盘价曲线
 # 最近n天数据
-def plot_stock_price_trend(stock,latest_days):
+def plot_stock_price_line(stock,latest_days=5000):
     # 获取股票历史价格
     stock_price=get_stock_price(stock,'close')
 
@@ -86,8 +86,8 @@ def plot_profit_line(stock_code,latest_year):
 
 if __name__ == '__main__':
     # plot_price_line('688676', '20210401', '20210414')
-    print(get_stock_name('002466'))
-    plot_stock_price_trend('002466',100)
+    # print(get_stock_name('000756'))
+    plot_stock_price_line('002432',500)
     # plot_income_line("000100",5)
     # plot_profit_line("000100",5)
 

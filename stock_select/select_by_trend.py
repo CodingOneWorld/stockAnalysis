@@ -2,30 +2,30 @@
 
 import sqlite3
 import pandas as pd
+import numpy as np
 
 from contants.common_contants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend
 
 
 # 选取最近n天呈上涨趋势的股票
-def select_up_trend_of_all_stocks(latest_days):
-    # 读取全部股票数据库
-    conn = sqlite3.connect(DB_PATH)
-    # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stockList', conn)
-    print(stock_list_data.head())
-    stock_list = stock_list_data['symbol'].values
+def select_up_trend_stocks(stock_list,latest_days):
     print(stock_list)
     # 遍历读取每一个股票的日交易数据，计算其最低价，最高价，上市日期等
     stock_array = []
     for stock in stock_list:
-        k=cal_stock_price_trend(stock,latest_days)
-        if k>0:
+        print(stock)
+        k=cal_stock_price_trend(stock[0],latest_days)
+        if k>0.2:
             print(stock+":"+str(k))
             stock_array.append(stock)
     return stock_array
 
 
 if __name__ == '__main__':
-    up_trend_stocks=select_up_trend_of_all_stocks(5)
-    print(up_trend_stocks)
+    df = pd.read_csv('stock_pool.txt', delimiter=',', dtype={'symbol': np.str})
+    print(df.head())
+    stock_list = df.values
+    stock_array=select_up_trend_stocks(stock_list,50)
+    stock_array=pd.DataFrame(stock_array,columns=['symbol','stock_name'])
+    stock_array.to_csv('up_trend_50days.txt',index=0)

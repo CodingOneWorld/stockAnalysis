@@ -38,7 +38,7 @@ def createDailyTableonOneStock(ts_code, filepath):
     # print(df2)
     df2.reset_index(drop=True, inplace=True)
     df2['name'] = [name] * len(df2)
-    # print(df2)
+    print(df2)
     data = df2.values
     # 创建表
     table_name = 'S' + ts_code.split('.')[0] + '_daily'
@@ -62,11 +62,11 @@ def createDailyTableonOneStock(ts_code, filepath):
     #                                     "change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
     # c.executemany(sql, data)
     # conn.commit()
-    df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
+    # df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
     print(table_name + ' done')
 
 
 if __name__ == '__main__':
     # 股票代码
-    ts_code = "830832.BJ"
+    ts_code = "833874.BJ"
     createDailyTableonOneStock(ts_code, DB_PATH)

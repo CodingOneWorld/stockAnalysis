@@ -15,7 +15,7 @@ def get_ST_stocks():
     ST_list = []
     for stock in stock_list:
         # print(stock)
-        if stock[1].find('ST') >= 0:
+        if stock[1].__contains__('ST') and not stock[1].__contains__('退'):
             ST_list.append(stock[0])
             # print("1")
     # for s in ST_list:

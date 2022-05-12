@@ -40,7 +40,7 @@ def cal_hist_price_of_stock(stock):
     # print(min_price)
     current_price = stock_price[len(stock_price) - 1]
     # print(current_price)
-    # print([stock, max_price, min_price, current_price])
+    print([stock, max_price, min_price, current_price])
     return [stock, max_price, min_price, current_price]
 
 
@@ -87,7 +87,7 @@ def cal_hist_price_of_all_stocks2sql():
     print("insert database successfully")
 
 
-# cal_hist_price_of_stock('000938')
+cal_hist_price_of_stock('601398')
 # cal_hist_price_of_all_stocks()
 # cal_hist_price_of_all_stocks2sql()
 
