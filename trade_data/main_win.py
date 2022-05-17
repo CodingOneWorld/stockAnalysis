@@ -21,10 +21,10 @@ def update_trade_data2_db(db_path):
     day0 = datetime.datetime.strptime(str(trade_date_arr[0]), '%Y%m%d')
     delta_1d = datetime.timedelta(days=1)
     update_date = (day0 + delta_1d).strftime('%Y%m%d')
-    # update_date = '20220315'
+    # update_date = '20220422'
     print(update_date)
 
-    update_daily_data_tspro(update_date, db_path, 0, 0, 0)
+    update_daily_data_tspro(update_date, db_path,0 , 0, 0)
     get_stock_basic_list_tspro(db_path)
 
 
