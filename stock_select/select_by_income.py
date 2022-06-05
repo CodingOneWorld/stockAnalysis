@@ -53,7 +53,6 @@ def select_by_income():
 
 
 
-
 # stocks = select_by_income()
 # print(stocks)
 # print(len(stocks))
