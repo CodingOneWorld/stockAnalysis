@@ -41,32 +41,32 @@ def createDailyTableonOneStock(ts_code, filepath):
     print(df2)
     data = df2.values
     # 创建表
-    table_name = 'S' + ts_code.split('.')[0] + '_daily'
+    table_name = 'S' + ts_code.split('.')[0] + '_daily2'
     print("create new table: " + table_name)
-    # c.execute('''CREATE TABLE ''' + table_name + '''
-    #                        (trade_date INT PRIMARY KEY     NOT NULL,
-    #                        ts_code  TEXT,
-    #                        name     TEXT,
-    #                        open     DOUBLE,
-    #                        high        DOUBLE,
-    #                        low     DOUBLE,
-    #                        close   DOUBLE,
-    #                        pre_close   DOUBLE,
-    #                        change  DOUBLE,
-    #                        pct_chg DOUBLE,
-    #                        vol     DOUBLE,
-    #                        amount   DOUBLE)''')
-    # conn.commit()
-    # # 批量插入数据
-    # sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close," \
-    #                                     "change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-    # c.executemany(sql, data)
-    # conn.commit()
-    # df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
+    c.execute('''CREATE TABLE ''' + table_name + '''
+                           (trade_date INT PRIMARY KEY     NOT NULL,
+                           ts_code  TEXT,
+                           name     TEXT,
+                           open     DOUBLE,
+                           high        DOUBLE,
+                           low     DOUBLE,
+                           close   DOUBLE,
+                           pre_close   DOUBLE,
+                           change  DOUBLE,
+                           pct_chg DOUBLE,
+                           vol     DOUBLE,
+                           amount   DOUBLE)''')
+    conn.commit()
+    # 批量插入数据
+    sql = "INSERT INTO " + table_name + " (ts_code,trade_date,open,high,low,close,pre_close," \
+                                        "change,pct_chg,vol,amount,name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    c.executemany(sql, data)
+    conn.commit()
+    df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
     print(table_name + ' done')
 
 
 if __name__ == '__main__':
     # 股票代码
-    ts_code = "833874.BJ"
+    ts_code = "689009.SH"
     createDailyTableonOneStock(ts_code, DB_PATH)

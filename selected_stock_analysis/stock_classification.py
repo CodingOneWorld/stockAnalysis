@@ -50,7 +50,7 @@ def get_latest_rising_stocks():
             medium_stocks.append(line)
         if k60 > grad2 and k120 > grad2:
             medium_long_stocks.append(line)
-        if k3000 > 0.1:
+        if k3000 > grad1:
             long_stock.append(line)
     print("趋势股：")
     print("超短线上升通道：")
