@@ -37,13 +37,14 @@ def get_stock_basic_list_tspro(filepath):
     # 写入数据库
     conn = sqlite3.connect(filepath)
     print("Open database successfully")
-    stock_basic.to_sql('stockList', con=conn, if_exists='replace', index=False)
+    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
 
-# if __name__ == '__main__':
-#     # getStockBasicList(filepath)
-#     getStockBasicList_tspro(DB_PATH)
+if __name__ == '__main__':
+    # getStockBasicList(filepath)
+    DB_PATH = "/Users/beyondzq/DB/stock_data.db"
+    get_stock_basic_list_tspro(DB_PATH)
 
 
 

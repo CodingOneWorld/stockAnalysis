@@ -36,12 +36,12 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
     print("Opened database successfully")
     c = conn.cursor()
     # 查询数据库中已有的股票列表
-    cursor = c.execute("SELECT ts_code,name from stockList")
+    # cursor = c.execute("SELECT ts_code,name from stockList")
     stocks_old = []
-    for row in cursor:
-        stocks_old.append(row[0])
-    print("数据库中已有股票数")
-    print(len(stocks_old))
+    # for row in cursor:
+    #     stocks_old.append(row[0])
+    # print("数据库中已有股票数")
+    # print(len(stocks_old))
 
     # 查询最新的股票列表
     # ts_pro
