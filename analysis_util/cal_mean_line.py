@@ -99,6 +99,21 @@ def plot_mean_line(code, latest_days):
     stock_trade_data.loc[:, 'low'].plot.line()
 
     # 计算移动均线，根据收盘价
+    df_mean = stock_trade_data.close.rolling(window=10).mean().fillna(0)
+    # print(df_mean)
+    df_mean.plot.line()
+
+    # 计算移动均线，根据收盘价
+    df_mean = stock_trade_data.close.rolling(window=20).mean().fillna(0)
+    # print(df_mean)
+    df_mean.plot.line()
+
+    # 计算移动均线，根据收盘价
+    df_mean = stock_trade_data.close.rolling(window=30).mean().fillna(0)
+    # print(df_mean)
+    df_mean.plot.line()
+
+    # 计算移动均线，根据收盘价
     df_mean = stock_trade_data.close.rolling(window=60).mean().fillna(0)
     # print(df_mean)
     df_mean.plot.line()
@@ -129,3 +144,5 @@ def plot_mean_line(code, latest_days):
 if __name__ == '__main__':
     mean_list = cal_mean_line('000001', 300)
     print(mean_list)
+    plot_mean_line('000001', 300)
+
