@@ -115,9 +115,11 @@ def get_profit_of_latest_years(stock_code, latest_years):
 
 
 if __name__ == '__main__':
+    profit_of_all_stocks2db()
+
     # getProfitOf5Year(file_path)
 
-    profit_of_all_stocks2db()
+    # profit_of_all_stocks2db()
 
     # income_data=get_profit_of_latest_years('000002',6)
     # k = cal_trend_common(income_data)
