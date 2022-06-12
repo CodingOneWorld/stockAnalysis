@@ -125,6 +125,7 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
             if df is None:
                 continue
+            df = df.dropna(axis=0, subset=["close"])
             df2 = df.sort_index(ascending=False)
             # print(df2)
             df2.reset_index(drop=True, inplace=True)
@@ -134,7 +135,7 @@ def update_daily_data_tspro(update_date, filepath, cou_inner, cou_new, cou_del):
             # 创建表
             table_name = 'S' + ts_code.split('.')[0] + '_daily'
             # print(table_name)
-            # c.execute("drop table " + table_name)
+            c.execute("drop table if exists " + table_name)
             c.execute('''CREATE TABLE ''' + table_name + '''
                                (trade_date INT PRIMARY KEY     NOT NULL,
                                ts_code  TEXT,
