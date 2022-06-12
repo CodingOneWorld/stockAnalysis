@@ -46,10 +46,6 @@ if __name__ == '__main__':
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
     get_stock_basic_list_tspro(DB_PATH)
 
-
-
-
-
 # 股票列表来自ts与ts_pro的股票列表的交集
 # 股票的基本信息部分来自ts，部分来自ts_pro
 # def getStockBasicList(filepath):
