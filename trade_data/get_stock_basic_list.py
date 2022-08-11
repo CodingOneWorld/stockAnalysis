@@ -44,7 +44,7 @@ def get_stock_basic_list_tspro2DB(filepath):
 if __name__ == '__main__':
     # getStockBasicList(filepath)
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
-    get_stock_basic_list_tspro(DB_PATH)
+    get_stock_basic_list_tspro2DB(DB_PATH)
 
 # 废弃 ts 获取股票基本信息表
 # 获取股票的基础数据，按天来存储
