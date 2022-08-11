@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # 读取全部股票数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stockList', conn)
+    stock_list_data = pd.read_sql('select * from stock_list', conn)
     print(stock_list_data.head())
 
     # 暂不考虑近3年刚上市的股票

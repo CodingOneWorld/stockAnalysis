@@ -17,9 +17,6 @@ pd.set_option('expand_frame_repr', False)
 
 # path
 
-
-
-
 def createDailyTableonOneStock(ts_code, filepath):
     # ts token
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')

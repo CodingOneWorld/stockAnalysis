@@ -38,6 +38,7 @@ def plot_stock_price_line(stock,latest_days=5000):
     x=[i for i in range(1,latest_days+1)]
     start_index=len(stock_price)-latest_days if (len(stock_price)-latest_days)>0 else 0
     y=stock_price[start_index:len(stock_price)]
+    print(','.join([str(x) for x in y]))
     x=np.array(x).reshape(-1,1)
     y=np.array(y).reshape(-1,1)
 
@@ -87,7 +88,7 @@ def plot_profit_line(stock_code,latest_year):
 if __name__ == '__main__':
     # plot_price_line('688676', '20210401', '20210414')
     # print(get_stock_name('000756'))
-    plot_stock_price_line('000538',50)
+    plot_stock_price_line('000823',100)
     # plot_income_line("000100",5)
     # plot_profit_line("000100",5)
 

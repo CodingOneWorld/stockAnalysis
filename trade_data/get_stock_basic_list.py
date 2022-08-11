@@ -20,8 +20,8 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-# 股票基础信息表
-def get_stock_basic_list_tspro(filepath):
+# 股票基础信息表 最新 tspro
+def get_stock_basic_list_tspro2DB(filepath):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
@@ -46,6 +46,71 @@ if __name__ == '__main__':
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
     get_stock_basic_list_tspro(DB_PATH)
 
+# 废弃 ts 获取股票基本信息表
+# 获取股票的基础数据，按天来存储
+# def get_stock_basic_data_ts():
+#     data = ts.get_stock_basics()
+#     # print(data)
+#
+#     # 连接sqlite数据库
+#     conn = sqlite3.connect(DB_PATH)
+#     print("Opened database successfully")
+#
+#     # 创建表
+#     table_name = 'stocks_basic'
+#     c = conn.cursor()
+#     c.execute('''CREATE TABLE ''' + table_name + '''
+#                            (code     TEXT   PRIMARY KEY,
+#                            name     TEXT,
+#                            industry TEXT,
+#                            area     TEXT,
+#                            pe       DOUBLE,
+#                            outstanding  DOUBLE,
+#                            totals       DOUBLE,
+#                            totalAssets  DOUBLE,
+#                            liquidAssets DOUBLE,
+#                            fixedAssets  DOUBLE,
+#                            reserved DOUBLE,
+#                            reservedPerShare DOUBLE,
+#                            esp   DOUBLE,
+#                            bvps    DOUBLE,
+#                            pb  DOUBLE,
+#                            timeToMarket      TEXT,
+#                            undp  DOUBLE,
+#                            perundp     DOUBLE,
+#                            rev   DOUBLE,
+#                            profit    DOUBLE,
+#                            gpr   DOUBLE,
+#                            npr    DOUBLE,
+#                            holders INT )''')
+#     conn.commit()
+#
+#     code = data.index
+#     data = data.values
+#     print(data[0])
+#     for i in range(len(data)):
+#         print("Table created successfully")
+#         c.execute(
+#             "INSERT INTO " + table_name +
+#             " (code,name, industry, area,pe,outstanding,totals,totalAssets,liquidAssets,fixedAssets,reserved,reservedPerShare,\
+#             esp,bvps,pb,timeToMarket,undp,perundp,rev,profit,gpr,npr,holders) VALUES \
+#             ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}',\
+#                                           '{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}')".format(
+#                 code[i], data[i][0], data[i][1],
+#                 data[i][2], data[i][3],
+#                 data[i][4], data[i][5],
+#                 data[i][6], data[i][7],
+#                 data[i][8], data[i][9],
+#                 data[i][10], data[i][11],
+#                 data[i][12], data[i][13],
+#                 data[i][14], data[i][15],
+#                 data[i][16], data[i][17],
+#                 data[i][18], data[i][19],
+#                 data[i][20], data[i][21]))
+#         conn.commit()
+#     conn.close()
+
+# 废弃
 # 股票列表来自ts与ts_pro的股票列表的交集
 # 股票的基本信息部分来自ts，部分来自ts_pro
 # def getStockBasicList(filepath):

@@ -31,6 +31,6 @@ def plot_k_line(stock,latest_days):
 
 
 if __name__ == '__main__':
-    plot_k_line('600310',20)
+    plot_k_line('c',100)
 
 
