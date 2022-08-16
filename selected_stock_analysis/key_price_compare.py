@@ -10,7 +10,8 @@ from analysis_util.plot_k_line import plot_k_line
 
 def mean_price_compare(stock_code):
     # 计算股票趋势
-    k = 1 if cal_stock_price_trend(stock_code, 3)>0 else -1
+    stock_price = get_stock_price(stock_code, 'close')
+    k = 1 if cal_stock_price_trend(stock_price, 3)>0 else -1
     print(k)
 
     # 获取股票最近的价格

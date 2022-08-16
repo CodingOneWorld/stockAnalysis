@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 from contants.common_contants import DB_PATH
+from trade_data.get_trade_data import get_stock_trade_data
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -21,20 +22,22 @@ pd.set_option('expand_frame_repr', False)
 
 # 获取某只股票的所有历史股价
 # type取值 close，high,low，控制取最低价，还是最高价还是收盘价
-def get_stock_price(stock,type):
+def get_stock_price(stock,type,mode='online'):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
-    # 读取相应的交易数据表
-    table_name = 'S' + str(stock) + '_daily'
-    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
+    # 获取交易数据
+    if mode=='online':
+        stock_trade_data=get_stock_trade_data(stock)
+    else:
+        # 读取相应的交易数据表
+        table_name = 'S' + str(stock) + '_daily'
+        stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     stock_price = stock_trade_data[type].values
+    print(stock_price)
     return stock_price
 
 
-def cal_stock_price_trend(stock,latest_days):
-    # 获取股票历史价格
-    stock_price=get_stock_price(stock,'close')
-
+def cal_stock_price_trend(stock_price,latest_days):
     # 构建线性回归样本，计算斜率
     latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
     x=[i for i in range(1,latest_days+1)]
@@ -77,5 +80,5 @@ def cal_trend_common(data):
     return model.coef_[0][0]
 
 
-# if __name__ == '__main__':
-#     cal_stock_price_trend('603288', 10)
+if __name__ == '__main__':
+    get_stock_price('000001','close')

@@ -34,5 +34,5 @@ if __name__ == '__main__':
     # while True:
     #     schedule.run_pending()
     #     time.sleep(1)
-    get_daily_data_tspro2DB(DB_PATH, 0, 0)
+    get_daily_data_tspro2DB(DB_PATH, 2830, 0)
     get_stock_basic_list_tspro2DB(DB_PATH)

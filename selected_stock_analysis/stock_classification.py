@@ -6,9 +6,11 @@ import pandas as pd
 import numpy as np
 
 # 获取短期上升通道股票，5
-from analysis_util.cal_stock_trend import cal_stock_price_trend
+from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
 
-def classify_stocks():
+
+# 获取上升通道股票
+def get_up_trend_stocks():
     # 获取自选股票池
     df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
     # df['symbol']=df['symbol'].astype('string')
@@ -42,16 +44,18 @@ def classify_stocks():
     for line in stock_list:
         print(line)
         s = line[0]
-        k3 = cal_stock_price_trend(s, 3)
-        k5 = cal_stock_price_trend(s, 5)
-        k10 = cal_stock_price_trend(s, 10)
-        k30 = cal_stock_price_trend(s, 30)
-        k60 = cal_stock_price_trend(s, 60)
-        k90 = cal_stock_price_trend(s, 90)
-        k120 = cal_stock_price_trend(s, 120)
+        # 获取股票历史价格
+        stock_price = get_stock_price(s, 'close')
+        k3 = cal_stock_price_trend(stock_price, 3)
+        k5 = cal_stock_price_trend(stock_price, 5)
+        k10 = cal_stock_price_trend(stock_price, 10)
+        k30 = cal_stock_price_trend(stock_price, 30)
+        k60 = cal_stock_price_trend(stock_price, 60)
+        k90 = cal_stock_price_trend(stock_price, 90)
+        k120 = cal_stock_price_trend(stock_price, 120)
         # k180 = cal_stock_price_trend(s, 180)
         # k300 = cal_stock_price_trend(s, 300)
-        k3000 = cal_stock_price_trend(s, 4000)
+        k3000 = cal_stock_price_trend(stock_price, 4000)
 
         # 上升趋势
         if k3 > grad2 and k5 > grad2:
@@ -108,4 +112,10 @@ def classify_stocks():
     rebound_stocks_h.to_csv('晚期反弹.csv', index=0)
     print(rebound_stocks_h)
 
-classify_stocks()
+
+# 获取低价股
+
+
+# 获取反弹股
+if __name__ == '__main__':
+    get_up_trend_stocks()

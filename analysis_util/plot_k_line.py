@@ -3,15 +3,19 @@ import datetime
 import sqlite3
 import pandas as pd
 import mplfinance as mpf
+
+from analysis_util.general_utils import get_stock_name, get_stock_code
 from contants.common_contants import DB_PATH
+from trade_data.get_trade_data import get_stock_trade_data, get_stock_trade_data_latestdays
 
 
 def load_data(stock,latest_days):
     # 连接sqlite数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取相应的交易数据表
-    table_name = 'S' + stock + '_daily'
-    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)[-latest_days:]
+    # table_name = 'S' + stock + '_daily'
+    # stock_trade_data = pd.read_sql('select * from ' + table_name, conn)[-latest_days:]
+    stock_trade_data=get_stock_trade_data_latestdays(stock,latest_days)
     print(stock_trade_data.head())
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(
         lambda x: datetime.datetime.strptime(str(x), '%Y%m%d'))
@@ -31,6 +35,7 @@ def plot_k_line(stock,latest_days):
 
 
 if __name__ == '__main__':
-    plot_k_line('c',100)
+    s=get_stock_code('三全食品')
+    plot_k_line(s,50)
 
 

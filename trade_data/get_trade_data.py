@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # 获取增量数据，并写入数据库
+import datetime
 
 import tushare as ts
 import pandas as pd
@@ -12,6 +13,8 @@ import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 from trade_data.trade_data_utils import createDailyTableonOneStock
+from util.date_util import get_today_date, date_add
+from util.utils_common import code2ts_code
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -20,6 +23,32 @@ pd.set_option('display.max_rows', None)
 pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
+
+
+def get_stock_trade_data(stock,start_date='',end_date=''):
+    # ts token
+    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+    ts_code=code2ts_code(stock)
+    df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date=start_date, end_date=end_date)
+    df = df.dropna(axis=0, subset=["close"])
+    df2 = df.sort_index(ascending=False)
+    df2.reset_index(drop=True, inplace=True)
+    print(df2.head())
+    return df2
+
+def get_stock_trade_data_latestdays(stock,latestdays):
+    # ts token
+    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+    ts_code=code2ts_code(stock)
+    df = ts.pro_bar(ts_code=ts_code, adj='qfq')
+    df = df.dropna(axis=0, subset=["close"])
+    df2 = df.sort_index(ascending=False)
+    if latestdays>len(df2['ts_code']):
+        latestdays=len(df2['ts_code'])
+    df2=df2.iloc[-latestdays:]
+    df2.reset_index(drop=True, inplace=True)
+    print(df2)
+    return df2
 
 
 # 获取股票的日线数据-前复权数据 ts_pro
@@ -93,6 +122,14 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         c.execute("drop table " + table_name)
 
     conn.close()
+
+
+if __name__ == '__main__':
+    # get_stock_trade_data('000001','20180101')
+    get_stock_trade_data_latestdays('000001',50)
+
+
+
 
 
 # 旧方法，保留已有数据，每次累加数据，会有错误，因为每次前复权的价格都是以当前价格重新进行的计算，累加数据会有错误

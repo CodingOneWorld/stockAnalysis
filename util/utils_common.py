@@ -5,7 +5,7 @@ import sqlalchemy as sqla
 
 
 def code2ts_code(s):
-    if s.startswith('0') or s.startswith('3'):
+    if str(s).startswith('0') or s.startswith('3'):
         return s + ".SZ"
     else:
         return s + ".SH"
