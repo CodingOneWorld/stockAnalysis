@@ -5,7 +5,7 @@ import pandas as pd
 import mplfinance as mpf
 
 from analysis_util.general_utils import get_stock_name, get_stock_code
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 from trade_data.get_trade_data import get_stock_trade_data, get_stock_trade_data_latestdays
 
 

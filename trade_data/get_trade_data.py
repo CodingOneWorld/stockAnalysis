@@ -29,6 +29,7 @@ def get_stock_trade_data(stock,start_date='',end_date=''):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     ts_code=code2ts_code(stock)
+    print(ts_code)
     df = ts.pro_bar(ts_code=ts_code, adj='qfq',start_date=start_date, end_date=end_date)
     df = df.dropna(axis=0, subset=["close"])
     df2 = df.sort_index(ascending=False)

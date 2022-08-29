@@ -7,7 +7,7 @@ from sklearn import linear_model  # 表示，可以调用sklearn中的linear_mod
 
 from analysis_util.cal_stock_trend import get_stock_price
 from analysis_util.general_utils import get_stock_name
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 
 
 # 绘制股票历史交易收盘价曲线

@@ -5,7 +5,7 @@ import tushare as ts
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 
 pd.set_option('display.max_columns', None)
 # 显示所有列

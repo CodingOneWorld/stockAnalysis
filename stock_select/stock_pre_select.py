@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 
 from analysis_util.cal_stock_trend import cal_trend_common
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 from fundamental_data.get_income import get_income_of_latest_years
 from fundamental_data.get_profit import get_profit_of_latest_years
 
