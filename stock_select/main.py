@@ -2,7 +2,6 @@
 from analysis_util.general_utils import get_stock_name
 from stock_select.select_by_income import select_by_income
 from stock_select.select_by_profit import select_by_profit
-from price_data.cal_hist_price import cal_hist_price_of_stock
 
 if __name__ == '__main__':
     stocksOfIncome = select_by_income()

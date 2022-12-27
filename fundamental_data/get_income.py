@@ -36,7 +36,7 @@ def query_income_since(year1):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
         # df1['code'] = df1['code'].apply(lambda x: str(x).split('.')[0])
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-        df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
+        df1.rename(columns={'business_income': 'income_' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
         df_income = df_income.merge(df1, how="outer")
         # df_profile.drop_duplicates()
@@ -48,7 +48,7 @@ def query_income_since(year1):
     df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'business_income']]
     df1['code'] = df1['code'].apply(lambda x: str(x))
     df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-    df1.rename(columns={'business_income': 'business_income' + str(year2)}, inplace=True)
+    df1.rename(columns={'business_income': 'income_' + str(year2)}, inplace=True)
     # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
     df_income = df_income.merge(df1, how="outer")
     df_income.drop_duplicates(['name'], inplace=True)
