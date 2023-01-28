@@ -35,7 +35,7 @@ def plot_k_line(stock,latest_days):
 
 
 if __name__ == '__main__':
-    s=get_stock_code('三人行')
-    plot_k_line(s,2000)
+    s=get_stock_code('航天宏图')
+    plot_k_line(s,20)
 
 
