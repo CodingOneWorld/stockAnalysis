@@ -5,14 +5,12 @@
 import pandas as pd
 import numpy as np
 
-# 获取短期上升通道股票，5
+from analysis_util.cal_hist_price import cal_price_pct
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
 
 
-# 获取上升通道股票
-def get_up_trend_stocks():
-    # 获取自选股票池
-    df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
+# 获取上升通道、反弹股股票
+def get_up_trend_stocks(df):
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     print(stock_list)
@@ -40,7 +38,6 @@ def get_up_trend_stocks():
     # 晚期反弹
     rebound_stocks_h=[]
 
-    # 反弹股
     for line in stock_list:
         print(line)
         s = line[0]
@@ -114,8 +111,24 @@ def get_up_trend_stocks():
 
 
 # 获取低价股
+def get_low_price_stocks(df,latestdays=3000):
+    stock_list = df.values
+    print(stock_list)
+    cheap_stocks=[]
+    for line in stock_list:
+        print(line)
+        s = line[0]
+        # 计算股票当前价格在最低价到最高价的那个百分比位置
+        pct=cal_price_pct(s,latestdays)
+        if pct<0.5:
+            cheap_stocks.append(line)
+    cheap_stocks = pd.DataFrame(cheap_stocks, columns=['symbol', 'stock_name'])
+    cheap_stocks.to_csv('低价股.csv', index=0)
 
 
 # 获取反弹股
 if __name__ == '__main__':
-    get_up_trend_stocks()
+    # 获取自选股票池
+    df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
+    # get_up_trend_stocks(df)
+    get_low_price_stocks(df)

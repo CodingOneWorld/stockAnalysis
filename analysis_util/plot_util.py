@@ -88,7 +88,7 @@ def plot_profit_line(stock_code,latest_year):
 if __name__ == '__main__':
     # plot_price_line('688676', '20210401', '20210414')
     # print(get_stock_name('000756'))
-    plot_stock_price_line('000823',100)
+    plot_stock_price_line('002594',100)
     # plot_income_line("000100",5)
     # plot_profit_line("000100",5)
 
