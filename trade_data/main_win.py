@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-from trade_data.get_trade_data import update_daily_data_tspro, get_daily_data_tspro
-from trade_data.get_stock_basic_list import get_stock_basic_list_tspro
+from trade_data.get_trade_data import get_daily_data_tspro2DB
+from trade_data.get_stock_basic_list import get_stock_basic_list_tspro2DB
 import pandas as pd
+
 import datetime
 import schedule
 import time
@@ -27,12 +28,15 @@ import time
 #     update_daily_data_tspro(update_date, db_path, 0, 0, 0)
 #     get_stock_basic_list_tspro(db_path)
 
+def update_trade_data2db(DB_PATH):
+    get_daily_data_tspro2DB(DB_PATH, 0, 0)
+    get_stock_basic_list_tspro2DB(DB_PATH)
+
 
 if __name__ == '__main__':
     DB_PATH = "E:/Money/stock_data.db"
-    # schedule.every().day.at("18:00").do(update_trade_data2_database,DB_PATH)
+    update_trade_data2db(DB_PATH)
+    # schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
     # while True:
     #     schedule.run_pending()
     #     time.sleep(1)
-    get_daily_data_tspro(DB_PATH, 0, 0)
-    get_stock_basic_list_tspro(DB_PATH)
