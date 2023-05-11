@@ -24,6 +24,7 @@ def plot_price_line(code, start_day, end_day):
         (stock_trade_data['trade_date'] > start_day) & (stock_trade_data['trade_date'] < end_day)]
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data.loc[:, 'close'].plot.line()
+    # stock_trade_data.plot.line(x='trade_date',y='close')
     plt.show()
 
 
@@ -86,9 +87,9 @@ def plot_profit_line(stock_code,latest_year):
 
 
 if __name__ == '__main__':
-    # plot_price_line('688676', '20210401', '20210414')
+    plot_price_line('688676', '20210401', '20210414')
     # print(get_stock_name('000756'))
-    plot_stock_price_line('002594',100)
+    # plot_stock_price_line('002594',100)
     # plot_income_line("000100",5)
     # plot_profit_line("000100",5)
 

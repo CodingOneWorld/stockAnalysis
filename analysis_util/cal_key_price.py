@@ -6,6 +6,8 @@ from scipy.signal import argrelextrema, argrelmin
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+from scipy.interpolate import interp1d
+from scipy.misc import derivative
 
 
 def cal_max_value(list):
@@ -18,32 +20,32 @@ def cal_max_value(list):
     plt.plot(list)
     plt.scatter(
         peaks,
-        x[peaks],
+        list[peaks],
         c='red'
     )
     # for i in range(len(peaks)):
     #     plt.plot(peaks[i], list[peaks[i]], '*', markersize=10)
-    plt.show()
+    # plt.show()
 
-    return [peaks, x[peaks]]
-
+    # return [peaks, x[peaks]]
+    return list[peaks]
 
 def cal_min_value(list):
     print(argrelmin(list))
 
     plt.plot(range(0, len(list)), list)
     plt.scatter(
-        argrelmin(x),
-        x[argrelmin(x)],
+        argrelmin(list),
+        list[argrelmin(list)],
         c='red'
     )
     plt.show()
 
-    return [argrelmin(x), x[argrelmin(x)]]
-
+    # return [argrelmin(list), x[argrelmin(list)]]
+    return list[argrelmin(list)]
 
 if __name__ == '__main__':
-    x = np.array(
+    data = np.array(
         # [12.16, 12.4967, 12.6056, 13.0116, 12.8037, 12.9324, 13.071, 13.2097, 13.8137, 13.5563, 13.586, 13.7147, 13.5959,
         #  13.8632, 13.9226, 13.8533, 14.0613, 13.7543, 13.7048, 13.5563, 13.7444, 13.6157, 13.1008, 13.3087, 13.081, 12.675,
         #  12.8235, 12.8136, 12.6254, 12.7641, 12.8334, 12.7641, 12.7344, 12.4967, 12.3284, 12.4175, 12.7839, 12.8433,
@@ -77,5 +79,42 @@ if __name__ == '__main__':
          ]
     )
 
-    cal_max_value(x)
+
+    y=cal_min_value(data)
+    print(y)
+    x = [i for i in range(1, len(y) + 1)]
+    print(x)
     # cal_min_value(x)
+
+    # Simple interpolation of x and y
+    f = interp1d(x, y)
+    x_fake = np.arange(1.1, len(y), 0.1)
+    print(type(x_fake[0]))
+    print(np.where(x_fake==2.1))
+
+
+    # derivative of y with respect to x
+    # df_dx = derivative(f, x_fake, dx=1e-6)
+    df_dx = derivative(f, x_fake, dx=1e-6)
+
+    print(df_dx)
+
+    # Plot
+    fig = plt.figure()
+    ax1 = fig.add_subplot(211)
+    ax2 = fig.add_subplot(212)
+
+    ax1.errorbar(x, y, fmt="o", color="blue", label='Input data')
+    ax1.errorbar(x_fake, f(x_fake), label="Interpolated data", lw=2)
+    ax1.set_xlabel("x")
+    ax1.set_ylabel("y")
+
+    ax2.errorbar(x_fake, df_dx, lw=2)
+    ax2.errorbar(x_fake, np.array([0 for i in x_fake]), ls="--", lw=2)
+    ax2.set_xlabel("x")
+    ax2.set_ylabel("dy/dx")
+
+    leg = ax1.legend(loc=2, numpoints=1, scatterpoints=1)
+    leg.draw_frame(False)
+    plt.show()
+
