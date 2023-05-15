@@ -4,7 +4,7 @@
 import sqlite3
 import pandas as pd
 import tushare as ts
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend
 
 f = open("自选股.sel", "r")

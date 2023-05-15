@@ -2,7 +2,7 @@
 import sqlite3
 import pandas as pd
 
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 
 
 def get_stock_name(stock_code):

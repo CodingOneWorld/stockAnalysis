@@ -3,7 +3,7 @@
 # 导入包
 import pandas as pd
 import sqlite3
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 import matplotlib.pyplot as plt
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)

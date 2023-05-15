@@ -7,7 +7,7 @@ from datetime import date
 import sqlite3
 
 from analysis_util.cal_stock_trend import cal_trend_common
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 from util.utils_common import code2ts_code
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
@@ -32,7 +32,7 @@ def query_profit_since(year1):
     for year in range(year1, year2):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'net_profits']]
         df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-        df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
+        df1.rename(columns={'net_profits': 'profits_' + str(year)}, inplace=True)
         # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
         df_profit = df_profit.merge(df1, how="outer")
         # df_profile.drop_duplicates()
@@ -44,7 +44,7 @@ def query_profit_since(year1):
     df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'net_profits']]
     # df1['code'] = df1['code'].apply(lambda x: str(x))
     df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-    df1.rename(columns={'net_profits': 'net_profits' + str(year2)}, inplace=True)
+    df1.rename(columns={'net_profits': 'profits_' + str(year2)}, inplace=True)
     # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
     df_profit = df_profit.merge(df1, how="outer")
     df_profit.drop_duplicates(['name'], inplace=True)
@@ -69,7 +69,7 @@ def get_profit_of5year(filepath):
     for year in range(year1, year2 + 1):
         df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'net_profits']]
         # df1.rename(columns={'business_income': 'business_income' + str(year)}, inplace=True)
-        df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
+        df1.rename(columns={'net_profits': 'profits_' + str(year)}, inplace=True)
         df_profit = df_profit.merge(df1)
         print()
         print(df_profit.head())

@@ -9,7 +9,7 @@ import time
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 
 pd.set_option('display.max_columns', None)
 # 显示所有列
@@ -21,6 +21,19 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 股票基础信息表 最新 tspro
+def get_stock_basic_list():
+    # ts token
+    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+    pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+    # 获取ts_pro股票列表
+    stock_basic = pro.stock_basic(exchange='', list_status='L')
+    # 获取当前日期
+    localdate = time.strftime("%Y%m%d", time.localtime())
+    stock_basic = stock_basic[stock_basic['list_date'] < localdate]
+    return stock_basic
+
+
+# 入库
 def get_stock_basic_list_tspro2DB(filepath):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')

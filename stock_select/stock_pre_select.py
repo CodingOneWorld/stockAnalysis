@@ -3,15 +3,17 @@ import sqlite3
 import pandas as pd
 
 from analysis_util.cal_stock_trend import cal_trend_common
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 from fundamental_data.get_income import get_income_of_latest_years
 from fundamental_data.get_profit import get_profit_of_latest_years
+from trade_data.get_stock_basic_list import get_stock_basic_list
 
 if __name__ == '__main__':
     # 读取全部股票数据库
     conn = sqlite3.connect(DB_PATH)
     # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stock_list', conn)
+    # stock_list_data = pd.read_sql('select * from stock_list', conn)
+    stock_list_data = get_stock_basic_list()
     print(stock_list_data.head())
 
     # 暂不考虑近3年刚上市的股票
@@ -44,7 +46,7 @@ if __name__ == '__main__':
         profit_data = get_profit_of_latest_years(s[0], 5)
         k2 = cal_trend_common(profit_data)
         if k1 < 0 or k2 < 0:
-            print('remove')
+            print('remove:',s)
             stock_array.remove(s)
     print("去除收入和净利润近5年没有持续增长的股票后剩余股票数")
     print(stock_array.__len__())

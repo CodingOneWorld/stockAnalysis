@@ -7,7 +7,7 @@ from sklearn import linear_model  # 表示，可以调用sklearn中的linear_mod
 
 from analysis_util.cal_stock_trend import get_stock_price
 from analysis_util.general_utils import get_stock_name
-from contants.common_contants import DB_PATH
+from constants.common_constants import DB_PATH
 
 
 # 绘制股票历史交易收盘价曲线
@@ -24,6 +24,7 @@ def plot_price_line(code, start_day, end_day):
         (stock_trade_data['trade_date'] > start_day) & (stock_trade_data['trade_date'] < end_day)]
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data.loc[:, 'close'].plot.line()
+    # stock_trade_data.plot.line(x='trade_date',y='close')
     plt.show()
 
 
@@ -86,9 +87,9 @@ def plot_profit_line(stock_code,latest_year):
 
 
 if __name__ == '__main__':
-    # plot_price_line('688676', '20210401', '20210414')
+    plot_price_line('688676', '20210401', '20210414')
     # print(get_stock_name('000756'))
-    plot_stock_price_line('000823',100)
+    # plot_stock_price_line('002594',100)
     # plot_income_line("000100",5)
     # plot_profit_line("000100",5)
 
