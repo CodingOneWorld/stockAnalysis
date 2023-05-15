@@ -13,11 +13,9 @@ if __name__ == '__main__':
     # 获取股票池
     df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
 
-
     # 先进行自选股分组
-    get_up_trend_stocks(df)
-
-
     # 上升通道股票
-    # 判断当前价格是否靠近均线，靠近之前的极值点
+    get_up_trend_stocks(df)
+    # 中线上升通道
+    df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
 

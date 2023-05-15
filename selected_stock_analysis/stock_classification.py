@@ -130,5 +130,6 @@ def get_low_price_stocks(df,latestdays=3000):
 if __name__ == '__main__':
     # 获取自选股票池
     df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
+    # df = pd.read_csv('stock_pool.txt', dtype={'symbol': np.str},delimiter=',')
     get_up_trend_stocks(df)
     # get_low_price_stocks(df)
