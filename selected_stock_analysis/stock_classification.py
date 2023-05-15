@@ -8,11 +8,13 @@ import numpy as np
 # 获取短期上升通道股票，5
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
 
-
 # 获取上升通道股票
-def get_up_trend_stocks():
+from analysis_util.plot_k_line import plot_k_line
+
+
+def get_up_trend_stocks(file):
     # 获取自选股票池
-    df = pd.read_csv('自选股.csv', dtype={'symbol': np.str})
+    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     print(stock_list)
@@ -34,11 +36,11 @@ def get_up_trend_stocks():
 
     # 反弹股
     # 刚开始反弹
-    rebound_stocks_l=[]
+    rebound_stocks_l = []
     # 中期反弹
-    rebound_stocks_m=[]
+    rebound_stocks_m = []
     # 晚期反弹
-    rebound_stocks_h=[]
+    rebound_stocks_h = []
 
     # 反弹股
     for line in stock_list:
@@ -70,46 +72,46 @@ def get_up_trend_stocks():
             long_stock.append(line)
 
         # 反弹
-        if k30 <0 and k5 > grad1:
+        if k30 < 0 and k5 > grad1:
             rebound_stocks_l.append(line)
-        if k60 <0 and k10 > grad1:
+        if k60 < 0 and k10 > grad1:
             rebound_stocks_m.append(line)
-        if k90 <0 and k30 > grad1:
+        if k90 < 0 and k30 > grad1:
             rebound_stocks_h.append(line)
     print("趋势股：")
     print("超短线上升通道：")
     super_short_stocks = pd.DataFrame(super_short_stocks, columns=['symbol', 'stock_name'])
-    super_short_stocks.to_csv('超短线上升通道.csv', index=0)
+    super_short_stocks.to_csv('超短线上升通道' + file.split('.')[0] + '.csv', index=0)
     print(super_short_stocks)
     print("短线上升通道：")
     short_stocks = pd.DataFrame(short_stocks, columns=['symbol', 'stock_name'])
-    short_stocks.to_csv('短线上升通道.csv', index=0)
+    short_stocks.to_csv('短线上升通道' + file.split('.')[0] + '.csv', index=0)
     print(short_stocks)
     print("中线上升通道：")
     medium_stocks = pd.DataFrame(medium_stocks, columns=['symbol', 'stock_name'])
-    medium_stocks.to_csv('中线上升通道.csv', index=0)
+    medium_stocks.to_csv('中线上升通道' + file.split('.')[0] + '.csv', index=0)
     print(medium_stocks)
     print("中长线上升通道：")
     medium_long_stocks = pd.DataFrame(medium_long_stocks, columns=['symbol', 'stock_name'])
-    medium_long_stocks.to_csv('中长线上升通道.csv', index=0)
+    medium_long_stocks.to_csv('中长线上升通道' + file.split('.')[0] + '.csv', index=0)
     print(medium_long_stocks)
     print("长线上升通道：")
     long_stock = pd.DataFrame(long_stock, columns=['symbol', 'stock_name'])
-    long_stock.to_csv('长线上升通道.csv', index=0)
+    long_stock.to_csv('长线上升通道' + file.split('.')[0] + '.csv', index=0)
     print(long_stock)
 
     print("反弹股：")
     print("开始反弹：")
     rebound_stocks_l = pd.DataFrame(rebound_stocks_l, columns=['symbol', 'stock_name'])
-    rebound_stocks_l.to_csv('开始反弹.csv', index=0)
+    rebound_stocks_l.to_csv('开始反弹' + file.split('.')[0] + '.csv', index=0)
     print(rebound_stocks_l)
     print("中期反弹：")
     rebound_stocks_m = pd.DataFrame(rebound_stocks_m, columns=['symbol', 'stock_name'])
-    rebound_stocks_m.to_csv('中期反弹.csv', index=0)
+    rebound_stocks_m.to_csv('中期反弹' + file.split('.')[0] + '.csv', index=0)
     print(rebound_stocks_m)
     print("晚期反弹：")
     rebound_stocks_h = pd.DataFrame(rebound_stocks_h, columns=['symbol', 'stock_name'])
-    rebound_stocks_h.to_csv('晚期反弹.csv', index=0)
+    rebound_stocks_h.to_csv('晚期反弹' + file.split('.')[0] + '.csv', index=0)
     print(rebound_stocks_h)
 
 
@@ -118,4 +120,21 @@ def get_up_trend_stocks():
 
 # 获取反弹股
 if __name__ == '__main__':
-    get_up_trend_stocks()
+    # file = '自选股.csv'
+    file = 'stock_pool.txt'
+    # get_up_trend_stocks(file)
+
+    # 观察各类别的股票
+    # tag = '自选股'
+    tag='stock_pool'
+    # file = '超短线上升通道%s.csv' % tag
+    # file = '短线上升通道%s.csv' % tag
+    # file = '中线上升通道%s.csv' % tag
+    # file = '长线上升通道%s.csv' % tag
+    # file = '开始反弹%s.csv' % tag
+    file = '中期反弹%s.csv' % tag
+    # file = '晚期反弹%s.csv' % tag
+    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    for line in df.values:
+        print(line)
+        plot_k_line(line[0], 200)
