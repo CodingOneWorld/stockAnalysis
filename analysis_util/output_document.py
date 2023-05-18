@@ -7,13 +7,12 @@ from docx.document import Document as Doc
 
 # 将分析结果输出到word文档中
 
-# 对某一股票分析并将结果输出到word文档
-def output_word_doc():
-    return
+def Doc():
+    # 创建代表Word文档的Doc对象
+    document = Document()
+    return document
 
-
-if __name__ == '__main__':
-
+def example():
     # 创建代表Word文档的Doc对象
     document = Document()
     # type: Doc
@@ -42,7 +41,7 @@ if __name__ == '__main__':
     )
     # 添加有序列表
     document.add_paragraph(
-      'first item in ordered list', style='List Number'
+        'first item in ordered list', style='List Number'
     )
     document.add_paragraph(
         'second item in ordered list', style='List Number'
@@ -76,3 +75,8 @@ if __name__ == '__main__':
     document.add_page_break()
     # 保存文档
     document.save('demo.docx')
+
+
+if __name__ == '__main__':
+    example()
+

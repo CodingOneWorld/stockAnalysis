@@ -4,11 +4,11 @@ import sqlite3
 import sqlalchemy as sqla
 
 
-def code2ts_code(s):
-    if str(s).startswith('0') or str(s).startswith('3'):
-        return s + ".SZ"
+def code2ts_code(symbol):
+    if str(symbol).startswith('0') or str(symbol).startswith('3'):
+        return symbol + ".SZ"
     else:
-        return s + ".SH"
+        return symbol + ".SH"
 
 
 # 连接数据库

@@ -23,12 +23,12 @@ pd.set_option('expand_frame_repr', False)
 # 获取某只股票的所有历史股价
 # type取值 close，high,low，控制取最低价，还是最高价还是收盘价
 def get_stock_price(stock,type,mode='online'):
-    # pandas连接数据库
-    conn = sqlite3.connect(DB_PATH)
     # 获取交易数据
     if mode=='online':
         stock_trade_data=get_stock_trade_data(stock)
     else:
+        # pandas连接数据库
+        conn = sqlite3.connect(DB_PATH)
         # 读取相应的交易数据表
         table_name = 'S' + str(stock) + '_daily'
         stock_trade_data = pd.read_sql('select * from ' + table_name, conn)

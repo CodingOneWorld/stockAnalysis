@@ -3,21 +3,28 @@ import sqlite3
 import pandas as pd
 
 from constants.common_constants import DB_PATH
+from trade_data.get_stock_basic_list import get_stock_basic_list
 
 
-def get_stock_name(stock_code):
-    # 读取全部股票数据库
-    conn = sqlite3.connect(DB_PATH)
-    # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stock_list', conn)
+def get_stock_name(stock_code,mode='online'):
+    if mode == 'online':
+        stock_list_data=get_stock_basic_list()
+    else:
+        # 读取全部股票数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取股票基本信息表
+        stock_list_data = pd.read_sql('select * from stock_list', conn)
     return stock_list_data[stock_list_data['symbol']==stock_code]['name'].values[0]
 
 
-def get_stock_code(stock_name):
-    # 读取全部股票数据库
-    conn = sqlite3.connect(DB_PATH)
-    # 读取股票基本信息表
-    stock_list_data = pd.read_sql('select * from stock_list', conn)
+def get_stock_code(stock_name,mode='online'):
+    if mode == 'online':
+        stock_list_data=get_stock_basic_list()
+    else:
+        # 读取全部股票数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取股票基本信息表
+        stock_list_data = pd.read_sql('select * from stock_list', conn)
     return stock_list_data[stock_list_data['name']==stock_name]['symbol'].values[0]
 
 
