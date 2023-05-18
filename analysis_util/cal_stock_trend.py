@@ -81,4 +81,4 @@ def cal_trend_common(data):
 
 
 if __name__ == '__main__':
-    get_stock_price('000001','close')
+    get_stock_price('002600','close')
