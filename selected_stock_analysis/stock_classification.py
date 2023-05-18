@@ -132,21 +132,14 @@ def get_low_price_stocks(df,latestdays=3000):
 
 # 获取反弹股
 if __name__ == '__main__':
-    file = '自选股.csv'
+    # file = '自选股.csv'
     # file = 'stock_pool.txt'
-    get_up_trend_stocks(file)
+    # get_up_trend_stocks(file)
 
-    # # 观察各类别的股票
-    # # tag = '自选股'
-    # tag='stock_pool'
-    # # file = '超短线上升通道%s.csv' % tag
-    # # file = '短线上升通道%s.csv' % tag
-    # # file = '中线上升通道%s.csv' % tag
-    # # file = '长线上升通道%s.csv' % tag
-    # # file = '开始反弹%s.csv' % tag
-    # file = '中期反弹%s.csv' % tag
-    # # file = '晚期反弹%s.csv' % tag
-    # df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # for line in df.values:
-    #     print(line)
-    #     plot_k_line(line[0], 200)
+    line= ['002600','领益智造']
+    stock_price = get_stock_price(line[0], 'close')
+    k60 = cal_stock_price_trend(stock_price, 60)
+    k120 = cal_stock_price_trend(stock_price, 120)
+    plot_k_line(line[0],500)
+    print(k60)
+    print(k120)

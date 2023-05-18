@@ -39,7 +39,8 @@ if __name__ == '__main__':
 
     # 先进行自选股分组
     # 上升通道股票
-    # get_up_trend_stocks(file)
+    get_up_trend_stocks(file)
+
     # 中线上升通道
     df = pd.read_csv('中线上升通道自选股.csv', dtype={'symbol': np.str})
     # 输出到文档

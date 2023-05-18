@@ -40,7 +40,7 @@ def plot_k_line(stock,latest_days):
                                   gridcolor='(0.82, 0.83, 0.85)')
     # mpf.plot(stock_trade_data)
     # K线图，附带均线，成交量
-    mpf.plot(stock_trade_data, type='candle', style=my_style,mav=(10,20,30, 60, 140), volume=True)
+    mpf.plot(stock_trade_data, type='candle', style=my_style,mav=(5,10,20,30, 60, 140), volume=True)
 
 
 def save_k_line(symbol,latest_days,save_path):
