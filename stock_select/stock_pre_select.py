@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print(stock_list_data.head())
 
     # 暂不考虑近3年刚上市的股票
-    stock_list_data=stock_list_data[stock_list_data['list_date']<='20190101']
+    stock_list_data=stock_list_data[stock_list_data['list_date']<='20200101']
 
     stock_list = stock_list_data.loc[:, ['symbol', 'name']].values
     print(stock_list)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     print(stock_array.__len__())
 
     # 输出到文本文件中
-    fw=open("stock_pool.txt",'w')
+    fw=open("stock_pool2023.txt",'w')
     fw.write("symbol,stock_name" + '\n')
     for s in stock_array:
         print(s[0]+","+s[1])

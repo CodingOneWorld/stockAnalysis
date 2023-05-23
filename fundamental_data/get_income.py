@@ -57,7 +57,14 @@ def query_income_since(year1):
     df_income = df_income.fillna(method="backfill", axis=1)
     # df_income = df_income.fillna(method='pad', axis = 1)
     df_income = df_income.fillna(0)
-    # print(df_Income[['code', 'name']])
+    print(df_income[['code', 'name']])
+    return df_income
+
+# 获取最近n年收入数据  latest_years=n
+def get_income_latest_years_online(latest_years):
+    year2 = date.today().year - 1
+    year1=year2-latest_years
+    df_income=query_income_since(year1)
     return df_income
 
 
@@ -91,8 +98,11 @@ def get_income_of_latest_years(stock_code, latest_years):
         return [0]
 
 
+
 if __name__ == '__main__':
-    income_of_all_stocks2db()
+    # income_of_all_stocks2db()
+
+    get_income_latest_years_online(5)
 
     # income_data = get_income_of_latest_years('002210', 6)
     # print(income_data)

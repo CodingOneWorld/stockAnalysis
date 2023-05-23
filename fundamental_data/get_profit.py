@@ -57,6 +57,15 @@ def query_profit_since(year1):
     return df_profit
 
 
+# 获取最近n年收入数据  latest_years=n
+def get_profit_latest_years_online(latest_years):
+    year2 = date.today().year - 1
+    year1 = year2 - latest_years
+    df_profit = query_profit_since(year1)
+    print(df_profit[['code', 'name']])
+    return df_profit
+
+
 # 获取最近5年的年收入数据
 def get_profit_of5year(filepath):
     year2 = date.today().year - 1
@@ -115,7 +124,9 @@ def get_profit_of_latest_years(stock_code, latest_years):
 
 
 if __name__ == '__main__':
-    profit_of_all_stocks2db()
+    # profit_of_all_stocks2db()
+
+    get_profit_latest_years_online(5)
 
     # getProfitOf5Year(file_path)
 
