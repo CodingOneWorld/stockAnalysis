@@ -27,6 +27,10 @@ def get_stock_basic_list():
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     # 获取ts_pro股票列表
     stock_basic = pro.stock_basic(exchange='', list_status='L')
+    # stock_basic = pro.bak_basic(trade_date='20211012', fields='trade_date,ts_code,name,list_date,industry,pe')
+    # def get_symbol(x):
+    #     return x.split('.')[0]
+    # stock_basic['symbol']=stock_basic['ts_code'].apply(get_symbol)
     # 获取当前日期
     localdate = time.strftime("%Y%m%d", time.localtime())
     stock_basic = stock_basic[stock_basic['list_date'] < localdate]
