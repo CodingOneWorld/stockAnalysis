@@ -13,7 +13,8 @@ from analysis_util.output_document import Doc
 from analysis_util.plot_k_line import save_k_line
 from selected_stock_analysis.stock_classification import get_up_trend_stocks
 
-def output_doc(df,file_path):
+
+def output_doc(df, file_path):
     # doc文档
     doc = Doc()
     for line in df.values:
@@ -32,23 +33,44 @@ def output_doc(df,file_path):
     # 保存文档
     doc.save(file_path)
 
+
 if __name__ == '__main__':
     # 获取股票池
-    file = 'stock_pool.txt'
+    # file = 'stock_pool2023.txt'
     file = '自选股.csv'
+
+    path = './classification/'
 
     # 先进行自选股分组
     # 上升通道股票
     get_up_trend_stocks(file)
 
+    # 超短线上升通道
+    df = pd.read_csv(path + '超短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+    # 输出到文档
+    output_doc(df, path + '超短线上升通道%s.docx' % (file.split('.')[0]))
+
+    # 短线上升通道
+    df = pd.read_csv(path + '短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+    # 输出到文档
+    output_doc(df, path + '短线上升通道%s.docx' % (file.split('.')[0]))
+
     # 中线上升通道
-    df = pd.read_csv('中线上升通道自选股.csv', dtype={'symbol': np.str})
+    df = pd.read_csv(path + '中线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
     # 输出到文档
-    output_doc(df,'中线上升通道自选股.docx')
+    output_doc(df, path + '中线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 中期反弹自选股
-    df = pd.read_csv('中期反弹自选股.csv', dtype={'symbol': np.str})
+    # 中长线上升通道
+    df = pd.read_csv(path + '中长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
     # 输出到文档
-    output_doc(df, '中期反弹自选股.docx')
+    output_doc(df, path + '中长线上升通道%s.docx' % (file.split('.')[0]))
 
+    # 长线上升通道
+    df = pd.read_csv(path + '长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+    # 输出到文档
+    output_doc(df, path + '长线上升通道%s.docx' % (file.split('.')[0]))
 
+    # 中期反弹
+    df = pd.read_csv(path + '中期反弹%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+    # 输出到文档
+    output_doc(df, path + '中期反弹%s.docx' % (file.split('.')[0]))

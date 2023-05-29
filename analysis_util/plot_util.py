@@ -30,29 +30,33 @@ def plot_price_line(code, start_day, end_day):
 
 # 绘制股票历史交易收盘价曲线
 # 最近n天数据
-def plot_stock_price_line(stock,latest_days=5000):
+def plot_price_line_latestdays(stock,latest_days=5000):
     # 获取股票历史价格
-    stock_price=get_stock_price(stock,'close')
+    stock_price_df=get_stock_price(stock,'close')
+    stock_price_df=stock_price_df.iloc[-latest_days:,:]
+    print(stock_price_df)
 
-    # 构建线性回归样本，计算斜率
-    latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
-    x=[i for i in range(1,latest_days+1)]
-    start_index=len(stock_price)-latest_days if (len(stock_price)-latest_days)>0 else 0
-    y=stock_price[start_index:len(stock_price)]
-    print(','.join([str(x) for x in y]))
-    x=np.array(x).reshape(-1,1)
-    y=np.array(y).reshape(-1,1)
 
-    model = linear_model.LinearRegression()
-    model.fit(x, y)
-    # print(model.intercept_)  # 截距
-    # print(model.coef_[0][0])  # 线性模型的系数
-    y2 = model.predict(x)
 
-    # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
+    # # 构建线性回归样本，计算斜率
+    # latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
+    # x=[i for i in range(1,latest_days+1)]
+    # start_index=len(stock_price)-latest_days if (len(stock_price)-latest_days)>0 else 0
+    # y=stock_price[start_index:len(stock_price)]
+    # print(','.join([str(x) for x in y]))
+    # x=np.array(x).reshape(-1,1)
+    # y=np.array(y).reshape(-1,1)
+    #
+    # model = linear_model.LinearRegression()
+    # model.fit(x, y)
+    # # print(model.intercept_)  # 截距
+    # # print(model.coef_[0][0])  # 线性模型的系数
+    # y2 = model.predict(x)
+    #
+    # # 绘制散点图与拟合直线图
+    # plt.plot(, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
 
 
 # 绘制收入曲线
@@ -87,8 +91,9 @@ def plot_profit_line(stock_code,latest_year):
 
 
 if __name__ == '__main__':
-    plot_price_line('688676', '20210401', '20210414')
-    plot_stock_price_line('002600',500)
+    # plot_price_line('688676', '20210401', '20210414')
+    # plot_stock_price_line('002486',5000)
+    plot_price_line_latestdays('000001',5)
     # print(get_stock_name('000756'))
     # plot_stock_price_line('002594',100)
     # plot_income_line("000100",5)

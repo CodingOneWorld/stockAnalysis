@@ -4,6 +4,7 @@
 
 import tushare as ts
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 import sqlite3
@@ -21,14 +22,28 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 股票基础信息表 最新 tspro
-def get_stock_basic_list():
-    # ts token
-    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    # 获取ts_pro股票列表
-    stock_basic = pro.stock_basic(exchange='', list_status='L')
+def get_stock_basic_list(source='file'):
+    if source == 'file':
+        stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
+        print(stock_basic.head())
+    elif source == 'DB':
+        # 连接数据库
+        conn = sqlite3.connect(DB_PATH)
+        stock_basic = pd.read_sql('select * from stock_list', conn)
+        print(stock_basic)
+        # stock_basic.to_csv('stock_list.csv',index=0)
+    else:
+        # ts token
+        ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+        pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+        # 获取ts_pro股票列表
+        stock_basic = pro.stock_basic(exchange='', list_status='L')
+        # stock_basic = pro.bak_basic(trade_date='20211012', fields='trade_date,ts_code,name,list_date,industry,pe')
+        # def get_symbol(x):
+        #     return x.split('.')[0]
+        # stock_basic['symbol']=stock_basic['ts_code'].apply(get_symbol)
     # 获取当前日期
-    localdate = time.strftime("%Y%m%d", time.localtime())
+    localdate = int(time.strftime("%Y%m%d", time.localtime()))
     stock_basic = stock_basic[stock_basic['list_date'] < localdate]
     return stock_basic
 
@@ -53,11 +68,15 @@ def get_stock_basic_list_tspro2DB(filepath):
     stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
     print("insert database successfully")
 
+    # 写入文件
+    stock_basic.to_csv('stock_list.csv', index=0)
+
 
 if __name__ == '__main__':
     # getStockBasicList(filepath)
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
-    get_stock_basic_list_tspro2DB(DB_PATH)
+    # get_stock_basic_list_tspro2DB(DB_PATH)
+    df = get_stock_basic_list('file')
 
 # 废弃 ts 获取股票基本信息表
 # 获取股票的基础数据，按天来存储
