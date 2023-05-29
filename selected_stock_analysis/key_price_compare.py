@@ -5,7 +5,7 @@
 # 计算当前价格最高值，最低值，以及均线数据，进行比较
 from analysis_util.cal_mean_line import cal_mean_line
 from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
-from analysis_util.plot_k_line import plot_k_line
+from analysis_util.plot_k_line import plot_k_line, plot_k_line_latestdays
 
 
 def mean_price_compare(stock_code):
@@ -39,7 +39,7 @@ def mean_price_compare(stock_code):
 if __name__ == '__main__':
     stock_mean=mean_price_compare('000001')
     print(stock_mean)
-    plot_k_line('000001',100)
+    plot_k_line_latestdays('000001',100)
 
 
 
