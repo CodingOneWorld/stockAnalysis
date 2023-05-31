@@ -45,6 +45,8 @@ def cal_stock_price_trend(stock_price,latest_days):
     y=stock_price[start_index:len(stock_price)]
     x=np.array(x).reshape(-1,1)
     y=np.array(y).reshape(-1,1)
+    print(x)
+    print(y)
 
     model = linear_model.LinearRegression()
     model.fit(x, y)
