@@ -33,6 +33,7 @@ def get_stock_price(stock,type,mode='online'):
         table_name = 'S' + str(stock) + '_daily'
         stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     stock_price = stock_trade_data[['trade_date',type]]
+    stock_price.set_index('trade_date',inplace=True)
     print(stock_price)
     return stock_price
 

@@ -97,7 +97,7 @@ def save_k_line(symbol,latest_days,save_path):
 
 
 if __name__ == '__main__':
-    s=get_stock_code('三一重工')
+    s=get_stock_code('艾迪精密')
     plot_k_line_latestdays(s,300)
     # plot_k_line(s,'20190301','20201231')
 

@@ -35,6 +35,10 @@ def plot_price_line_latestdays(stock,latest_days=5000):
     stock_price_df=get_stock_price(stock,'close')
     stock_price_df=stock_price_df.iloc[-latest_days:,:]
     print(stock_price_df)
+    stock_price_df.plot.line()
+
+    plt.show()
+
 
 
 
@@ -93,7 +97,7 @@ def plot_profit_line(stock_code,latest_year):
 if __name__ == '__main__':
     # plot_price_line('688676', '20210401', '20210414')
     # plot_stock_price_line('002486',5000)
-    plot_price_line_latestdays('000001',5)
+    plot_price_line_latestdays('000001',3000)
     # print(get_stock_name('000756'))
     # plot_stock_price_line('002594',100)
     # plot_income_line("000100",5)

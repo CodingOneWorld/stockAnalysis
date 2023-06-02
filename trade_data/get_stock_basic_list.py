@@ -24,7 +24,8 @@ pd.set_option('expand_frame_repr', False)
 # 股票基础信息表 最新 tspro
 def get_stock_basic_list(source='file'):
     if source == 'file':
-        stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
+        # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
+        stock_basic=pd.read_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
         print(stock_basic.head())
     elif source == 'DB':
         # 连接数据库
@@ -38,6 +39,8 @@ def get_stock_basic_list(source='file'):
         pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
         # 获取ts_pro股票列表
         stock_basic = pro.stock_basic(exchange='', list_status='L')
+        # 在运行时写入文件
+        stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv',index=0)
         # stock_basic = pro.bak_basic(trade_date='20211012', fields='trade_date,ts_code,name,list_date,industry,pe')
         # def get_symbol(x):
         #     return x.split('.')[0]
@@ -69,7 +72,7 @@ def get_stock_basic_list_tspro2DB(filepath):
     print("insert database successfully")
 
     # 写入文件
-    stock_basic.to_csv('stock_list.csv', index=0)
+    stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv', index=0)
 
 
 if __name__ == '__main__':

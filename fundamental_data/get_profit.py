@@ -126,7 +126,8 @@ def get_profit_of_latest_years(stock_code, latest_years):
 if __name__ == '__main__':
     # profit_of_all_stocks2db()
 
-    get_profit_latest_years_online(5)
+    # get_profit_latest_years_online(5)
+    get_profit_of_latest_years('601900',5)
 
     # getProfitOf5Year(file_path)
 
