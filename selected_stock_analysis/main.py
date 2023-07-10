@@ -34,8 +34,8 @@ def output_doc(df,file_path):
 
 if __name__ == '__main__':
     # 获取股票池
-    file = 'stock_pool2023.txt'
-    # file = '自选股.csv'
+    # file = 'stock_pool2023.txt'
+    file = '自选股.csv'
 
     path='./classification/'
 

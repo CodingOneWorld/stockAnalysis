@@ -2,11 +2,14 @@
 
 # 导入包
 import pandas as pd
+import numpy as np
 import sqlite3
 from constants.common_constants import DB_PATH
 import matplotlib.pyplot as plt
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from trade_data.get_trade_data import get_stock_trade_data
+
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -15,13 +18,17 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-
-def cal_mean_line(code, latest_days):
-    # 连接sqlite数据库
-    conn = sqlite3.connect(DB_PATH)
-    # 读取相应的交易数据表
-    table_name = 'S' + code + '_daily'
-    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
+# 计算10-180日全部均线数据
+def cal_all_mean_line(code, latest_days,mode='online'):
+    # 获取交易数据
+    if mode == 'online':
+        stock_trade_data = get_stock_trade_data(code)
+    else:
+        # pandas连接数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取相应的交易数据表
+        table_name = 'S' + str(code) + '_daily'
+        stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(lambda x: str(x))
     stock_trade_data.set_index("trade_date", inplace=True)
 
@@ -82,12 +89,16 @@ def cal_mean_line(code, latest_days):
     return mean_dict
 
 
-def plot_mean_line(code, latest_days):
-    # 连接sqlite数据库
-    conn = sqlite3.connect(DB_PATH)
-    # 读取相应的交易数据表
-    table_name = 'S' + code + '_daily'
-    stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
+def plot_mean_line(code, latest_days,mode='online'):
+    # 获取交易数据
+    if mode == 'online':
+        stock_trade_data = get_stock_trade_data(code)
+    else:
+        # pandas连接数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取相应的交易数据表
+        table_name = 'S' + str(code) + '_daily'
+        stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(lambda x: str(x))
     stock_trade_data.set_index("trade_date", inplace=True)
 
@@ -141,8 +152,31 @@ def plot_mean_line(code, latest_days):
     plt.show()
 
 
+# 预估第二天的均线值
+# 前k-1天加上当前的临近收盘价，估计k日均线值
+def cal_tomorrow_k_mean(code,k_days,current_price,mode='online'):
+    # 获取交易数据
+    if mode == 'online':
+        stock_trade_data = get_stock_trade_data(code)
+    else:
+        # pandas连接数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取相应的交易数据表
+        table_name = 'S' + str(code) + '_daily'
+        stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
+    stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(lambda x: str(x))
+    stock_trade_data.set_index("trade_date", inplace=True)
+
+    price_list=list(stock_trade_data['close'].values[-(k_days-1):])+[current_price]
+    print(price_list)
+    return sum(price_list)/len(price_list)
+
+
 if __name__ == '__main__':
-    mean_list = cal_mean_line('000001', 300)
-    print(mean_list)
-    plot_mean_line('000001', 300)
+    # mean_list = cal_all_mean_line('002068', 9)
+    # print(mean_list)
+    # plot_mean_line('000001', 300)
+
+    cal_tomorrow_k_mean('002068', 10,11.7)
+
 
