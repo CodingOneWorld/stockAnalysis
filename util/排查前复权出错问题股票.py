@@ -19,7 +19,7 @@ pd.set_option('expand_frame_repr', False)
 conn = sqlite3.connect(DB_PATH)
 
 # 读取股票列表
-stock_list = pd.read_sql('select * from stockList' , conn)['symbol'].values
+stock_list = pd.read_sql('select * from stock_list' , conn)['symbol'].values
 print(stock_list)
 # stock_list=['000538']
 

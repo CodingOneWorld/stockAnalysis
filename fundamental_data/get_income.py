@@ -102,7 +102,9 @@ def get_income_of_latest_years(stock_code, latest_years):
 if __name__ == '__main__':
     # income_of_all_stocks2db()
 
-    get_income_latest_years_online(5)
+    # get_income_latest_years_online(5)
+    income=get_income_of_latest_years('601900',5)
+    print(income)
 
     # income_data = get_income_of_latest_years('002210', 6)
     # print(income_data)

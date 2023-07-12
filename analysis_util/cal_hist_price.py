@@ -35,11 +35,11 @@ def cal_hist_price_of_stock(stock,latest_days=10000):
     # stock_trade_data['close'].plot.bar()
     # plt.show()
     stock_price = stock_trade_data['close'].values
-    print(len(stock_price))
+    # print(len(stock_price))
     latest_days = latest_days if len(stock_price) > latest_days else len(stock_price)
     start_index = len(stock_price) - latest_days
     stock_price = stock_price[start_index:len(stock_price)]
-    print(len(stock_price))
+    # print(len(stock_price))
     # print(stock_price)
     # for i in stock_price:
     #     print(i)
@@ -105,6 +105,14 @@ def cal_price_pct(stock,latestdays=3000):
     price = cal_hist_price_of_stock(stock,latestdays)
     # print(price)
     pct = (price[3] - price[2]) / (price[1] - price[2])
+    return pct
+
+
+# 计算股票当前价格对最高价格的回撤幅度
+def cal_price_withdraw_pct(stock,latestdays=3000):
+    price = cal_hist_price_of_stock(stock,latestdays)
+    # print(price)
+    pct = (price[1] - price[3]) / price[1]
     return pct
 
 

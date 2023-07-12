@@ -12,6 +12,7 @@ import os
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from trade_data.get_stock_basic_list import get_stock_basic_list
 from trade_data.trade_data_utils import createDailyTableonOneStock
 from util.date_util import get_today_date, date_add
 from util.utils_common import code2ts_code
@@ -70,18 +71,19 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     print("数据库中已有股票数")
     print(len(stocks_old))
 
-    # 查询最新的股票列表
-    # ts_pro
-    stock_basic = pro.stock_basic(exchange='', list_status='L')
-    stock_basic = stock_basic[['ts_code', 'name', 'list_date']]
-    # 获取当前日期
-    localdate = time.strftime("%Y%m%d", time.localtime())
-    stock_basic = stock_basic[stock_basic['list_date'] < localdate]
+    # 查询最新的股票列表，并写入数据库
+    stock_basic=get_stock_basic_list('online')
     # print(stock_basic)
     stocks_tspro = stock_basic['ts_code'].values
     print("ts_pro中最新股票列表数")
     stocks_now = set(stocks_tspro)
     print(len(stocks_now))
+
+    # 写入数据库
+    conn = sqlite3.connect(filepath)
+    print("Open database successfully")
+    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
+    print("insert database successfully")
 
     # ts_pro中最新股票列表，全量更新
     # 基础积分每分钟内最多调取200次，每次4000条数据

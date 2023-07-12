@@ -33,7 +33,8 @@ def get_stock_price(stock,type,mode='online'):
         table_name = 'S' + str(stock) + '_daily'
         stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
     stock_price = stock_trade_data[['trade_date',type]]
-    print(stock_price)
+    stock_price.set_index('trade_date',inplace=True)
+    # print(stock_price)
     return stock_price
 
 
@@ -45,8 +46,8 @@ def cal_stock_price_trend(stock_price,latest_days):
     y=stock_price[start_index:len(stock_price)]
     x=np.array(x).reshape(-1,1)
     y=np.array(y).reshape(-1,1)
-    print(x)
-    print(y)
+    # print(x)
+    # print(y)
 
     model = linear_model.LinearRegression()
     model.fit(x, y)
@@ -83,4 +84,5 @@ def cal_trend_common(data):
 
 
 if __name__ == '__main__':
-    get_stock_price('002600','close')
+    stock_price = get_stock_price(s, 'close').values
+    cal_stock_price_trend(stock_price,50)

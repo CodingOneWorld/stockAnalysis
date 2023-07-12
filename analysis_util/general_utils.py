@@ -23,4 +23,4 @@ def get_stock_code(stock_name,mode='file'):
 
 
 if __name__ == '__main__':
-    print(get_stock_code('南方传媒'))
+    print(get_stock_code('福耀玻璃'))

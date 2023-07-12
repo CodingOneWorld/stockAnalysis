@@ -25,4 +25,5 @@ def get_ST_stocks():
     return ST_list
 
 
-get_ST_stocks()
+if __name__ == '__main__':
+    get_ST_stocks()
