@@ -46,8 +46,8 @@ def get_stock_basic_list(source='file'):
         #     return x.split('.')[0]
         # stock_basic['symbol']=stock_basic['ts_code'].apply(get_symbol)
     # 获取当前日期
-    localdate = int(time.strftime("%Y%m%d", time.localtime()))
-    stock_basic = stock_basic[stock_basic['list_date'] < localdate]
+    # localdate = int(time.strftime("%Y%m%d", time.localtime()))
+    # stock_basic = stock_basic[stock_basic['list_date'] < localdate]
     return stock_basic
 
 
@@ -62,24 +62,24 @@ def get_stock_basic_list_tspro2DB(filepath):
     localdate = time.strftime("%Y%m%d", time.localtime())
     stock_basic = stock_basic[stock_basic['list_date'] < localdate]
 
-    print(stock_basic.head())
+    print(stock_basic)
     print(stock_basic.count())
 
-    # 写入数据库
-    conn = sqlite3.connect(filepath)
-    print("Open database successfully")
-    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
-
-    # 写入文件
-    stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv', index=0)
+    # # 写入数据库
+    # conn = sqlite3.connect(filepath)
+    # print("Open database successfully")
+    # stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
+    # print("insert database successfully")
+    #
+    # # 写入文件
+    # stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv', index=0)
 
 
 if __name__ == '__main__':
     # getStockBasicList(filepath)
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
-    # get_stock_basic_list_tspro2DB(DB_PATH)
-    df = get_stock_basic_list('file')
+    get_stock_basic_list_tspro2DB(DB_PATH)
+    # df = get_stock_basic_list('file')
 
 # 废弃 ts 获取股票基本信息表
 # 获取股票的基础数据，按天来存储
