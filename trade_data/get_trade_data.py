@@ -70,25 +70,26 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         stocks_old.append(row[0])
     print("数据库中已有股票数")
     print(len(stocks_old))
+    stock_basic = get_stock_basic_list('DB')
 
-    # 查询最新的股票列表，并写入数据库
-    stock_basic=get_stock_basic_list('online')
-    # print(stock_basic)
-    stocks_tspro = stock_basic['ts_code'].values
-    print("ts_pro中最新股票列表数")
-    stocks_now = set(stocks_tspro)
-    print(len(stocks_now))
-
-    # 写入数据库
-    conn = sqlite3.connect(filepath)
-    print("Open database successfully")
-    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
+    # # 查询最新的股票列表，并写入数据库
+    # stock_basic=get_stock_basic_list('online')
+    # # print(stock_basic)
+    # stocks_tspro = stock_basic['ts_code'].values
+    # print("ts_pro中最新股票列表数")
+    # stocks_now = set(stocks_tspro)
+    # print(len(stocks_now))
+    #
+    # # 写入数据库
+    # conn = sqlite3.connect(filepath)
+    # print("Open database successfully")
+    # stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
+    # print("insert database successfully")
 
     # ts_pro中最新股票列表，全量更新
     # 基础积分每分钟内最多调取200次，每次4000条数据
     # 加入计数和睡眠
-    stocks_new = sorted(list(stocks_now))
+    stocks_new = sorted(list(stocks_old))
     count = 99
     for i in range(cou_new, len(stocks_new)):
         print('stocks_now:' + str(i))
@@ -115,14 +116,14 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
         print(table_name + ' done')
 
-    # 针对原有的已退市的股票，删表
-    stocks_del = list(set(stocks_old).difference(set(stocks_now)))
-    print("已退市股票：")
-    print(len(stocks_del))
-    for i in range(cou_del, len(stocks_del)):
-        print('stocks_del:' + stocks_del[i])
-        table_name = 'S' + stocks_del[i].split('.')[0] + '_daily'
-        c.execute("drop table " + table_name)
+    # # 针对原有的已退市的股票，删表
+    # stocks_del = list(set(stocks_old).difference(set(stocks_now)))
+    # print("已退市股票：")
+    # print(len(stocks_del))
+    # for i in range(cou_del, len(stocks_del)):
+    #     print('stocks_del:' + stocks_del[i])
+    #     table_name = 'S' + stocks_del[i].split('.')[0] + '_daily'
+    #     c.execute("drop table " + table_name)
 
     conn.close()
 
