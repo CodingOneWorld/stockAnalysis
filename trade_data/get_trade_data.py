@@ -90,15 +90,15 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # 基础积分每分钟内最多调取200次，每次4000条数据
     # 加入计数和睡眠
     stocks_new = sorted(list(stocks_now))
-    count = 99
+    # count = 99
     for i in range(cou_new, len(stocks_new)):
         print('stocks_now:' + str(i))
         ts_code = stocks_new[i]
         print(ts_code)
-        count -= 1
-        if count < 0:
-            time.sleep(30)
-            count = 99
+        # count -= 1
+        # if count < 0:
+        #     time.sleep(30)
+        #     count = 99
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
         df = ts.pro_bar(ts_code=ts_code, adj='qfq')
