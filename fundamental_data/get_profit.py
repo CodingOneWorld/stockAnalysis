@@ -109,13 +109,13 @@ def profit_of_all_stocks2db():
     print("insert database successfully")
 
 
-def get_profit_of_latest_years(stock_code, latest_years):
+def get_profit_of_latest_years(code, latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     stock_profit_data = pd.read_sql('select * from profit_all_stocks', conn)
     stock_profit_list = stock_profit_data['code'].values
-    if stock_profit_list.__contains__(stock_code):
-        profit_data = stock_profit_data[stock_profit_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
+    if stock_profit_list.__contains__(code):
+        profit_data = stock_profit_data[stock_profit_data['code'] == code].iloc[:, -latest_years:].values[0]
         # print(profit_data)
     else:
         profit_data = [0]

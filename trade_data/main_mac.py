@@ -9,7 +9,7 @@ import schedule
 import time
 
 
-def update_trade_data2db(db_path):
+def update_trade_data2db(DB_PATH):
     # # 从数据库中直接推算日期参数
     # # update_date = "20201118"
     # # pandas连接数据库

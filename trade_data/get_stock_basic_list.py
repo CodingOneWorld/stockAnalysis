@@ -25,7 +25,7 @@ pd.set_option('expand_frame_repr', False)
 def get_stock_basic_list(source='file'):
     if source == 'file':
         # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
-        stock_basic=pd.read_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
+        stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
         print(stock_basic.head())
     elif source == 'DB':
         # 连接数据库
@@ -40,7 +40,7 @@ def get_stock_basic_list(source='file'):
         # 获取ts_pro股票列表
         stock_basic = pro.stock_basic(exchange='', list_status='L')
         # 在运行时写入文件
-        stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv',index=0)
+        stock_basic.to_csv('stock_list.csv',index=0)
         # stock_basic = pro.bak_basic(trade_date='20211012', fields='trade_date,ts_code,name,list_date,industry,pe')
         # def get_symbol(x):
         #     return x.split('.')[0]

@@ -4,11 +4,12 @@ import pandas as pd
 import numpy as np
 
 # 对预筛选出的股票池中的股票做分析
-from stock_select.get_low_price_stock import cal_price_pct
+from analysis_util.cal_hist_price import cal_price_pct
 
-df=pd.read_csv('stock_pool.txt',delimiter=',',dtype={'symbol': np.str})
+df = pd.read_csv('stock_pool.txt', delimiter=',', dtype={'symbol': np.str})
 print(df.head())
-stock_list=df.values
+stock_list = df.values
+
 
 # 价格分析
 def price_analysis():
@@ -68,6 +69,5 @@ def price_analysis():
     stock_78.to_csv('./price/stock_78.txt', index=0)
     stock_89.to_csv('./price/stock_89.txt', index=0)
     stock_910.to_csv('./price/stock_910.txt', index=0)
-
 
 # 基本面分析

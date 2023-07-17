@@ -60,11 +60,12 @@ def query_income_since(year1):
     print(df_income[['code', 'name']])
     return df_income
 
+
 # 获取最近n年收入数据  latest_years=n
 def get_income_latest_years_online(latest_years):
     year2 = date.today().year - 1
-    year1=year2-latest_years
-    df_income=query_income_since(year1)
+    year1 = year2 - latest_years
+    df_income = query_income_since(year1)
     return df_income
 
 
@@ -85,25 +86,24 @@ def income_of_all_stocks2db():
     print("insert database successfully")
 
 
-def get_income_of_latest_years(stock_code, latest_years):
+def get_income_of_latest_years(code, latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     stock_income_data = pd.read_sql('select * from income_all_stocks', conn)
     # 判断需要查的股票代码是否在数据库中
     stock_income_list = stock_income_data['code'].values
-    if stock_income_list.__contains__(stock_code):
-        return stock_income_data[stock_income_data['code'] == stock_code].iloc[:, -latest_years:].values[0]
+    if stock_income_list.__contains__(code):
+        return stock_income_data[stock_income_data['code'] == code].iloc[:, -latest_years:].values[0]
         # print(income_data)
     else:
         return [0]
-
 
 
 if __name__ == '__main__':
     # income_of_all_stocks2db()
 
     # get_income_latest_years_online(5)
-    income=get_income_of_latest_years('601900',5)
+    income = get_income_of_latest_years('601900', 5)
     print(income)
 
     # income_data = get_income_of_latest_years('002210', 6)

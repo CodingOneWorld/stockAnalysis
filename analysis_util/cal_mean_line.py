@@ -18,8 +18,9 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
+
 # 计算10-180日全部均线数据
-def cal_all_mean_line(code, latest_days,mode='online'):
+def cal_all_mean_line(code, latest_days, mode='online'):
     # 获取交易数据
     if mode == 'online':
         stock_trade_data = get_stock_trade_data(code)
@@ -77,19 +78,12 @@ def cal_all_mean_line(code, latest_days,mode='online'):
     # print(mean_180_latest)
 
     # 存入字典
-    mean_dict = {}
-    mean_dict['10'] = mean_10_latest
-    mean_dict['20'] = mean_20_latest
-    mean_dict['30'] = mean_30_latest
-    mean_dict['60'] = mean_60_latest
-    mean_dict['88'] = mean_88_latest
-    mean_dict['120'] = mean_120_latest
-    mean_dict['140'] = mean_140_latest
-    mean_dict['180'] = mean_180_latest
+    mean_dict = {'10': mean_10_latest, '20': mean_20_latest, '30': mean_30_latest, '60': mean_60_latest,
+                 '88': mean_88_latest, '120': mean_120_latest, '140': mean_140_latest, '180': mean_180_latest}
     return mean_dict
 
 
-def plot_mean_line(code, latest_days,mode='online'):
+def plot_mean_line(code, latest_days, mode='online'):
     # 获取交易数据
     if mode == 'online':
         stock_trade_data = get_stock_trade_data(code)
@@ -154,7 +148,7 @@ def plot_mean_line(code, latest_days,mode='online'):
 
 # 预估第二天的均线值
 # 前k-1天加上当前的临近收盘价，估计k日均线值
-def cal_tomorrow_k_mean(code,k_days,current_price,mode='online'):
+def cal_tomorrow_k_mean(code, k_days, current_price, mode='online'):
     # 获取交易数据
     if mode == 'online':
         stock_trade_data = get_stock_trade_data(code)
@@ -167,9 +161,9 @@ def cal_tomorrow_k_mean(code,k_days,current_price,mode='online'):
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(lambda x: str(x))
     stock_trade_data.set_index("trade_date", inplace=True)
 
-    price_list=list(stock_trade_data['close'].values[-(k_days-1):])+[current_price]
+    price_list = list(stock_trade_data['close'].values[-(k_days - 1):]) + [current_price]
     print(price_list)
-    return sum(price_list)/len(price_list)
+    return sum(price_list) / len(price_list)
 
 
 if __name__ == '__main__':
@@ -177,6 +171,4 @@ if __name__ == '__main__':
     # print(mean_list)
     # plot_mean_line('000001', 300)
 
-    cal_tomorrow_k_mean('002068', 10,11.7)
-
-
+    cal_tomorrow_k_mean('002068', 10, 11.7)

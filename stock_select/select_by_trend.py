@@ -4,7 +4,6 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-from analysis_util.plot_util import plot_stock_price_line
 from constants.common_constants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
 

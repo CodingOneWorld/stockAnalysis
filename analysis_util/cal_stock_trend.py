@@ -22,30 +22,30 @@ pd.set_option('expand_frame_repr', False)
 
 # 获取某只股票的所有历史股价
 # type取值 close，high,low，控制取最低价，还是最高价还是收盘价
-def get_stock_price(stock,type,mode='online'):
+def get_stock_price(code, type, mode='online'):
     # 获取交易数据
-    if mode=='online':
-        stock_trade_data=get_stock_trade_data(stock)
+    if mode == 'online':
+        stock_trade_data = get_stock_trade_data(code)
     else:
         # pandas连接数据库
         conn = sqlite3.connect(DB_PATH)
         # 读取相应的交易数据表
-        table_name = 'S' + str(stock) + '_daily'
+        table_name = 'S' + str(code) + '_daily'
         stock_trade_data = pd.read_sql('select * from ' + table_name, conn)
-    stock_price = stock_trade_data[['trade_date',type]]
-    stock_price.set_index('trade_date',inplace=True)
+    stock_price = stock_trade_data[['trade_date', type]]
+    stock_price.set_index('trade_date', inplace=True)
     # print(stock_price)
     return stock_price
 
 
-def cal_stock_price_trend(stock_price,latest_days):
+def cal_stock_price_trend(stock_price, latest_days):
     # 构建线性回归样本，计算斜率
-    latest_days=latest_days if len(stock_price)>latest_days else len(stock_price)
-    x=[i for i in range(1,latest_days+1)]
-    start_index=len(stock_price)-latest_days if (len(stock_price)-latest_days)>0 else 0
-    y=stock_price[start_index:len(stock_price)]
-    x=np.array(x).reshape(-1,1)
-    y=np.array(y).reshape(-1,1)
+    latest_days = latest_days if len(stock_price) > latest_days else len(stock_price)
+    x = [i for i in range(1, latest_days + 1)]
+    start_index = len(stock_price) - latest_days if (len(stock_price) - latest_days) > 0 else 0
+    y = stock_price[start_index:len(stock_price)]
+    x = np.array(x).reshape(-1, 1)
+    y = np.array(y).reshape(-1, 1)
     # print(x)
     # print(y)
 
@@ -64,10 +64,10 @@ def cal_stock_price_trend(stock_price,latest_days):
 
 
 def cal_trend_common(data):
-    x=[i for i in range(1,len(data)+1)]
-    y=data
-    x=np.array(x).reshape(-1,1)
-    y=np.array(y).reshape(-1,1)
+    x = [i for i in range(1, len(data) + 1)]
+    y = data
+    x = np.array(x).reshape(-1, 1)
+    y = np.array(y).reshape(-1, 1)
 
     model = linear_model.LinearRegression()
     model.fit(x, y)
@@ -84,5 +84,5 @@ def cal_trend_common(data):
 
 
 if __name__ == '__main__':
-    stock_price = get_stock_price(s, 'close').values
-    cal_stock_price_trend(stock_price,50)
+    stock_price = get_stock_price('000001', 'close').values
+    cal_stock_price_trend(stock_price, 50)

@@ -30,7 +30,7 @@ import time
 
 def update_trade_data2db(DB_PATH):
     get_daily_data_tspro2DB(DB_PATH, 0, 0)
-    get_stock_basic_list_tspro2DB(DB_PATH)
+    # get_stock_basic_list_tspro2DB(DB_PATH)
 
 
 if __name__ == '__main__':
