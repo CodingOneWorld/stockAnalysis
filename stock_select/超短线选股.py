@@ -21,20 +21,22 @@ warnings.filterwarnings("ignore")
 if __name__ == '__main__':
     # 股票列表
     stock_basic=get_stock_basic_list('DB')
+    # 不看最近一年上市的股票
+    stock_basic = stock_basic[stock_basic['list_date'] <= '20220701']
     stock_list=stock_basic['symbol'].values
     print(stock_list)
 
     s_list=[]
 
-    for s in stock_list[0:1]:
-    # for s in ['000980']:
+    for s in stock_list:
+    # for s in ['001282']:
         # 获取股票交易数据
         trade_data=get_stock_trade_data_latestdays(s,100)
         # 计算5日均线
         trade_data['m5']=trade_data['close'].rolling(window=5).mean().fillna(0)
         trade_data=trade_data[-60:].reset_index(drop=True)
         trade_data['latestdays']=[60]*60-trade_data.index
-        print(trade_data)
+        # print(trade_data)
         trade_data['moreM5']=trade_data['close']-trade_data['m5']
         trade_data_8=trade_data[-8:]
         # 8天以内有涨停
@@ -58,11 +60,11 @@ if __name__ == '__main__':
                     trade_data_after_pct9 = trade_data_8[pct9_index + 1:]
                     print(trade_data_after_pct9)
                     # 计算涨停后收盘价是否大于5日线
-                    trade_data_after_pct9['moreM5_tag'] = trade_data_after_pct9['moreM5'].apply(
-                        lambda x: 1 if x > 0 else 0)
-                    if trade_data_after_pct9['moreM5_tag'].sum() >= len(trade_data_after_pct9):
-                        print(s+'满足条件')
-                        s_list.append(s)
+                    # trade_data_after_pct9['moreM5_tag'] = trade_data_after_pct9['moreM5'].apply(
+                    #     lambda x: 1 if x > 0 else 0)
+                    # if trade_data_after_pct9['moreM5_tag'].sum() >= len(trade_data_after_pct9):
+                    print(s+'满足条件')
+                    s_list.append(s)
 
     for l in s_list:
         print(l)
