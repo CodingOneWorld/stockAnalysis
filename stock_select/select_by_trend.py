@@ -27,6 +27,6 @@ if __name__ == '__main__':
     df = pd.read_csv('stock_pool.txt', delimiter=',', dtype={'symbol': np.str})
     print(df.head())
     stock_list = list(df.values)
-    stock_array=select_up_trend_stocks(stock_list,50)
+    stock_array=select_up_trend_stocks(stock_list,20)
     stock_array=pd.DataFrame(stock_array,columns=['symbol','stock_name'])
     print(stock_array)

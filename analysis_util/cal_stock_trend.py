@@ -22,7 +22,7 @@ pd.set_option('expand_frame_repr', False)
 
 # 获取某只股票的所有历史股价
 # type取值 close，high,low，控制取最低价，还是最高价还是收盘价
-def get_stock_price(code, type, mode='online'):
+def get_stock_price(code, type, mode='DB'):
     # 获取交易数据
     if mode == 'online':
         stock_trade_data = get_stock_trade_data(code)
@@ -84,5 +84,5 @@ def cal_trend_common(data):
 
 
 if __name__ == '__main__':
-    stock_price = get_stock_price('000063', 'close').values
-    cal_stock_price_trend(stock_price, 100)
+    stock_price = get_stock_price('000661', 'close','DB').values
+    cal_stock_price_trend(stock_price, 20)

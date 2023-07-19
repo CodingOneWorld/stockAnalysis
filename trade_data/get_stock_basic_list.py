@@ -26,11 +26,13 @@ def get_stock_basic_list(source='file'):
     if source == 'file':
         # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
         stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
+        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
         # print(stock_basic.head())
     elif source == 'DB':
         # 连接数据库
         conn = sqlite3.connect(DB_PATH)
         stock_basic = pd.read_sql('select * from stock_list', conn)
+        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
         # print(stock_basic)
         # stock_basic.to_csv('stock_list.csv',index=0)
     else:
@@ -80,6 +82,9 @@ if __name__ == '__main__':
     DB_PATH = "/Users/beyondzq/DB/stock_data.db"
     # get_stock_basic_list_tspro2DB(DB_PATH)
     df = get_stock_basic_list('file')
+    print(df.head())
+    df=df[df.symbol.str.startswith('3')==False]
+    print(df.count())
 
 # 废弃 ts 获取股票基本信息表
 # 获取股票的基础数据，按天来存储

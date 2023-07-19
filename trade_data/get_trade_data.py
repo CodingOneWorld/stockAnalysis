@@ -12,6 +12,7 @@ import os
 import sqlite3
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
+from constants.common_constants import DB_PATH
 from trade_data.get_stock_basic_list import get_stock_basic_list
 from trade_data.trade_data_utils import createDailyTableonOneStock
 from util.date_util import get_today_date, date_add
@@ -26,31 +27,35 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def get_stock_trade_data(code, start_date='', end_date=''):
-    # ts token
-    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    ts_code = code2ts_code(code)
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq', start_date=start_date, end_date=end_date)
+def get_stock_trade_data(code, start_date='', end_date='',mode='DB'):
+    if mode=='online':
+        # ts token
+        ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+        ts_code = code2ts_code(code)
+        df = ts.pro_bar(ts_code=ts_code, adj='qfq', start_date=start_date, end_date=end_date)
+    else:
+        # pandas连接数据库
+        conn = sqlite3.connect(DB_PATH)
+        # 读取相应的交易数据表
+        table_name = 'S' + str(code) + '_daily'
+        df = pd.read_sql('select * from ' + table_name, conn)
+
     df = df.dropna(axis=0, subset=["close"])
     df2 = df.sort_index(ascending=False)
     df2.reset_index(drop=True, inplace=True)
-    print(df2.head())
+    # print(df2.head())
     return df2
 
 
 def get_stock_trade_data_latestdays(code, latestdays):
-    # ts token
-    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    ts_code = code2ts_code(code)
-    df = ts.pro_bar(ts_code=ts_code, adj='qfq')
-    df = df.dropna(axis=0, subset=["close"])
+    df=get_stock_trade_data(code)
     df2 = df.sort_index(ascending=False)
     if latestdays > len(df2['ts_code']):
         latestdays = len(df2['ts_code'])
     # df2 = df2.iloc[-latestdays:]
     df2 = df2[-latestdays:]
     df2.reset_index(drop=True, inplace=True)
-    print(df2)
+    print(df2.head())
     return df2
 
 
@@ -60,34 +65,36 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    # 数据库连接
-    conn = sqlite3.connect(filepath)
-    print("Opened database successfully")
-    c = conn.cursor()
-    # 查询数据库中已有的股票列表
-    cursor = c.execute("SELECT ts_code,name from stock_list")
-    stocks_old = []
-    for row in cursor:
-        stocks_old.append(row[0])
-    print("数据库中已有股票数")
-    print(len(stocks_old))
+    # # 数据库连接
+    # conn = sqlite3.connect(filepath)
+    # print("Opened database successfully")
+    # c = conn.cursor()
+    # # 查询数据库中已有的股票列表
+    # cursor = c.execute("SELECT ts_code,name from stock_list")
+    # stocks_old = []
+    # for row in cursor:
+    #     stocks_old.append(row[0])
+    # print("数据库中已有股票数")
+    # print(len(stocks_old))
 
     # 查询最新的股票列表，并写入数据库
-    stock_basic = get_stock_basic_list('file')
+    stock_basic = get_stock_basic_list('online')
+    # 写入数据库
+    conn = sqlite3.connect(filepath)
+    print("Open database successfully")
+    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
+    print("insert database successfully")
+    # 只提取非创业板的股票
+    stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
     # print(stock_basic)
     stocks_tspro = stock_basic['ts_code'].values
     print("ts_pro中最新股票列表数")
     stocks_now = set(stocks_tspro)
     print(len(stocks_now))
 
-    # 写入数据库
-    conn = sqlite3.connect(filepath)
-    print("Open database successfully")
-    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
 
     # ts_pro中最新股票列表，全量更新
-    # 基础积分每分钟内最多调取200次，每次4000条数据
+    # 基础积分每分钟内最多调取500次
     # 加入计数和睡眠
     stocks_new = sorted(list(stocks_now))
     # count = 99
@@ -117,14 +124,14 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         df2.to_sql(table_name, con=conn, if_exists='replace', index=False)
         print(table_name + ' done')
 
-    # 针对原有的已退市的股票，删表
-    stocks_del = list(set(stocks_old).difference(set(stocks_now)))
-    print("已退市股票：")
-    print(len(stocks_del))
-    for i in range(cou_del, len(stocks_del)):
-        print('stocks_del:' + stocks_del[i])
-        table_name = 'S' + stocks_del[i].split('.')[0] + '_daily'
-        c.execute("drop table " + table_name)
+    # # 针对原有的已退市的股票，删表
+    # stocks_del = list(set(stocks_old).difference(set(stocks_now)))
+    # print("已退市股票：")
+    # print(len(stocks_del))
+    # for i in range(cou_del, len(stocks_del)):
+    #     print('stocks_del:' + stocks_del[i])
+    #     table_name = 'S' + stocks_del[i].split('.')[0] + '_daily'
+    #     c.execute("drop table " + table_name)
 
     conn.close()
 
