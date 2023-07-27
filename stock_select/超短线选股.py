@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     s_list=[]
 
-    for s in stock_list:
-    # for s in ['001282']:
+    # for s in stock_list:
+    for s in ['002654','600268','601567']:
         # 获取股票交易数据
         trade_data=get_stock_trade_data_latestdays(s,100)
         # 计算5日均线
@@ -39,6 +39,7 @@ if __name__ == '__main__':
         # print(trade_data)
         trade_data['moreM5']=trade_data['close']-trade_data['m5']
         trade_data_8=trade_data[-8:]
+        print(trade_data_8)
         # 8天以内有涨停
         if len(trade_data_8[trade_data_8.pct_chg>9])>0:
             # 涨停板是60天内最高价
@@ -60,25 +61,14 @@ if __name__ == '__main__':
                     trade_data_after_pct9 = trade_data_8[pct9_index + 1:]
                     print(trade_data_after_pct9)
                     # 计算涨停后收盘价是否大于5日线
-                    # trade_data_after_pct9['moreM5_tag'] = trade_data_after_pct9['moreM5'].apply(
-                    #     lambda x: 1 if x > 0 else 0)
-                    # if trade_data_after_pct9['moreM5_tag'].sum() >= len(trade_data_after_pct9):
-                    print(s+'满足条件')
-                    s_list.append(s)
+                    trade_data_after_pct9['moreM5_tag'] = trade_data_after_pct9['moreM5'].apply(
+                        lambda x: 1 if x > 0 else 0)
+                    if trade_data_after_pct9['moreM5_tag'].sum() >= len(trade_data_after_pct9):
+                        print(s+'满足条件')
+                        s_list.append(s)
 
     for l in s_list:
         print(l)
-
-
-
-
-
-
-
-
-
-        # 涨停时间距离今天8天以内
-        # if len(trade_data[trade_data.pct_chg>9][trade_data.latestdays<8])>0:
 
 
 

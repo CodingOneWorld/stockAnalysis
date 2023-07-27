@@ -55,7 +55,7 @@ def get_stock_trade_data_latestdays(code, latestdays):
     # df2 = df2.iloc[-latestdays:]
     df2 = df2[-latestdays:]
     df2.reset_index(drop=True, inplace=True)
-    print(df2.head())
+    # print(df2.head())
     return df2
 
 
