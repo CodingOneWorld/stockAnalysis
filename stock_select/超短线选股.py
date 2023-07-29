@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     s_list=[]
 
-    # for s in stock_list:
-    for s in ['002654','600268','601567']:
+    for s in stock_list:
+    # for s in ['002654','600268','601567']:
         # 获取股票交易数据
         trade_data=get_stock_trade_data_latestdays(s,100)
         # 计算5日均线

@@ -2,7 +2,7 @@
 
 # 计算股票交易价格序列中的极值点（高点，低点）
 
-from scipy.signal import argrelextrema, argrelmin
+from scipy.signal import argrelextrema, argrelmin,savgol_filter
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
@@ -46,6 +46,39 @@ def cal_min_value(list):
     return list[argrelmin(list)]
 
 
+def cal_dydx():
+    # Simple interpolation of x and y
+    f = interp1d(x, y)
+    x_fake = np.arange(1.1, len(y), 0.1)
+    print(type(x_fake[0]))
+    print(np.where(x_fake == 2.1))
+
+    # derivative of y with respect to x
+    # df_dx = derivative(f, x_fake, dx=1e-6)
+    df_dx = derivative(f, x_fake, dx=1e-6)
+
+    print(df_dx)
+
+    # Plot
+    fig = plt.figure()
+    ax1 = fig.add_subplot(211)
+    ax2 = fig.add_subplot(212)
+
+    ax1.errorbar(x, y, fmt="o", color="blue", label='Input data')
+    ax1.errorbar(x_fake, f(x_fake), label="Interpolated data", lw=2)
+    ax1.set_xlabel("x")
+    ax1.set_ylabel("y")
+
+    ax2.errorbar(x_fake, df_dx, lw=2)
+    ax2.errorbar(x_fake, np.array([0 for i in x_fake]), ls="--", lw=2)
+    ax2.set_xlabel("x")
+    ax2.set_ylabel("dy/dx")
+
+    leg = ax1.legend(loc=2, numpoints=1, scatterpoints=1)
+    leg.draw_frame(False)
+    plt.show()
+
+
 if __name__ == '__main__':
     data = np.array(
         # [12.16, 12.4967, 12.6056, 13.0116, 12.8037, 12.9324, 13.071, 13.2097, 13.8137, 13.5563, 13.586, 13.7147, 13.5959,
@@ -83,40 +116,24 @@ if __name__ == '__main__':
          ]
     )
 
-    # y = cal_min_value(data)
-    y = cal_max_value(data)
-    print(y)
-    x = [i for i in range(1, len(y) + 1)]
-    print(x)
-    # cal_min_value(x)
+    # # 计算极大值，极小值
+    # # y = cal_min_value(data)
+    # y = cal_max_value(data)
+    # print(y)
+    # x = [i for i in range(1, len(y) + 1)]
+    # print(x)
+    # # cal_min_value(x)
 
-    # # Simple interpolation of x and y
-    # f = interp1d(x, y)
-    # x_fake = np.arange(1.1, len(y), 0.1)
-    # print(type(x_fake[0]))
-    # print(np.where(x_fake == 2.1))
-    #
-    # # derivative of y with respect to x
-    # # df_dx = derivative(f, x_fake, dx=1e-6)
-    # df_dx = derivative(f, x_fake, dx=1e-6)
-    #
-    # print(df_dx)
-    #
-    # # Plot
-    # fig = plt.figure()
-    # ax1 = fig.add_subplot(211)
-    # ax2 = fig.add_subplot(212)
-    #
-    # ax1.errorbar(x, y, fmt="o", color="blue", label='Input data')
-    # ax1.errorbar(x_fake, f(x_fake), label="Interpolated data", lw=2)
-    # ax1.set_xlabel("x")
-    # ax1.set_ylabel("y")
-    #
-    # ax2.errorbar(x_fake, df_dx, lw=2)
-    # ax2.errorbar(x_fake, np.array([0 for i in x_fake]), ls="--", lw=2)
-    # ax2.set_xlabel("x")
-    # ax2.set_ylabel("dy/dx")
-    #
-    # leg = ax1.legend(loc=2, numpoints=1, scatterpoints=1)
-    # leg.draw_frame(False)
-    # plt.show()
+    # 曲线平滑
+    # 可视化图线
+    x = [i for i in range(1, len(data) + 1)]
+    plt.plot(x, data)
+
+    # 使用Savitzky-Golay 滤波器后得到平滑图线
+    from scipy.signal import savgol_filter
+
+    y = savgol_filter(data, 9, 1, mode='nearest')
+    # 可视化图线
+    plt.plot(x, y, 'b', label='savgol')
+    plt.show()
+

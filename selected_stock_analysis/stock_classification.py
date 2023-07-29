@@ -97,11 +97,11 @@ def get_up_trend_stocks(file):
     long_stock = pd.DataFrame(long_stock, columns=['symbol', 'stock_name'])
     print(long_stock)
 
-    # super_short_stocks.to_csv(path+'超短线上升通道' + file.split('.')[0] + '.csv', index=0)
-    # short_stocks.to_csv(path+'短线上升通道' + file.split('.')[0] + '.csv', index=0)
-    # medium_stocks.to_csv(path+'中线上升通道' + file.split('.')[0] + '.csv', index=0)
-    # medium_long_stocks.to_csv(path+'中长线上升通道' + file.split('.')[0] + '.csv', index=0)
-    # long_stock.to_csv(path+'长线上升通道' + file.split('.')[0] + '.csv', index=0)
+    super_short_stocks.to_csv(path+'超短线上升通道' + file.split('.')[0] + '.csv', index=0)
+    short_stocks.to_csv(path+'短线上升通道' + file.split('.')[0] + '.csv', index=0)
+    medium_stocks.to_csv(path+'中线上升通道' + file.split('.')[0] + '.csv', index=0)
+    medium_long_stocks.to_csv(path+'中长线上升通道' + file.split('.')[0] + '.csv', index=0)
+    long_stock.to_csv(path+'长线上升通道' + file.split('.')[0] + '.csv', index=0)
 
 
     print("反弹股：")
@@ -115,9 +115,9 @@ def get_up_trend_stocks(file):
     rebound_stocks_h = pd.DataFrame(rebound_stocks_h, columns=['symbol', 'stock_name'])
     print(rebound_stocks_h)
 
-    # rebound_stocks_l.to_csv(path+'开始反弹' + file.split('.')[0] + '.csv', index=0)
-    # rebound_stocks_m.to_csv(path+'中期反弹' + file.split('.')[0] + '.csv', index=0)
-    # rebound_stocks_h.to_csv(path+'晚期反弹' + file.split('.')[0] + '.csv', index=0)
+    rebound_stocks_l.to_csv(path+'开始反弹' + file.split('.')[0] + '.csv', index=0)
+    rebound_stocks_m.to_csv(path+'中期反弹' + file.split('.')[0] + '.csv', index=0)
+    rebound_stocks_h.to_csv(path+'晚期反弹' + file.split('.')[0] + '.csv', index=0)
 
 
 
