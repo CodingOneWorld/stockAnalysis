@@ -127,12 +127,13 @@ if __name__ == '__main__':
     # profit_of_all_stocks2db()
 
     # get_profit_latest_years_online(5)
-    get_profit_of_latest_years('601900',5)
+    # get_profit_of_latest_years('601900',5)
 
     # getProfitOf5Year(file_path)
 
     # profit_of_all_stocks2db()
 
-    # income_data=get_profit_of_latest_years('000002',6)
-    # k = cal_trend_common(income_data)
-    # print(k)
+    income_data=get_profit_of_latest_years('002714',5)
+    print(income_data)
+    k = cal_trend_common(income_data)
+    print(k)

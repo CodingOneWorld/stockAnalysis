@@ -27,8 +27,8 @@ pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
 
 
-def get_stock_trade_data(code, start_date='', end_date='',mode='DB'):
-    if mode=='online':
+def get_stock_trade_data(code, start_date='', end_date='', mode='DB'):
+    if mode == 'online':
         # ts token
         ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
         ts_code = code2ts_code(code)
@@ -48,7 +48,7 @@ def get_stock_trade_data(code, start_date='', end_date='',mode='DB'):
 
 
 def get_stock_trade_data_latestdays(code, latestdays):
-    df=get_stock_trade_data(code)
+    df = get_stock_trade_data(code)
     df2 = df.sort_index(ascending=False)
     if latestdays > len(df2['ts_code']):
         latestdays = len(df2['ts_code'])
@@ -78,7 +78,20 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # print(len(stocks_old))
 
     # 查询最新的股票列表，并写入数据库
-    stock_basic = get_stock_basic_list('online')
+    source = 'online'
+    # 从文件中查询上一次查询时间
+    # 如果距离上一次查询不到一个小时，则在DB查询
+    with open('last_datetime.txt', 'r') as file:
+        dtime = datetime.datetime.strptime(file.readlines()[0], "%Y-%m-%d %H:%M:%S")
+        dtime2 = datetime.datetime.now()
+        if (dtime2 - dtime).seconds / 3600 < 1:
+            source = 'DB'
+    # 将当前时间写入文件
+    dtime = datetime.datetime.now()
+    with open('last_datetime.txt', 'w') as file:
+        file.write(dtime.strftime('%Y-%m-%d %H:%M:%S'))
+    print(source)
+    stock_basic = get_stock_basic_list(source)
     # 写入数据库
     conn = sqlite3.connect(filepath)
     print("Open database successfully")
@@ -92,20 +105,19 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     stocks_now = set(stocks_tspro)
     print(len(stocks_now))
 
-
     # ts_pro中最新股票列表，全量更新
-    # 基础积分每分钟内最多调取500次
+    # 基础积分每分钟内最多调取200次
     # 加入计数和睡眠
     stocks_new = sorted(list(stocks_now))
-    # count = 99
+    count = 100
     for i in range(cou_new, len(stocks_new)):
         print('stocks_now:' + str(i))
         ts_code = stocks_new[i]
         print(ts_code)
-        # count -= 1
-        # if count < 0:
-        #     time.sleep(30)
-        #     count = 99
+        count -= 1
+        if count < 0:
+            time.sleep(5)
+            count = 100
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
         df = ts.pro_bar(ts_code=ts_code, adj='qfq')

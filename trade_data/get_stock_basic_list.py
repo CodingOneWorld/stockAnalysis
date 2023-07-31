@@ -22,7 +22,7 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 股票基础信息表 最新 tspro
-def get_stock_basic_list(source='file'):
+def get_stock_basic_list(source='DB'):
     if source == 'file':
         # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
         stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')

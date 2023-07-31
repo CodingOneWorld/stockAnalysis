@@ -103,13 +103,13 @@ if __name__ == '__main__':
     # income_of_all_stocks2db()
 
     # get_income_latest_years_online(5)
-    income = get_income_of_latest_years('601900', 5)
+    income = get_income_of_latest_years('002714', 5)
     print(income)
 
     # income_data = get_income_of_latest_years('002210', 6)
     # print(income_data)
-    # k = cal_trend_common(income_data)
-    # print(k)
+    k = cal_trend_common(income)
+    print(k)
     #
     # df_Income = ts.get_profit_data(2015, 4).loc[:, ['code', 'name', 'business_income']]
     # df = df_Income[df_Income['name']=='兆易创新']

@@ -3,6 +3,7 @@
 import tushare as ts
 import pandas as pd
 import matplotlib.pyplot as plt
+import datetime
 
 import time
 import os
@@ -17,26 +18,12 @@ pd.set_option('max_colwidth', 200)
 # 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
-# ts token
-ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
+with open('last_datetime.txt', 'r') as file:
+    dtime=datetime.datetime.strptime(file.readlines()[0], "%Y-%m-%d %H:%M:%S")
 
-# 查询最新的股票列表
-# 查询当前所有正常上市交易的股票列表-是ts_pro
-# ts_pro
-stock_basic = pro.stock_basic(exchange='', list_status='L')
-# 获取当前日期
-localdate = time.strftime("%Y%m%d", time.localtime())
-stock_basic = stock_basic[stock_basic['list_date'] < localdate]
-print(stock_basic)
-stocks_tspro = stock_basic['ts_code'].values
-print(len(stocks_tspro))
+print(dtime)
+dtime2 = datetime.datetime.now()
 
-# 获取交易数据
-df = ts.pro_bar(adj='qfq')
-# df = ts.pro_bar(ts_code='000538.SZ', adj='qfq', start_date='20220430')
-# df = df.dropna(axis=0,subset = ["close"])
-
-print(df)
+print((dtime2-dtime).seconds/3600)
 
 
