@@ -20,7 +20,7 @@ pd.set_option('expand_frame_repr', False)
 
 
 # 计算10-180日全部均线数据
-def cal_all_mean_line(code, latest_days, mode='online'):
+def cal_all_mean_line(code, latest_days, mode='DB'):
     # 获取交易数据
     if mode == 'online':
         stock_trade_data = get_stock_trade_data(code)
@@ -41,20 +41,20 @@ def cal_all_mean_line(code, latest_days, mode='online'):
     stock_trade_data.loc[:, 'low'].plot.line()
 
     # 计算移动均线，根据收盘价
-    df_mean = stock_trade_data.close.rolling(window=10).mean().fillna(0)
-    # print(df_mean)
-    mean_10_latest = df_mean.values[-1]
-    # print(mean_10_latest)
-
-    df_mean = stock_trade_data.close.rolling(window=20).mean().fillna(0)
-    # print(df_mean)
-    mean_20_latest = df_mean.values[-1]
-    # print(mean_20_latest)
-
-    df_mean = stock_trade_data.close.rolling(window=30).mean().fillna(0)
-    # print(df_mean)
-    mean_30_latest = df_mean.values[-1]
-    # print(mean_30_latest)
+    # df_mean = stock_trade_data.close.rolling(window=10).mean().fillna(0)
+    # # print(df_mean)
+    # mean_10_latest = df_mean.values[-1]
+    # # print(mean_10_latest)
+    #
+    # df_mean = stock_trade_data.close.rolling(window=20).mean().fillna(0)
+    # # print(df_mean)
+    # mean_20_latest = df_mean.values[-1]
+    # # print(mean_20_latest)
+    #
+    # df_mean = stock_trade_data.close.rolling(window=30).mean().fillna(0)
+    # # print(df_mean)
+    # mean_30_latest = df_mean.values[-1]
+    # # print(mean_30_latest)
 
     df_mean = stock_trade_data.close.rolling(window=60).mean().fillna(0)
     # print(df_mean)
@@ -78,7 +78,9 @@ def cal_all_mean_line(code, latest_days, mode='online'):
     # print(mean_180_latest)
 
     # 存入字典
-    mean_dict = {'10': mean_10_latest, '20': mean_20_latest, '30': mean_30_latest, '60': mean_60_latest,
+    # mean_dict = {'10': mean_10_latest, '20': mean_20_latest, '30': mean_30_latest, '60': mean_60_latest,
+    #              '88': mean_88_latest, '120': mean_120_latest, '140': mean_140_latest, '180': mean_180_latest}
+    mean_dict = {'60': mean_60_latest,
                  '88': mean_88_latest, '120': mean_120_latest, '140': mean_140_latest, '180': mean_180_latest}
     return mean_dict
 

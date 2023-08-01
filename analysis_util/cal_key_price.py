@@ -2,51 +2,49 @@
 
 # 计算股票交易价格序列中的极值点（高点，低点）
 
-from scipy.signal import argrelextrema, argrelmin, savgol_filter
+from scipy.signal import argrelextrema, argrelmin, argrelmax,savgol_filter
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.interpolate import interp1d
 from scipy.misc import derivative
 
-
-def cal_max_value(list):
-    peaks, _ = signal.find_peaks(list, distance=5)  # distance表示极大值点两两之间的距离至少大于等于5个水平单位
-
-    print(peaks)
-    # print(len(peaks))  # the number of peaks
-
-    plt.figure(figsize=(20, 5))
-    plt.plot(list)
-    plt.scatter(
-        peaks,
-        list[peaks],
-        c='red'
-    )
-    # for i in range(len(peaks)):
-    #     plt.plot(peaks[i], list[peaks[i]], '*', markersize=10)
-    plt.show()
-
-    # return [peaks, x[peaks]]
-    return list[peaks]
-
-
-def cal_min_value(list):
-    print(argrelmin(list))
+# 计算极大值
+def cal_extreme_max_value(list):
+    print(argrelmax(list))
 
     plt.plot(range(0, len(list)), list)
     plt.scatter(
-        argrelmin(list),
-        list[argrelmin(list)],
-        c='red'
+        argrelmax(list),
+        list[argrelmax(list)],
+        c='black'
     )
+
+    plt.show()
+
+    return list[argrelmax(list)]
+
+# 计算极小值
+def cal_extreme_min_value(list):
+    # print(argrelmin(list))
+    print(list[argrelmin(list)])
+
+    # plt.plot(range(0, len(list)), list)
+    # plt.scatter(
+    #     argrelmin(list),
+    #     list[argrelmin(list)],
+    #     c='red'
+    # )
+    #
+    # plt.show()
 
     # return [argrelmin(list), x[argrelmin(list)]]
     return list[argrelmin(list)]
 
-
-def cal_dydx():
+# 求导，计算斜率的变化
+def cal_dydx(y):
     # Simple interpolation of x and y
+    x = [i for i in range(1, len(y) + 1)]
     f = interp1d(x, y)
     x_fake = np.arange(1.1, len(y), 0.1)
     print(type(x_fake[0]))
@@ -76,6 +74,27 @@ def cal_dydx():
     leg = ax1.legend(loc=2, numpoints=1, scatterpoints=1)
     leg.draw_frame(False)
     plt.show()
+
+# 计算极大值另一种方法（废弃）
+def cal_extreme_max_value2(list):
+    peaks, _ = signal.find_peaks(list, distance=5)  # distance表示极大值点两两之间的距离至少大于等于5个水平单位
+
+    print(peaks)
+    # print(len(peaks))  # the number of peaks
+
+    plt.figure(figsize=(20, 5))
+    plt.plot(list)
+    plt.scatter(
+        peaks,
+        list[peaks],
+        c='red'
+    )
+    # for i in range(len(peaks)):
+    #     plt.plot(peaks[i], list[peaks[i]], '*', markersize=10)
+    plt.show()
+
+    # return [peaks, x[peaks]]
+    return list[peaks]
 
 
 if __name__ == '__main__':
@@ -108,13 +127,10 @@ if __name__ == '__main__':
     )
 
     # 计算极大值，极小值
-    y = cal_min_value(data)
-    # y = cal_max_value(data)
+    # y = cal_extreme_min_value(data)
+    y = cal_extreme_min_value(data)
     print(y)
-    y2 = cal_min_value(y)
-    y3 = cal_min_value(y2)
-    plt.show()
+    y2 = cal_extreme_min_value(y)
+    print(y2)
 
-    # x = [i for i in range(1, len(y) + 1)]
-    # print(x)
-    # cal_min_value(x)
+
