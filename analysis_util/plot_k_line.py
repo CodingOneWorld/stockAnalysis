@@ -94,5 +94,5 @@ def save_k_line(code, latest_days, save_path):
 
 if __name__ == '__main__':
     # s = get_stock_code('机器人')
-    plot_k_line_latestdays('000661', 20)
+    plot_k_line_latestdays('600660', 200)
     # plot_k_line(s,'20190301','20201231')

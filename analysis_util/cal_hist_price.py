@@ -108,6 +108,6 @@ def cal_price_withdraw_pct(code, latestdays=3000):
 
 
 if __name__ == '__main__':
-    cal_hist_price_of_stock('601398', 3000)
+    cal_hist_price_of_stock('600660', 300)
     # cal_hist_price_of_all_stocks()
     # cal_hist_price_of_all_stocks2sql()

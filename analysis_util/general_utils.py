@@ -23,4 +23,4 @@ def get_stock_code(stock_name, mode='file'):
 
 
 if __name__ == '__main__':
-    print(get_stock_code('众泰汽车','DB'))
+    print(get_stock_code('东方雨虹','DB'))
