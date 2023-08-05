@@ -2,12 +2,13 @@
 
 # 计算股票交易价格序列中的极值点（高点，低点）
 
-from scipy.signal import argrelextrema, argrelmin, argrelmax,savgol_filter
+from scipy.signal import argrelextrema, argrelmin, argrelmax, savgol_filter
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.interpolate import interp1d
 from scipy.misc import derivative
+
 
 # 计算极大值
 def cal_extreme_max_value(list):
@@ -24,56 +25,24 @@ def cal_extreme_max_value(list):
 
     return list[argrelmax(list)]
 
+
 # 计算极小值
 def cal_extreme_min_value(list):
     # print(argrelmin(list))
     print(list[argrelmin(list)])
 
-    # plt.plot(range(0, len(list)), list)
-    # plt.scatter(
-    #     argrelmin(list),
-    #     list[argrelmin(list)],
-    #     c='red'
-    # )
-    #
-    # plt.show()
+    plt.plot(range(0, len(list)), list)
+    plt.scatter(
+        argrelmin(list),
+        list[argrelmin(list)],
+        c='red'
+    )
+
+    plt.show()
 
     # return [argrelmin(list), x[argrelmin(list)]]
     return list[argrelmin(list)]
 
-# 求导，计算斜率的变化
-def cal_dydx(y):
-    # Simple interpolation of x and y
-    x = [i for i in range(1, len(y) + 1)]
-    f = interp1d(x, y)
-    x_fake = np.arange(1.1, len(y), 0.1)
-    print(type(x_fake[0]))
-    print(np.where(x_fake == 2.1))
-
-    # derivative of y with respect to x
-    # df_dx = derivative(f, x_fake, dx=1e-6)
-    df_dx = derivative(f, x_fake, dx=1e-6)
-
-    print(df_dx)
-
-    # Plot
-    fig = plt.figure()
-    ax1 = fig.add_subplot(211)
-    ax2 = fig.add_subplot(212)
-
-    ax1.errorbar(x, y, fmt="o", color="blue", label='Input data')
-    ax1.errorbar(x_fake, f(x_fake), label="Interpolated data", lw=2)
-    ax1.set_xlabel("x")
-    ax1.set_ylabel("y")
-
-    ax2.errorbar(x_fake, df_dx, lw=2)
-    ax2.errorbar(x_fake, np.array([0 for i in x_fake]), ls="--", lw=2)
-    ax2.set_xlabel("x")
-    ax2.set_ylabel("dy/dx")
-
-    leg = ax1.legend(loc=2, numpoints=1, scatterpoints=1)
-    leg.draw_frame(False)
-    plt.show()
 
 # 计算极大值另一种方法（废弃）
 def cal_extreme_max_value2(list):
@@ -126,11 +95,12 @@ if __name__ == '__main__':
 
     )
 
-    # 计算极大值，极小值
-    # y = cal_extreme_min_value(data)
+    # # 计算极大值，极小值
     y = cal_extreme_min_value(data)
-    print(y)
-    y2 = cal_extreme_min_value(y)
-    print(y2)
+    # y = cal_extreme_max_value(data)
+    # print(y)
+    # y2 = cal_extreme_min_value(y)
+    # print(y2)
 
-
+    # 计算股价变化趋势
+    cal_dydx(y)
