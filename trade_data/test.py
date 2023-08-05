@@ -26,4 +26,8 @@ dtime2 = datetime.datetime.now()
 
 print((dtime2-dtime).seconds/3600)
 
+with open('last_datetime.txt', 'w') as file:
+    file.write(dtime.strftime('%Y-%m-%d %H:%M:%S'))
+file.close()
+
 
