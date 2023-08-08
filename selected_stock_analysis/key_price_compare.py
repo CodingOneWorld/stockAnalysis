@@ -10,9 +10,9 @@ from analysis_util.plot_k_line import plot_k_line, plot_k_line_latestdays, save_
 from docx.shared import Cm
 from analysis_util.output_document import Doc
 
-
 import pandas as pd
 import numpy as np
+
 
 def output_doc(df, file_path):
     # doc文档
@@ -34,10 +34,10 @@ def output_doc(df, file_path):
     doc.save(file_path)
 
 
-def key_price_compare(stock):
+def mean_price_compare(doc,stock):
     # doc = Doc()
 
-    code=stock[0]
+    code = stock[0]
     # 计算股票趋势
     stock_price = get_stock_price(code, 'close')
     k = 1 if cal_stock_price_trend(stock_price, 10) > 0 else -1
@@ -57,28 +57,12 @@ def key_price_compare(stock):
             if mean_dict.get(mean) * 0.95 <= stock_price <= mean_dict.get(mean) * 1.05:
                 stock_mean_list.append(mean)
 
-        # 与历史股价极小值比较
-        # 获取股票历史价格
-        his_price = get_stock_price(code, 'low').values[-300:-1]
-        # 计算历史股价极小值
-        ex_price = cal_extreme_min_value(his_price)
-        ex_price = cal_extreme_min_value(ex_price)
-
-        ex_price_list = []
-        for price in ex_price:
-            if price * 0.95 <= stock_price <= price * 1.05:
-                ex_price_list.append(price)
-
-
         doc.add_heading('，'.join(','.join(stock)))
         if len(stock_mean_list) > 0 or len(ex_price_list) > 0:
             if len(stock_mean_list) > 0:
                 print(code + ": " + "接近以下均线: " + ','.join(stock_mean_list))
                 doc.add_heading("接近以下均线: " + ','.join(stock_mean_list))
 
-            if len(ex_price_list) > 0:
-                print(code + ": " + "接近以下历史股价低点: " + ','.join([str(i) for i in ex_price_list]))
-                doc.add_heading("接近以下历史股价低点: " + ','.join([str(i) for i in ex_price_list]))
             # 画出其最近100天，300天，1000天日线图
             save_k_line(code, 100, './resources/kline100.png')
             save_k_line(code, 300, './resources/kline300.png')
@@ -88,20 +72,35 @@ def key_price_compare(stock):
     return 0
 
 
-if __name__ == '__main__':
-    # stock_mean = key_price_compare('000001')
-    # print(stock_mean)
-    # plot_k_line_latestdays('000001', 100)
+def extreme_price_compare(code):
+    # 与历史股价极小值比较
+    # 获取股票历史价格
+    his_price = get_stock_price(code, 'low')['low'].values[-300:]
+    # print(his_price)
+    current_price = his_price[-1]
+    # 计算历史股价极小值
+    ex_price = cal_extreme_min_value(his_price)
+    ex_price = cal_extreme_min_value(ex_price)
 
+    ex_price_list = []
+    for price in ex_price:
+        if price * 0.95 <= current_price <= price * 1.05:
+            ex_price_list.append(price)
+
+    if len(ex_price_list) > 0:
+        print(code + ": " + "接近以下历史股价低点: " + ','.join([str(i) for i in ex_price_list]))
+
+
+if __name__ == '__main__':
     # 获取自选股票池
     file = '自选股.csv'
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     # print(stock_list)
-    doc = Doc()
+    # doc = Doc()
     for s in stock_list:
         print(s)
-        key_price_compare(s)
+        extreme_price_compare(s[0])
     # 保存文档
-    doc.save('./关键价格监控.docx')
+    # doc.save('./关键价格监控.docx')
