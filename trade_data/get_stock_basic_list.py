@@ -9,6 +9,10 @@ import matplotlib.pyplot as plt
 import time
 import sqlite3
 
+from util.utils_common import get_dbpath_by_repo
+
+DB_PATH=get_dbpath_by_repo()
+
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -78,7 +82,6 @@ def get_stock_basic_list_tspro2DB(filepath):
 
 if __name__ == '__main__':
     # getStockBasicList(filepath)
-    DB_PATH = "/Users/beyondzq/DB/stock_data.db"
     # get_stock_basic_list_tspro2DB(DB_PATH)
     df = get_stock_basic_list('file')
     print(df.head())
