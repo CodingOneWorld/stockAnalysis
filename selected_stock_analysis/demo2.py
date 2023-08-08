@@ -6,7 +6,6 @@ import pandas as pd
 import tushare as ts
 
 from analysis_util.plot_util import plot_price_line_latestdays
-from constants.common_constants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
 
 # f = open("自选股.sel", "r")

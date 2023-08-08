@@ -2,7 +2,9 @@
 import sqlite3
 import pandas as pd
 
-from constants.common_constants import DB_PATH
+from util.utils_common import get_dbpath_by_repo
+
+DB_PATH = get_dbpath_by_repo()
 
 
 def get_ST_stocks():

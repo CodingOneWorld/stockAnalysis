@@ -3,10 +3,12 @@ import sqlite3
 import pandas as pd
 
 from analysis_util.cal_stock_trend import cal_trend_common
-from constants.common_constants import DB_PATH
 from fundamental_data.get_income import get_income_of_latest_years
 from fundamental_data.get_profit import get_profit_of_latest_years
 from trade_data.get_stock_basic_list import get_stock_basic_list
+from util.utils_common import get_dbpath_by_repo
+
+DB_PATH = get_dbpath_by_repo()
 
 if __name__ == '__main__':
     # 读取全部股票数据库

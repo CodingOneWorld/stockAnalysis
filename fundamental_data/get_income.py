@@ -6,8 +6,9 @@ from datetime import date
 import sqlite3
 
 from analysis_util.cal_stock_trend import cal_trend_common
-from constants.common_constants import DB_PATH
-from util.utils_common import code2ts_code
+from util.utils_common import code2ts_code, get_dbpath_by_repo
+
+DB_PATH = get_dbpath_by_repo()
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)

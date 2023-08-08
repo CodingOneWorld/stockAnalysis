@@ -4,8 +4,10 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-from constants.common_constants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price
+from util.utils_common import get_dbpath_by_repo
+
+DB_PATH = get_dbpath_by_repo()
 
 
 # 选取最近n天呈上涨趋势的股票

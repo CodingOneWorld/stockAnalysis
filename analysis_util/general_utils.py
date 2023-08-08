@@ -2,7 +2,6 @@
 import sqlite3
 import pandas as pd
 
-from constants.common_constants import DB_PATH
 from trade_data.get_stock_basic_list import get_stock_basic_list
 
 

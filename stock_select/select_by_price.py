@@ -5,7 +5,6 @@ import numpy as np
 
 from analysis_util.cal_hist_price import cal_price_pct, cal_price_withdraw_pct
 from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
-from constants.common_constants import DB_PATH
 from fundamental_data.get_ST_stocks import get_ST_stocks
 
 if __name__ == '__main__':

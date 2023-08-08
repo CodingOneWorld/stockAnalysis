@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 import time
 import os
 import sqlite3
-
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from constants.common_constants import DB_PATH
 from trade_data.get_stock_basic_list import get_stock_basic_list
 from trade_data.trade_data_utils import createDailyTableonOneStock
 from util.date_util import get_today_date, date_add
-from util.utils_common import code2ts_code
+from util.utils_common import code2ts_code, get_dbpath_by_repo
 
+DB_PATH=get_dbpath_by_repo()
+
+# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)

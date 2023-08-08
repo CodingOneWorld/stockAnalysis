@@ -8,7 +8,6 @@ import tushare as ts
 
 from analysis_util.general_utils import get_stock_code
 from analysis_util.plot_k_line import plot_k_line
-from constants.common_constants import DB_PATH
 from analysis_util.cal_stock_trend import cal_stock_price_trend, cal_trend_common, get_stock_price
 
 if __name__ == '__main__':

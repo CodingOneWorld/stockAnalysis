@@ -7,12 +7,14 @@ import tushare as ts
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+from util.utils_common import get_dbpath_by_repo
 import os
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from constants.common_constants import DB_PATH
 from trade_data.get_stock_basic_list import get_stock_basic_list
 from trade_data.get_trade_data import get_stock_trade_data
+
+DB_PATH = get_dbpath_by_repo()
 
 pd.set_option('display.max_columns', None)
 # 显示所有列

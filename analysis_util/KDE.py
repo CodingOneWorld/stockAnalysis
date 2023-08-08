@@ -6,9 +6,12 @@ from sklearn.neighbors import KernelDensity
 
 # 导出某股票的价格
 # pandas连接数据库
-from constants.common_constants import DB_PATH
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from util.utils_common import get_dbpath_by_repo
+
+DB_PATH = get_dbpath_by_repo()
 
 stock = '000001'
 conn = sqlite3.connect(DB_PATH)

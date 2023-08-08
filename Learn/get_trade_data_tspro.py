@@ -8,9 +8,11 @@ import matplotlib.pyplot as plt
 import time
 import sqlite3
 
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from constants.common_constants import DB_PATH
+from util.utils_common import get_dbpath_by_repo
 
+DB_PATH=get_dbpath_by_repo()
+
+# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)

@@ -8,6 +8,8 @@ import datetime
 import schedule
 import time
 
+from util.utils_common import get_dbpath_by_repo
+
 
 def update_trade_data2db(DB_PATH):
     # # 从数据库中直接推算日期参数
@@ -28,7 +30,7 @@ def update_trade_data2db(DB_PATH):
 
 
 if __name__ == '__main__':
-    DB_PATH = "/Users/beyondzq/DB/stock_data.db"
+    DB_PATH = get_dbpath_by_repo()
     # schedule.every().day.at("18:00").do(update_trade_data2db, DB_PATH)
     # while True:
     #     schedule.run_pending()
