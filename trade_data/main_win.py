@@ -3,6 +3,7 @@
 import sqlite3
 from trade_data.get_trade_data import get_daily_data_tspro2DB
 from trade_data.get_stock_basic_list import get_stock_basic_list_tspro2DB
+from util.utils_common import get_dbpath_by_repo
 import pandas as pd
 
 import datetime
@@ -28,15 +29,15 @@ import time
 #     update_daily_data_tspro(update_date, db_path, 0, 0, 0)
 #     get_stock_basic_list_tspro(db_path)
 
+
 def update_trade_data2db(DB_PATH):
-    get_daily_data_tspro2DB(DB_PATH,3915 , 0)
+    get_daily_data_tspro2DB(DB_PATH,0 , 0)
     # get_stock_basic_list_tspro2DB(DB_PATH)
 
 
 if __name__ == '__main__':
-    DB_PATH = "E:/Money/stock_data.db"
-    update_trade_data2db(DB_PATH)
-    # schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    DB_PATH = get_dbpath_by_repo()
+    schedule.every().day.at("18:00").do(update_trade_data2db, DB_PATH)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

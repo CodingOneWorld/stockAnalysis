@@ -31,9 +31,9 @@ def update_trade_data2db(DB_PATH):
 
 if __name__ == '__main__':
     DB_PATH = get_dbpath_by_repo()
-    # schedule.every().day.at("18:00").do(update_trade_data2db, DB_PATH)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
     update_trade_data2db(DB_PATH)

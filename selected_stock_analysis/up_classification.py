@@ -58,20 +58,3 @@ if __name__ == '__main__':
     if len(selected_stock)>0:
         df = pd.DataFrame(selected_stock, columns=['code', 'name'])
         output_doc(df, '股票池_10日短线反弹股票.docx')
-
-    # 短线上升通道
-    # 中线上升通道
-    # 长线上升通道
-    # 反弹
-
-    s_l = [
-        ['603506', '南都物业'],
-        ['002695', '煌上煌'],
-        ['603993', '洛阳钼业'],
-        ['601066', '中信建投'],
-        ['600660', '福耀玻璃'],
-        ['002714', '牧原股份'],
-        ['603020', '爱普股份']
-    ]
-    df = pd.DataFrame(s_l, columns=['code', 'name'])
-    output_doc(df, '20日上升通道股票.docx')
