@@ -1,3 +1,3 @@
 .idea
-./selected_stock_analysis/classification
-./selected_stock_analysis/resources
+/selected_stock_analysis/classification/
+/selected_stock_analysis/resources/

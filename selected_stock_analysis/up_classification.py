@@ -57,4 +57,4 @@ if __name__ == '__main__':
 
     if len(selected_stock)>0:
         df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        output_doc(df, '股票池_10日短线反弹股票.docx')
+        output_doc(df, '股票池_10日短线上升通道股票.docx')
