@@ -31,14 +31,14 @@ def cal_extreme_min_value(list):
     # print(argrelmin(list))
     # print(list[argrelmin(list)])
 
-    plt.plot(range(0, len(list)), list)
-    plt.scatter(
-        argrelmin(list),
-        list[argrelmin(list)],
-        c='red'
-    )
-
-    plt.show()
+    # plt.plot(range(0, len(list)), list)
+    # plt.scatter(
+    #     argrelmin(list),
+    #     list[argrelmin(list)],
+    #     c='red'
+    # )
+    #
+    # plt.show()
 
     # return [argrelmin(list), x[argrelmin(list)]]
     return [argrelmin(list),list[argrelmin(list)]]
