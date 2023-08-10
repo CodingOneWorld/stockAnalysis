@@ -14,7 +14,7 @@ import numpy as np
 def get_l10_rebound_stock(stock_list):
     selected_stock = []
     # for s in stock_list:
-    for s in [['000025', '神州高铁']]:
+    for s in [['000032', '神州高铁']]:
         print(s)
         code = s[0]
         # 股价
@@ -22,12 +22,13 @@ def get_l10_rebound_stock(stock_list):
         his_price_df = get_stock_price(code, 'low')[-200:]
         his_price = his_price_df['low'].values
         # 斜率
+        k5 = cal_stock_price_trend(his_price, 10)
         k10 = cal_stock_price_trend(his_price, 10)
         k20 = cal_stock_price_trend(his_price, 20)
         k100 = cal_stock_price_trend(his_price, 100)
-        print('斜率：', k10, k20, k100)
+        print('斜率：', k5,k10, k20, k100)
         # print(k20)
-        if k10 > 0 and k20 < 0 and k100 < 0:
+        if k5 > 0 and k10 > 0 and k20 < 0 and k100 < 0:
             # 均线
             # his_price_df['mean_20'] = his_price_df.close.rolling(window=20).mean().fillna(0)
             # his_price_df['dev'] = his_price_df['close'] - his_price_df['mean_20']
