@@ -14,14 +14,14 @@ import numpy as np
 # 短线（10d）反弹股票
 # 最近100天，最近20天 股价斜率小于0
 # 最近10天 股价斜率大于0
-# 最近10天 股价均高于20日均线
+# 最近10天 股价均高于10日均线
 # 最近10天 股价极低值一个比一个高
 
 
 if __name__ == '__main__':
     # stock_list=['600660']
-    file = 'stock_pool2023.txt'
-    # file = '自选股.csv'
+    # file = 'stock_pool2023.txt'
+    file = '自选股.csv'
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         # print(k20)
         if k10 > 0 and k20<0 and k100<0:
             # 均线
-            his_price_df['mean_20'] = his_price_df.close.rolling(window=20).mean().fillna(0)
+            his_price_df['mean_20'] = his_price_df.close.rolling(window=10).mean().fillna(0)
             his_price_df['dev'] = his_price_df['close'] - his_price_df['mean_20']
             his_price_df['tag'] = his_price_df['dev'].apply(lambda x: 1 if x < 0 else 0)
             mean_10_dev_tag = his_price_df['tag'][-10:].sum()
