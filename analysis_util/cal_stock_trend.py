@@ -6,11 +6,13 @@ import pandas as pd
 from sklearn import linear_model  # 表示，可以调用sklearn中的linear_model模块进行线性回归。
 import numpy as np
 import matplotlib.pyplot as plt
-
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
-from constants.common_constants import DB_PATH
 from trade_data.get_trade_data import get_stock_trade_data
 
+from util.utils_common import get_dbpath_by_repo
+DB_PATH=get_dbpath_by_repo()
+
+
+# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
 # 显示所有列
 pd.set_option('display.max_rows', None)
@@ -56,10 +58,10 @@ def cal_stock_price_trend(stock_price, latest_days):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
-    print(model.coef_[0][0])
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
+    # print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
