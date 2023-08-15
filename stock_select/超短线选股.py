@@ -9,6 +9,7 @@
 
 
 from analysis_util.cal_stock_trend import get_stock_price
+from selected_stock_analysis.main import output_doc
 from trade_data.get_stock_basic_list import get_stock_basic_list
 from trade_data.get_trade_data import get_stock_trade_data_latestdays
 import pandas as pd
@@ -26,8 +27,9 @@ def list_format(l):
 def super_short_stock_select(stock_list):
     s_list = []
 
-    for s in stock_list:
+    for sl in stock_list:
     # for s in [000625,000656,000750,002508,600030,600155,600266,600340,600369,601127,601162,601375,601555,601677]:
+        s=sl[0]
         # 获取股票交易数据
         trade_data = get_stock_trade_data_latestdays(s, 100)
         # 计算5日均线
@@ -74,7 +76,7 @@ def super_short_stock_select(stock_list):
                         lambda x: 1 if x > 0 else 0)
                     if trade_data_after_pct9['moreM5_tag'].sum() >= len(trade_data_after_pct9):
                         print(s + '满足条件')
-                        s_list.append(s)
+                        s_list.append(sl)
     return s_list
 
 
@@ -83,27 +85,14 @@ if __name__ == '__main__':
     stock_basic=get_stock_basic_list('DB')
     # 不看最近一年上市的股票
     stock_basic = stock_basic[stock_basic['list_date'] <= '20220701']
-    stock_list=stock_basic['symbol'].values
+    stock_list=stock_basic['symbol','name'].values
     print(stock_list)
 
     s_list=super_short_stock_select(stock_list)
+    s_df=pd.DataFrame(s_list,columns=['symbol','name'])
 
-    l = ['000625',
-         '000656',
-         '000750',
-         '002508',
-         '600030',
-         '600155',
-         '600266',
-         '600340',
-         '600369',
-         '601127',
-         '601162',
-         '601375',
-         '601555',
-         '601677']
 
-    list_format(l)
+    output_doc(s_df,'超短线选股.docx')
 
 
 
