@@ -2,6 +2,7 @@
 
 # 获取增量数据，并写入数据库
 import datetime
+import traceback
 
 import tushare as ts
 import pandas as pd
@@ -120,7 +121,12 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
             count = 100
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
-        df = ts.pro_bar(ts_code=ts_code, adj='qfq')
+        # 加入try catch
+        try :
+            df = ts.pro_bar(ts_code=ts_code, adj='qfq')
+        except Exception as e:
+            print('get_box_api_realtime', e, traceback.format_exc())
+            continue
         if df is None:
             continue
         df = df.dropna(axis=0, subset=["close"])
