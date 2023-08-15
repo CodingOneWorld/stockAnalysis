@@ -85,11 +85,13 @@ if __name__ == '__main__':
     stock_basic=get_stock_basic_list('DB')
     # 不看最近一年上市的股票
     stock_basic = stock_basic[stock_basic['list_date'] <= '20220701']
-    stock_list=stock_basic['symbol','name'].values
+    stock_list=stock_basic[['symbol','name']].values
     print(stock_list)
 
     s_list=super_short_stock_select(stock_list)
     s_df=pd.DataFrame(s_list,columns=['symbol','name'])
+
+    print(s_df)
 
 
     output_doc(s_df,'超短线选股.docx')
