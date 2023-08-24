@@ -20,7 +20,7 @@ import numpy as np
 
 if __name__ == '__main__':
     # stock_list=['600660']
-    # file = 'stock_pool2023.txt'
+    file = 'stock_pool2023.txt'
     file = '自选股.csv'
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
@@ -57,4 +57,4 @@ if __name__ == '__main__':
 
     if len(selected_stock)>0:
         df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        output_doc(df, '股票池_10日短线上升通道股票.docx')
+        output_doc(df, 'stock_pool_10日短线上升通道股票.docx')

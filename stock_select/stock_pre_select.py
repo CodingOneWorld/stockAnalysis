@@ -38,7 +38,7 @@ if __name__ == '__main__':
     print("去除创业板和st股后剩余股票数")
     print(count)
 
-    # 收入和净利润近5年均大于0，且趋势不能为负
+    # 收入和净利润近5年均大于0
     for s in stock_array:
         print(s)
         # 计算最近5年的收入和净利润

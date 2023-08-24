@@ -36,7 +36,7 @@ def plot_price_line_latestdays(code, latest_days=5000):
     # 获取股票历史价格
     stock_price_df = get_stock_price(code, 'close')
     stock_price_df = stock_price_df.iloc[-latest_days:, :]
-    print(stock_price_df)
+    # print(stock_price_df)
     stock_price_df.plot.line()
 
     plt.show()
