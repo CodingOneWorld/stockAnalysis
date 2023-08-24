@@ -11,12 +11,13 @@ from trade_data.get_trade_data import get_stock_trade_data, get_stock_trade_data
 def load_data(code, start_date, end_date):
     stock_trade_data = get_stock_trade_data(code, start_date, end_date)
     # print(stock_trade_data.head())
+    stock_trade_data=stock_trade_data[stock_trade_data.trade_date>=start_date][stock_trade_data.trade_date<=end_date]
     stock_trade_data['trade_date'] = stock_trade_data['trade_date'].apply(
         lambda x: datetime.datetime.strptime(str(x), '%Y%m%d'))
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data = stock_trade_data[["open", "high", "close", "low", "vol"]]
     stock_trade_data.rename(columns={'vol': 'volume'}, inplace=True)
-    # print(stock_trade_data.head())
+    print(stock_trade_data)
     return stock_trade_data
 
 
@@ -93,6 +94,6 @@ def save_k_line(code, latest_days, save_path):
 
 
 if __name__ == '__main__':
-    # s = get_stock_code('机器人')
-    plot_k_line_latestdays('600660', 200)
-    # plot_k_line(s,'20190301','20201231')
+    s = get_stock_code('云赛智联')
+    # plot_k_line_latestdays(s, 200)
+    plot_k_line(s,'20190301','20201231')

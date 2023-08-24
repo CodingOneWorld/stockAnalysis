@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import sqlite3
+import sys
 
 from util.utils_common import get_dbpath_by_repo
 

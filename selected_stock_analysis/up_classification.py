@@ -11,12 +11,6 @@ import numpy as np
 # 最近20天 股价均高于20日均线
 # 最近20天 股价极低值一个比一个高
 
-# 短线（10d）反弹股票
-# 最近100天，最近20天 股价斜率小于0
-# 最近10天 股价斜率大于0
-# 最近10天 股价均高于10日均线
-# 最近10天 股价极低值一个比一个高
-
 
 def get_l10_up_stock(file,path):
 
@@ -35,7 +29,7 @@ def get_l10_up_stock(file,path):
         his_price_df = get_stock_price(code, 'close')[-200:]
         his_price = his_price_df['close'].values
         # 斜率
-        k10 = cal_stock_price_trend(his_price, 20)
+        k10 = cal_stock_price_trend(his_price, 10)
         k20 = cal_stock_price_trend(his_price, 20)
         k100 = cal_stock_price_trend(his_price, 100)
         # print(k20)
