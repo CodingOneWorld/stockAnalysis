@@ -5,12 +5,41 @@ from docx import Document
 from docx.shared import Cm, Pt
 from docx.document import Document as Doc
 
+
 # 将分析结果输出到word文档中
+from analysis_util.plot_k_line import save_k_line
+
 
 def Doc():
     # 创建代表Word文档的Doc对象
     document = Document()
     return document
+
+def output_doc(df, file_path):
+    '''
+
+    :param df: DataFrame columns=['symbol','stock_name']
+    :param file_path: 输出文档的路径
+    :return:
+    '''
+    # doc文档
+    doc = Doc()
+    for line in df.values:
+        print(line)
+        doc.add_heading('，'.join(line))
+        symbol = line[0]
+
+        # 画出其最近100天，300天，1000天日线图
+        save_k_line(symbol, 100, './resources/kline100.png')
+        save_k_line(symbol, 300, './resources/kline300.png')
+        save_k_line(symbol, 1000, './resources/kline1000.png')
+        doc.add_picture('./resources/kline100.png', width=Cm(10))
+        doc.add_picture('./resources/kline300.png', width=Cm(10))
+        doc.add_picture('./resources/kline1000.png', width=Cm(10))
+
+    # 保存文档
+    doc.save(file_path)
+
 
 def example():
     # 创建代表Word文档的Doc对象
@@ -79,4 +108,3 @@ def example():
 
 if __name__ == '__main__':
     example()
-

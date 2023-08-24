@@ -11,8 +11,9 @@ import numpy as np
 # 最近10天 股价斜率大于0
 # 最近10天 股价极低值一个比一个高
 # 最近10天 股价均高于20日均线  适用于上升通道，不适用于反弹，因为反弹初期股价很难超过20日线
-def get_l10_rebound_stock(file,stock_list):
-    file_name=file.split('.')[0]
+def get_l10_rebound_stock(file,path):
+    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    stock_list = df.values
     selected_stock = []
     for s in stock_list:
     # for s in [['000032', '神州高铁']]:
@@ -58,17 +59,16 @@ def get_l10_rebound_stock(file,stock_list):
     if len(selected_stock) > 0:
         print(selected_stock)
         df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        output_doc(df, file_name+'_10日短线反弹股票.docx')
+        output_doc(df, path)
 
 
 if __name__ == '__main__':
     # stock_list=['600660']
     file = 'stock_pool2023.txt'
     # file = '自选股.csv'
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # df['symbol']=df['symbol'].astype('string')
-    stock_list = df.values
-    # print(stock_list)
 
-    get_l10_rebound_stock(file,stock_list)
+    file_name=file.split('.')[0]
+    path=file_name+'_10日短线反弹股票.docx'
+
+    get_l10_rebound_stock(file,path)
 

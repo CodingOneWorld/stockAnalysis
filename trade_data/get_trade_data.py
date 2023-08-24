@@ -85,6 +85,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     with open('last_datetime.txt', 'r') as file:
         dtime = datetime.datetime.strptime(file.readlines()[0], "%Y-%m-%d %H:%M:%S")
         dtime2 = datetime.datetime.now()
+        print(dtime,dtime2)
         if (dtime2 - dtime).seconds / 3600 < 1:
             source = 'DB'
     # 将当前时间写入文件
