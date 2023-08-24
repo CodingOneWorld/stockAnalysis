@@ -30,6 +30,7 @@ def update_trade_data2db(DB_PATH):
 
 
 if __name__ == '__main__':
+    t1= datetime.datetime.now()
     DB_PATH = get_dbpath_by_repo()
     # schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
     # while True:
@@ -37,3 +38,6 @@ if __name__ == '__main__':
     #     time.sleep(1)
 
     update_trade_data2db(DB_PATH)
+
+    t2= datetime.datetime.now()
+    print(t2-t1)

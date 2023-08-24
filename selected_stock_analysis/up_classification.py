@@ -18,10 +18,10 @@ import numpy as np
 # 最近10天 股价极低值一个比一个高
 
 
-if __name__ == '__main__':
-    # stock_list=['600660']
-    # file = 'stock_pool2023.txt'
-    file = '自选股.csv'
+def get_l10_up_stock(file,path):
+
+    class_s='10日短线上升通道'
+
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         k20 = cal_stock_price_trend(his_price, 20)
         k100 = cal_stock_price_trend(his_price, 100)
         # print(k20)
-        if k10 > 0 and k20<0 and k100<0:
+        if k10 > 0 and k20 < 0 and k100 < 0:
             # 均线
             his_price_df['mean_20'] = his_price_df.close.rolling(window=10).mean().fillna(0)
             his_price_df['dev'] = his_price_df['close'] - his_price_df['mean_20']
@@ -55,6 +55,21 @@ if __name__ == '__main__':
                     print(s)
                     selected_stock.append(s)
 
-    if len(selected_stock)>0:
+    if len(selected_stock) > 0:
         df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        output_doc(df, '股票池_10日短线上升通道股票.docx')
+        # 将股票列表写入数据库
+
+        output_doc(df, path)
+
+
+if __name__ == '__main__':
+    # stock_list=['600660']
+    file = 'stock_pool2023.txt'
+    # file = '自选股.csv'
+
+    file_name = file.split('.')[0]
+    path = file_name + '_10日短线上升通道股票.docx'
+
+    get_l10_up_stock(file,path)
+
+

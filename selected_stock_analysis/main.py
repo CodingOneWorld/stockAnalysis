@@ -9,68 +9,60 @@ import numpy as np
 import pandas as pd
 from docx.shared import Cm
 
-from analysis_util.output_document import Doc
+from analysis_util.output_document import Doc, output_doc
 from analysis_util.plot_k_line import save_k_line
+from selected_stock_analysis.rebound_classification import get_l10_rebound_stock
 from selected_stock_analysis.stock_classification import get_up_trend_stocks
-
-
-def output_doc(df, file_path):
-    # doc文档
-    doc = Doc()
-    for line in df.values:
-        print(line)
-        doc.add_heading('，'.join(line))
-        symbol = line[0]
-
-        # 画出其最近100天，300天，1000天日线图
-        save_k_line(symbol, 100, './resources/kline100.png')
-        save_k_line(symbol, 300, './resources/kline300.png')
-        save_k_line(symbol, 1000, './resources/kline1000.png')
-        doc.add_picture('./resources/kline100.png', width=Cm(10))
-        doc.add_picture('./resources/kline300.png', width=Cm(10))
-        doc.add_picture('./resources/kline1000.png', width=Cm(10))
-
-    # 保存文档
-    doc.save(file_path)
-
+from selected_stock_analysis.up_classification import get_l10_up_stock
 
 if __name__ == '__main__':
     # 获取股票池
-    # file = 'stock_pool2023.txt'
+    files=[]
+    file = 'stock_pool2023.txt'
+    files.append(file)
     file = '自选股.csv'
+    files.append(file)
 
     path = './classification/'
 
-    # 先进行自选股分组
-    # 上升通道股票
-    get_up_trend_stocks(file)
+    for file  in files:
+        # 先进行自选股分组
+        # 上升通道股票
+        get_up_trend_stocks(file)
 
-    # 超短线上升通道
-    df = pd.read_csv(path + '超短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '超短线上升通道%s.docx' % (file.split('.')[0]))
+        # 超短线上升通道
+        df = pd.read_csv(path + '超短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '超短线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 短线上升通道
-    df = pd.read_csv(path + '短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '短线上升通道%s.docx' % (file.split('.')[0]))
+        # 短线上升通道
+        df = pd.read_csv(path + '短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '短线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 中线上升通道
-    df = pd.read_csv(path + '中线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '中线上升通道%s.docx' % (file.split('.')[0]))
+        # 中线上升通道
+        df = pd.read_csv(path + '中线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '中线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 中长线上升通道
-    df = pd.read_csv(path + '中长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '中长线上升通道%s.docx' % (file.split('.')[0]))
+        # 中长线上升通道
+        df = pd.read_csv(path + '中长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '中长线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 长线上升通道
-    df = pd.read_csv(path + '长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '长线上升通道%s.docx' % (file.split('.')[0]))
+        # 长线上升通道
+        df = pd.read_csv(path + '长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '长线上升通道%s.docx' % (file.split('.')[0]))
 
-    # 中期反弹
-    df = pd.read_csv(path + '中期反弹%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
-    # 输出到文档
-    output_doc(df, path + '中期反弹%s.docx' % (file.split('.')[0]))
+        # 中期反弹
+        df = pd.read_csv(path + '中期反弹%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        # 输出到文档
+        output_doc(df, path + '中期反弹%s.docx' % (file.split('.')[0]))
+
+
+        # 10日短期反弹
+        get_l10_rebound_stock(file,path + '%s_10日短线反弹股票.docx' % (file.split('.')[0]))
+
+        # 10日短线上升通道
+        get_l10_up_stock(file,path + '%s_10日短线上升通道股票.docx' % (file.split('.')[0]))

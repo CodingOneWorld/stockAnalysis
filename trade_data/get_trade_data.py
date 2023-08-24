@@ -85,6 +85,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     with open('last_datetime.txt', 'r') as file:
         dtime = datetime.datetime.strptime(file.readlines()[0], "%Y-%m-%d %H:%M:%S")
         dtime2 = datetime.datetime.now()
+        print(dtime,dtime2)
         if (dtime2 - dtime).seconds / 3600 < 1:
             source = 'DB'
     # 将当前时间写入文件
@@ -110,7 +111,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # 基础积分每分钟内最多调取200次
     # 加入计数和睡眠
     stocks_new = sorted(list(stocks_now))
-    count = 100
+    count = 200
     for i in range(cou_new, len(stocks_new)):
         print('stocks_now:' + str(i))
         ts_code = stocks_new[i]
@@ -118,7 +119,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         count -= 1
         if count < 0:
             time.sleep(5)
-            count = 100
+            count = 200
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
         # 加入try catch
