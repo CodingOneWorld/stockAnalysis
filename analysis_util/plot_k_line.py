@@ -17,7 +17,7 @@ def load_data(code, start_date, end_date):
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data = stock_trade_data[["open", "high", "close", "low", "vol"]]
     stock_trade_data.rename(columns={'vol': 'volume'}, inplace=True)
-    print(stock_trade_data)
+    # print(stock_trade_data)
     return stock_trade_data
 
 
@@ -57,12 +57,12 @@ def plot_k_line_latestdays(symbol, latest_days):
 
 
 # 起止日，到终止日
-def plot_k_line(code, start_date, end_date):
+def plot_k_line(code, start_date, end_date,mav=[5, 10, 20, 30, 40,60, 140]):
     stock_trade_data = load_data(code, start_date, end_date)
     # OHLC图
     # 设置mplfinance的蜡烛颜色，up为阳线颜色，down为阴线颜色
     my_color = mpf.make_marketcolors(up='r',
-                                     down='g',
+                                     down='b',
                                      edge='inherit',
                                      wick='inherit',
                                      volume='inherit')
@@ -72,7 +72,7 @@ def plot_k_line(code, start_date, end_date):
                                   gridcolor='(0.82, 0.83, 0.85)')
     # mpf.plot(stock_trade_data)
     # K线图，附带均线，成交量
-    mpf.plot(stock_trade_data, type='candle', style=my_style, mav=(5, 10, 20, 30, 60, 140), volume=True)
+    mpf.plot(stock_trade_data, type='candle', style=my_style, mav=mav, volume=True)
 
 
 def save_k_line(code, latest_days, save_path):

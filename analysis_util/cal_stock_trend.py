@@ -78,10 +78,10 @@ def cal_trend_common(data):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
-    print(model.coef_[0][0])
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
+    # print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
