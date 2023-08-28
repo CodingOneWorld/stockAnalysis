@@ -42,7 +42,8 @@ def get_stock_trade_data(code, start_date='', end_date='', mode='DB'):
         df = pd.read_sql('select * from ' + table_name, conn)
 
     df2 = df.dropna(axis=0, subset=["close"])
-    # df2 = df.sort_index(ascending=False)
+    if start_date!='' and end_date!='':
+        df2=df2[df2.trade_date>=start_date][df2.trade_date<=end_date]
     df2.reset_index(drop=True, inplace=True)
     # print(df2.head())
     return df2

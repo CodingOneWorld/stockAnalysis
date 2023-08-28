@@ -22,4 +22,4 @@ def get_stock_code(stock_name, mode='DB'):
 
 
 if __name__ == '__main__':
-    print(get_stock_code('东方雨虹','DB'))
+    print(get_stock_code('蒙娜丽莎','DB'))
