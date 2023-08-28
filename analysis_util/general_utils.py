@@ -5,7 +5,7 @@ import pandas as pd
 from trade_data.get_stock_basic_list import get_stock_basic_list
 
 
-def get_stock_name(code, mode='file'):
+def get_stock_name(code, mode='DB'):
     if mode == 'file':
         stock_list_data = get_stock_basic_list('file')
     elif mode == 'DB':
@@ -13,7 +13,7 @@ def get_stock_name(code, mode='file'):
     return stock_list_data[stock_list_data['symbol'] == code]['name'].values[0]
 
 
-def get_stock_code(stock_name, mode='file'):
+def get_stock_code(stock_name, mode='DB'):
     if mode == 'file':
         stock_list_data = get_stock_basic_list('file')
     elif mode == 'DB':
@@ -22,4 +22,4 @@ def get_stock_code(stock_name, mode='file'):
 
 
 if __name__ == '__main__':
-    print(get_stock_code('东方雨虹','DB'))
+    print(get_stock_code('蒙娜丽莎','DB'))

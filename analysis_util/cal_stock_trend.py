@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn import linear_model  # 表示，可以调用sklearn中的linear_model模块进行线性回归。
 import numpy as np
 import matplotlib.pyplot as plt
+
+from analysis_util.general_utils import get_stock_code
 from trade_data.get_trade_data import get_stock_trade_data
 
 from util.utils_common import get_dbpath_by_repo
@@ -58,10 +60,10 @@ def cal_stock_price_trend(stock_price, latest_days):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    # plt.plot(x, y, 'k.')
-    # plt.plot(x, y2, 'g-')
-    # plt.show()
-    # print(model.coef_[0][0])
+    plt.plot(x, y, 'k.')
+    plt.plot(x, y2, 'g-')
+    plt.show()
+    print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
@@ -86,6 +88,12 @@ def cal_trend_common(data):
 
 
 if __name__ == '__main__':
-    stock_price = get_stock_price('002271', 'close','DB')['close'].values[-300:]
-    print(','.join([str(i) for i in stock_price]))
-    cal_stock_price_trend(stock_price, 300)
+    # stock_price = get_stock_price('002271', 'close','DB')['close'].values[-300:]
+    # print(','.join([str(i) for i in stock_price]))
+    # cal_stock_price_trend(stock_price, 300)
+
+    code=get_stock_code('三一重工')
+    his_price_df = get_stock_trade_data(code, '20220601','20221012')
+    his_price=his_price_df['close'].values[-20:]
+    cal_trend_common(his_price)
+

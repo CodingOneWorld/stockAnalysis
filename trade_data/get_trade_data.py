@@ -41,16 +41,17 @@ def get_stock_trade_data(code, start_date='', end_date='', mode='DB'):
         table_name = 'S' + str(code) + '_daily'
         df = pd.read_sql('select * from ' + table_name, conn)
 
-    df = df.dropna(axis=0, subset=["close"])
-    df2 = df.sort_index(ascending=False)
+    df2 = df.dropna(axis=0, subset=["close"])
+    if start_date!='' and end_date!='':
+        df2=df2[df2.trade_date>=start_date][df2.trade_date<=end_date]
     df2.reset_index(drop=True, inplace=True)
     # print(df2.head())
     return df2
 
 
 def get_stock_trade_data_latestdays(code, latestdays):
-    df = get_stock_trade_data(code)
-    df2 = df.sort_index(ascending=False)
+    df2 = get_stock_trade_data(code)
+    # df2 = df.sort_index(ascending=False)
     if latestdays > len(df2['ts_code']):
         latestdays = len(df2['ts_code'])
     # df2 = df2.iloc[-latestdays:]
@@ -156,8 +157,8 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
 
 
 if __name__ == '__main__':
-    # get_stock_trade_data('000001','20180101')
-    get_stock_trade_data_latestdays('000001', 50)
+    get_stock_trade_data('000001','20230101','20230801')
+    # get_stock_trade_data_latestdays('000001', 50)
 
 # 旧方法，保留已有数据，每次累加数据，会有错误，因为每次前复权的价格都是以当前价格重新进行的计算，累加数据会有错误
 # 获取股票的日线数据-前复权数据 ts_pro
