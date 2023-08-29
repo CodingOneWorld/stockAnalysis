@@ -60,10 +60,10 @@ def cal_stock_price_trend(stock_price, latest_days):
     y2 = model.predict(x)
 
     # 绘制散点图与拟合直线图
-    plt.plot(x, y, 'k.')
-    plt.plot(x, y2, 'g-')
-    plt.show()
-    print(model.coef_[0][0])
+    # plt.plot(x, y, 'k.')
+    # plt.plot(x, y2, 'g-')
+    # plt.show()
+    # print(model.coef_[0][0])
     return model.coef_[0][0]
 
 
@@ -92,8 +92,9 @@ if __name__ == '__main__':
     # print(','.join([str(i) for i in stock_price]))
     # cal_stock_price_trend(stock_price, 300)
 
-    code=get_stock_code('三一重工')
-    his_price_df = get_stock_trade_data(code, '20220601','20221012')
-    his_price=his_price_df['close'].values[-20:]
+    code=get_stock_code('西部矿业')
+    his_price_df = get_stock_trade_data(code, '20221026','20230829')
+    print(his_price_df.shape)
+    his_price=his_price_df['close'].values[-100:]
     cal_trend_common(his_price)
 

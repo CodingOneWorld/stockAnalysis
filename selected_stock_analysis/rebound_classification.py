@@ -2,11 +2,15 @@
 from analysis_util.cal_key_price import cal_extreme_min_value
 from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
 from analysis_util.output_document import output_doc
+from selected_stock_analysis.up_classification import compare2mean
 from trade_data.get_trade_data import get_stock_trade_data
-from up_classification import compare2mean
 from util.math_util import List_util
 import pandas as pd
 import numpy as np
+
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 def analysis():
@@ -19,6 +23,7 @@ def get_stocklist(file):
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     stock_list = df.values
     return stock_list
+
 
 def compare2exmin(his_price_df):
     # 获取股票历史价格
@@ -41,8 +46,8 @@ def compare2exmin(his_price_df):
 # 最近100天，最近20天 股价斜率小于0
 # 最近10天 股价斜率大于0
 # 最近10天 股价极低值一个比一个高
-def get_l10_rebound_stock(file):
-    stock_list=get_stocklist(file)
+def get_l10_rebound_stock(file, path):
+    stock_list = get_stocklist(file)
     selected_stock = []
     for s in stock_list:
         # for s in [['002107','沃华医药']]:
@@ -62,22 +67,22 @@ def get_l10_rebound_stock(file):
         # 确保反弹前的下降通道
         if k5 > 0 and k10 > 0 and k20 < -0.05 and k100 < 0:
             # 反弹，均在5日线上
-            is_true=compare2mean(5, his_price_df)
+            is_true = compare2mean(5, his_price_df)
 
             if is_true is True:
                 print(s)
                 selected_stock.append(s)
 
-    # if len(selected_stock) > 0:
-    #     print(selected_stock)
-    #     df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-    #     output_doc(df, path)
+    if len(selected_stock) > 0:
+        print(selected_stock)
+        df = pd.DataFrame(selected_stock, columns=['code', 'name'])
+        output_doc(df, path)
 
 
 if __name__ == '__main__':
     # stock_list=['600660']
-    file = 'stock_pool2023.txt'
-    # file = '自选股.csv'
+    # file = 'stock_pool2023.txt'
+    file = '自选股.csv'
 
     file_name = file.split('.')[0]
     path = file_name + '_10日短线反弹股票.docx'

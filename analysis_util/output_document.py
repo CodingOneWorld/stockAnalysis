@@ -5,7 +5,6 @@ from docx import Document
 from docx.shared import Cm, Pt
 from docx.document import Document as Doc
 
-
 # 将分析结果输出到word文档中
 from analysis_util.plot_k_line import save_k_line
 
@@ -14,6 +13,7 @@ def Doc():
     # 创建代表Word文档的Doc对象
     document = Document()
     return document
+
 
 def output_doc(df, file_path):
     '''

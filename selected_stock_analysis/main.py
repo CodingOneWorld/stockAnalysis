@@ -17,7 +17,7 @@ from selected_stock_analysis.up_classification import get_l10_up_stock
 
 if __name__ == '__main__':
     # 获取股票池
-    files=[]
+    files = []
     file = 'stock_pool2023.txt'
     files.append(file)
     file = '自选股.csv'
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     path = './classification/'
 
-    for file  in files:
+    for file in files:
         # 先进行自选股分组
         # 上升通道股票
         get_up_trend_stocks(file)
@@ -60,9 +60,8 @@ if __name__ == '__main__':
         # 输出到文档
         output_doc(df, path + '中期反弹%s.docx' % (file.split('.')[0]))
 
-
         # 10日短期反弹
-        get_l10_rebound_stock(file,path + '%s_10日短线反弹股票.docx' % (file.split('.')[0]))
+        get_l10_rebound_stock(file, path + '%s_10日短线反弹股票.docx' % (file.split('.')[0]))
 
         # 10日短线上升通道
-        get_l10_up_stock(file,path + '%s_10日短线上升通道股票.docx' % (file.split('.')[0]))
+        get_l10_up_stock(file, path + '%s_10日短线上升通道股票.docx' % (file.split('.')[0]))
