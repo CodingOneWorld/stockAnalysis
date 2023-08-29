@@ -20,6 +20,7 @@ def get_stocklist(file):
     stock_list = df.values
     return stock_list
 
+# 极小值比较，极小值是否一个比一个大
 def compare2exmin(his_price_df):
     # 获取股票历史价格
     his_price = his_price_df['close'].values
