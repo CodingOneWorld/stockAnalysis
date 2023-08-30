@@ -4,7 +4,6 @@ from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
 from analysis_util.output_document import output_doc
 from selected_stock_analysis.up_classification import compare2mean
 from trade_data.get_trade_data import get_stock_trade_data
-from up_classification import compare2mean
 from util.math_util import List_util
 import pandas as pd
 import numpy as np
@@ -24,6 +23,7 @@ def get_stocklist(file):
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     stock_list = df.values
     return stock_list
+
 
 def compare2exmin(his_price_df):
     # 获取股票历史价格
