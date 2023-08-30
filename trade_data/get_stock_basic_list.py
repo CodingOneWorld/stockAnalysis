@@ -12,8 +12,7 @@ import sys
 
 from util.utils_common import get_dbpath_by_repo
 
-DB_PATH=get_dbpath_by_repo()
-
+DB_PATH = get_dbpath_by_repo()
 
 # 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
@@ -29,16 +28,31 @@ pd.set_option('expand_frame_repr', False)
 def get_stock_basic_list(source='DB'):
     if source == 'file':
         # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
-        stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
-        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
+        stock_basic = pd.read_csv('stock_list.csv', dtype={'symbol': np.str}, delimiter=',')
+        # 去除创业板和科创板
+        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
+            stock_basic.symbol.str.startswith('688') == False]
         # print(stock_basic.head())
     elif source == 'DB':
         # 连接数据库
         conn = sqlite3.connect(DB_PATH)
         stock_basic = pd.read_sql('select * from stock_list', conn)
-        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
-        # print(stock_basic)
-        # stock_basic.to_csv('stock_list.csv',index=0)
+        # 去除创业板和科创板
+        stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
+            stock_basic.symbol.str.startswith('688') == False]
+    # 获取当前日期
+    # localdate = int(time.strftime("%Y%m%d", time.localtime()))
+    # stock_basic = stock_basic[stock_basic['list_date'] < localdate]
+    return stock_basic
+
+
+# 读取股票列表，写入数据库
+# 这里的股票列表是全的，写入数据库的列表也是全的
+def get_stock_basic_list_2DB(source='DB'):
+    # 连接数据库
+    conn = sqlite3.connect(DB_PATH)
+    if source == 'DB':
+        stock_basic = pd.read_sql('select * from stock_list', conn)
     else:
         # ts token
         ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
@@ -46,39 +60,17 @@ def get_stock_basic_list(source='DB'):
         # 获取ts_pro股票列表
         stock_basic = pro.stock_basic(exchange='', list_status='L')
         # 在运行时写入文件
-        stock_basic.to_csv('stock_list.csv',index=0)
-        # stock_basic = pro.bak_basic(trade_date='20211012', fields='trade_date,ts_code,name,list_date,industry,pe')
-        # def get_symbol(x):
-        #     return x.split('.')[0]
-        # stock_basic['symbol']=stock_basic['ts_code'].apply(get_symbol)
-    # 获取当前日期
-    # localdate = int(time.strftime("%Y%m%d", time.localtime()))
-    # stock_basic = stock_basic[stock_basic['list_date'] < localdate]
-    return stock_basic
-
-
-# 入库
-def get_stock_basic_list_tspro2DB(filepath):
-    # ts token
-    ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    # 获取ts_pro股票列表
-    stock_basic = pro.stock_basic(exchange='', list_status='L')
+        stock_basic.to_csv('stock_list.csv', index=0)
+        # 写入数据库
+        stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
     # 获取当前日期
     localdate = time.strftime("%Y%m%d", time.localtime())
     stock_basic = stock_basic[stock_basic['list_date'] < localdate]
 
-    print(stock_basic)
-    print(stock_basic.count())
+    print(stock_basic.head())
+    print(len(stock_basic))
 
-    # # 写入数据库
-    # conn = sqlite3.connect(filepath)
-    # print("Open database successfully")
-    # stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
-    # print("insert database successfully")
-    #
-    # # 写入文件
-    # stock_basic.to_csv('/Users/beyondzq/PycharmProjects/stockAnalysis/trade_data/stock_list.csv', index=0)
+    return stock_basic
 
 
 if __name__ == '__main__':
@@ -86,7 +78,7 @@ if __name__ == '__main__':
     # get_stock_basic_list_tspro2DB(DB_PATH)
     df = get_stock_basic_list('file')
     print(df.head())
-    df=df[df.symbol.str.startswith('3')==False]
+    df = df[df.symbol.str.startswith('3') == False]
     print(df.count())
 
 # 废弃 ts 获取股票基本信息表

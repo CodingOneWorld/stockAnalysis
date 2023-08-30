@@ -6,6 +6,12 @@ from trade_data.get_trade_data import get_stock_trade_data
 from util.math_util import List_util
 import pandas as pd
 import numpy as np
+import math
+
+# 中线（20d）上升通道的股票
+# 最近20天 股价斜率大于0
+# 最近20天 股价均高于20日均线
+# 最近20天 股价极低值一个比一个高
 
 
 # 计算某短时间股价是否大于某一均线
@@ -16,15 +22,16 @@ def compare2mean(mav, his_price_df, latest_days):
     :param his_price_df: 股票历史交易数据
     :return: 股价在某一均线上返回True  否则False
     '''
-    his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
-    his_price_df['dev'] = his_price_df['close'] - his_price_df['mean' + str(mav)]
+    his_price_df['mean'+str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
+    his_price_df['dev'] = his_price_df['close'] - his_price_df['mean'+str(mav)]
     his_price_df['tag'] = his_price_df['dev'].apply(lambda x: 1 if x < 0 else 0)
     mav_dev_tag = his_price_df['tag'][-latest_days:].sum()
 
-    if mav_dev_tag <= 0:
-        return 1
+    # 允许latest_days中，有十分之一天的股价低于均线
+    if mav_dev_tag <=math.ceil(latest_days*0.1):
+        return True
     else:
-        return 0
+        return False
 
 
 # 短线上升通道（10d）
