@@ -29,9 +29,9 @@ def compare2mean(mav, his_price_df, latest_days):
 
     # 允许latest_days中，有十分之一天的股价低于均线
     if mav_dev_tag <=math.ceil(latest_days*0.1):
-        return True
+        return 1
     else:
-        return False
+        return 0
 
 
 # 短线上升通道（10d）
