@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import time
 import os
 import sqlite3
-from trade_data.get_stock_basic_list import get_stock_basic_list
+from trade_data.get_stock_basic_list import get_stock_basic_list_2DB
 from trade_data.trade_data_utils import createDailyTableonOneStock
 from util.date_util import get_today_date, date_add
 from util.utils_common import code2ts_code, get_dbpath_by_repo
@@ -67,9 +67,9 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
-    # # 数据库连接
-    # conn = sqlite3.connect(filepath)
-    # print("Opened database successfully")
+    # 数据库连接
+    conn = sqlite3.connect(filepath)
+    print("Opened database successfully")
     # c = conn.cursor()
     # # 查询数据库中已有的股票列表
     # cursor = c.execute("SELECT ts_code,name from stock_list")
@@ -94,14 +94,10 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     with open('last_datetime.txt', 'w') as file:
         file.write(dtime.strftime('%Y-%m-%d %H:%M:%S'))
     print(source)
-    stock_basic = get_stock_basic_list(source)
-    # 写入数据库
-    conn = sqlite3.connect(filepath)
-    print("Open database successfully")
-    stock_basic.to_sql('stock_list', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
-    # 只提取非创业板的股票
-    stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False]
+    stock_basic = get_stock_basic_list_2DB(source)
+    # 更新交易数据，去除创业板和科创板
+    stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
+            stock_basic.symbol.str.startswith('688') == False]
     # print(stock_basic)
     stocks_tspro = stock_basic['ts_code'].values
     print("ts_pro中最新股票列表数")
@@ -127,7 +123,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
         try :
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
         except Exception as e:
-            print('get_box_api_realtime', e, traceback.format_exc())
+            print('获取交易数据失败', e, traceback.format_exc())
             continue
         if df is None:
             continue

@@ -6,6 +6,7 @@ from trade_data.get_trade_data import get_stock_trade_data
 from util.math_util import List_util
 import pandas as pd
 import numpy as np
+import math
 
 # 中线（20d）上升通道的股票
 # 最近20天 股价斜率大于0
@@ -14,7 +15,7 @@ import numpy as np
 
 
 # 计算某短时间股价是否大于某一均线
-def compare2mean(mav,his_price_df):
+def compare2mean(mav,his_price_df,latest_days):
     '''
     :param mav: 几日均线
     :param his_price_df: 股票历史交易数据
@@ -23,51 +24,13 @@ def compare2mean(mav,his_price_df):
     his_price_df['mean'+str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
     his_price_df['dev'] = his_price_df['close'] - his_price_df['mean'+str(mav)]
     his_price_df['tag'] = his_price_df['dev'].apply(lambda x: 1 if x < 0 else 0)
-    mav_dev_tag = his_price_df['tag'][-mav:].sum()
+    mav_dev_tag = his_price_df['tag'][-latest_days:].sum()
 
-    if mav_dev_tag <=0:
+    # 允许latest_days中，有十分之一天的股价低于均线
+    if mav_dev_tag <=math.ceil(latest_days*0.1):
         return True
     else:
         return False
-
-
-def get_l10_up_stock(file,path):
-
-    class_s='10日短线上升通道'
-
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # df['symbol']=df['symbol'].astype('string')
-    stock_list = df.values
-    print(stock_list)
-
-    selected_stock = []
-    for s in stock_list:
-        code = s[0]
-        # 股价
-        # 获取股票历史价格
-        his_price_df = get_stock_price(code, 'close')[-200:]
-        his_price = his_price_df['close'].values
-        # 斜率
-        k10 = cal_stock_price_trend(his_price, 10)
-        k20 = cal_stock_price_trend(his_price, 20)
-        k100 = cal_stock_price_trend(his_price, 100)
-        # print(k20)
-        if k10 > 0 and k20 < 0 and k100 < 0:
-            # 均线
-            if compare2mean(10,his_price_df):
-                # 极低值
-                ex_mins = cal_extreme_min_value(his_price[-10:])[1]
-                is_true = List_util.isAZ(ex_mins)
-                # print(is_true)
-                if is_true is True:
-                    print(s)
-                    selected_stock.append(s)
-
-    if len(selected_stock) > 0:
-        df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        # 将股票列表写入数据库
-
-        output_doc(df, path)
 
 
 if __name__ == '__main__':

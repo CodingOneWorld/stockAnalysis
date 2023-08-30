@@ -14,13 +14,13 @@ from trade_data.get_trade_data import get_stock_trade_data
 if __name__ == '__main__':
     # 给定一只股票，尝试分析
 
-    s = get_stock_code('泛微网络')
+    s = get_stock_code('深物业A')
 
     # k线图
-    # plot_k_line_latestdays(s,400)
+    # plot_k_line_latestdays(s,100)
 
-    d1='20220501'
-    d2='20221011'
+    d1='20230610'
+    d2='20230830'
 
     # 上升通道持续时间
     df = get_stock_trade_data(s)
