@@ -2,7 +2,6 @@
 
 import sqlite3
 from trade_data.get_trade_data import get_daily_data_tspro2DB
-from trade_data.get_stock_basic_list import get_stock_basic_list_tspro2DB
 from util.utils_common import get_dbpath_by_repo
 import pandas as pd
 

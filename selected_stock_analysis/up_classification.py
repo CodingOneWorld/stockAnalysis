@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import math
 
+
 # 中线（20d）上升通道的股票
 # 最近20天 股价斜率大于0
 # 最近20天 股价均高于20日均线
@@ -22,13 +23,13 @@ def compare2mean(mav, his_price_df, latest_days):
     :param his_price_df: 股票历史交易数据
     :return: 股价在某一均线上返回True  否则False
     '''
-    his_price_df['mean'+str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
-    his_price_df['dev'] = his_price_df['close'] - his_price_df['mean'+str(mav)]
+    his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
+    his_price_df['dev'] = his_price_df['close'] - his_price_df['mean' + str(mav)]
     his_price_df['tag'] = his_price_df['dev'].apply(lambda x: 1 if x < 0 else 0)
     mav_dev_tag = his_price_df['tag'][-latest_days:].sum()
 
     # 允许latest_days中，有十分之一天的股价低于均线
-    if mav_dev_tag <=math.ceil(latest_days*0.1):
+    if mav_dev_tag <= math.ceil(latest_days * 0.1):
         return 1
     else:
         return 0
@@ -60,37 +61,25 @@ def get_l10_up_stock(code):
     return 0
 
 
-def get_l10_up_stock_all(stock_list, path):
-    selected_stock = []
-    for s in stock_list:
-        code = s[0]
-        # 股价
-        # 获取股票历史价格
-        his_price_df = get_stock_price(code, 'close')[-200:]
-        his_price = his_price_df['close'].values
-        # 斜率
-        k10 = cal_stock_price_trend(his_price, 10)
-        k20 = cal_stock_price_trend(his_price, 20)
-        k100 = cal_stock_price_trend(his_price, 100)
-        # print(k20)
-        if k10 > 0 and k20 < 0 and k100 < 0:
-            # 均线
-            if compare2mean(10, his_price_df, 10):
-                # 极低值
-                ex_mins = cal_extreme_min_value(his_price[-10:])[1]
-                is_true = List_util.isAZ(ex_mins)
-                # print(is_true)
-                if is_true is True:
-                    print(s)
-                    selected_stock.append(s)
+# l50上升通道
+def get_l50_up_stock(code):
+    # 最近100天的斜率大于0
+    # 获取股票历史价格
+    his_price_df = get_stock_price(code, 'close')[-200:]
+    his_price = his_price_df['close'].values
+    # 斜率
+    k50 = cal_stock_price_trend(his_price, 50)
+    print(k50)
+    # 均线比较
+    mean_tag = compare2mean(60, his_price_df, 50)
+    # mean_tag = 1
 
-    if len(selected_stock) > 0:
-        df = pd.DataFrame(selected_stock, columns=['code', 'name'])
-        # 将股票列表写入数据库
-        output_doc(df, path)
+    if k50 > 0 and mean_tag == 1:
+        return 1
+    return 0
 
 
-# 中线上升通道
+# l100上升通道
 def get_l100_up_stock(code):
     # 最近100天的斜率大于0
     # 获取股票历史价格
@@ -98,13 +87,13 @@ def get_l100_up_stock(code):
     his_price = his_price_df['close'].values
     # 斜率
     k100 = cal_stock_price_trend(his_price, 100)
-    k200 = cal_stock_price_trend(his_price, 100)
-    print(k100,k200)
+    # k200 = cal_stock_price_trend(his_price, 100)
+    print(k100)
     # 均线比较
-    # mean_tag = compare2mean(60, his_price_df, 200)
-    mean_tag=1
+    mean_tag = compare2mean(60, his_price_df, 100)
+    # mean_tag = 1
 
-    if k100 > 0 and k200 > 0 and mean_tag == 1:
+    if k100 > 0  and mean_tag == 1:
         return 1
     return 0
 
@@ -124,6 +113,9 @@ if __name__ == '__main__':
     l10_up_stock = []
     l10_path = file_name + '_10日短线上升通道股票.docx'
 
+    l50_up_stock = []
+    l50_path = file_name + '_50日长线上升通道股票.docx'
+
     l100_up_stock = []
     l100_path = file_name + '_100日长线上升通道股票.docx'
     for s in stock_list:
@@ -134,7 +126,12 @@ if __name__ == '__main__':
         # if tagl10 == 1:
         #     l10_up_stock.append(s)
 
-        # l100,l200上升通道
+        # l100上升通道
+        tagl50 = get_l50_up_stock(code)
+        if tagl50 == 1:
+            l50_up_stock.append(s)
+
+        # l100上升通道
         tagl100 = get_l100_up_stock(code)
         if tagl100 == 1:
             l100_up_stock.append(s)
@@ -143,6 +140,11 @@ if __name__ == '__main__':
         df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])
         # 将股票列表写入数据库
         output_doc(df, l10_path)
+
+    if len(l50_up_stock) > 0:
+        df = pd.DataFrame(l50_up_stock, columns=['code', 'name'])
+        # 将股票列表写入数据库
+        output_doc(df, l50_path)
 
     if len(l100_up_stock) > 0:
         df = pd.DataFrame(l100_up_stock, columns=['code', 'name'])
