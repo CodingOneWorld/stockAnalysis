@@ -115,6 +115,7 @@ def get_profit_of_latest_years(code, latest_years):
     conn = sqlite3.connect(DB_PATH)
     stock_profit_data = pd.read_sql('select * from profit_all_stocks', conn)
     stock_profit_list = stock_profit_data['code'].values
+    print(stock_profit_data.columns)
     if stock_profit_list.__contains__(code):
         profit_data = stock_profit_data[stock_profit_data['code'] == code].iloc[:, -latest_years:].values[0]
         # print(profit_data)

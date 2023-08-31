@@ -91,6 +91,7 @@ def get_income_of_latest_years(code, latest_years):
     # pandas连接数据库
     conn = sqlite3.connect(DB_PATH)
     stock_income_data = pd.read_sql('select * from income_all_stocks', conn)
+    print(stock_income_data.columns)
     # 判断需要查的股票代码是否在数据库中
     stock_income_list = stock_income_data['code'].values
     if stock_income_list.__contains__(code):
