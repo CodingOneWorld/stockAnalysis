@@ -13,7 +13,7 @@ DB_PATH = get_dbpath_by_repo()
 if __name__ == '__main__':
     # 读取全部股票数据库
     conn = sqlite3.connect(DB_PATH)
-    # 读取股票基本信息表
+    # 读取股票基本信息表  已经排除创业板3和科创板688
     # stock_list_data = pd.read_sql('select * from stock_list', conn)
     stock_list_data = get_stock_basic_list()
     print(stock_list_data.head())
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print(stock_list)
     print(len(stock_list))
 
-    # 去除创业板和st股
+    # 去除st股和退市股
     stock_array = []
     count = 0
     for i in stock_list:
@@ -62,7 +62,7 @@ if __name__ == '__main__':
             # if k1 < 0 or k2 < 0:
             print('remove:', s)
             stock_array.remove(s)
-    print("去除收入和净利润近5年没有持续增长的股票后剩余股票数")
+    print("收入和净利润近5年均大于0的剩余股票数")
     print(stock_array.__len__())
 
     # 输出到文本文件中

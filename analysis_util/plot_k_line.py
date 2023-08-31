@@ -34,7 +34,7 @@ def load_data_latestdays(code, latest_days):
     stock_trade_data.set_index("trade_date", inplace=True)
     stock_trade_data = stock_trade_data[["open", "high", "close", "low", "vol"]]
     stock_trade_data.rename(columns={'vol': 'volume'}, inplace=True)
-    # print(stock_trade_data.head())
+    print(','.join([str(x) for x in stock_trade_data['close'].values]))
     return stock_trade_data
 
 
@@ -98,6 +98,6 @@ def save_k_line(code, latest_days, save_path):
 
 
 if __name__ == '__main__':
-    s = get_stock_code('纽威股份')
-    plot_k_line_latestdays(s, 100)
+    s = get_stock_code('澳柯玛')
+    plot_k_line_latestdays(s, 250)
     # plot_k_line(s,'20220929','20230531')
