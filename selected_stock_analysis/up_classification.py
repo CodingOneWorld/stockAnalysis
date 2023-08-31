@@ -71,7 +71,7 @@ def get_l50_up_stock(code):
     k50 = cal_stock_price_trend(his_price, 50)
     print(k50)
     # 均线比较
-    mean_tag = compare2mean(60, his_price_df, 50)
+    mean_tag = compare2mean(30, his_price_df, 50)
     # mean_tag = 1
 
     if k50 > 0 and mean_tag == 1:
@@ -132,9 +132,9 @@ if __name__ == '__main__':
             l50_up_stock.append(s)
 
         # l100上升通道
-        tagl100 = get_l100_up_stock(code)
-        if tagl100 == 1:
-            l100_up_stock.append(s)
+        # tagl100 = get_l100_up_stock(code)
+        # if tagl100 == 1:
+        #     l100_up_stock.append(s)
 
     if len(l10_up_stock) > 0:
         df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])

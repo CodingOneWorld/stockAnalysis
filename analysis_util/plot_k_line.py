@@ -58,7 +58,9 @@ def plot_k_line_latestdays(symbol, latest_days):
 
 
 # 起止日，到终止日
-def plot_k_line(code, start_date, end_date,mav=[5, 10, 20, 30, 40,60, 140]):
+def plot_k_line(code, start_date, end_date, mav=None):
+    if mav is None:
+        mav = [5, 10, 20, 30, 40, 60, 140]
     stock_trade_data = load_data(code, start_date, end_date)
     # OHLC图
     # # 设置mplfinance的蜡烛颜色，up为阳线颜色，down为阴线颜色
