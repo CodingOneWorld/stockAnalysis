@@ -40,6 +40,7 @@ if __name__ == '__main__':
 
     # 收入和净利润近5年均大于0
     for s in stock_array:
+    # for s in [['000413','东旭光电']]:
         print(s)
         # 计算最近5年的收入和净利润
         # 收入
@@ -58,7 +59,8 @@ if __name__ == '__main__':
             if profit < 0:
                 tag2 = 1
         # k2 = cal_trend_common(profit_data)
-        if tag1 > 0 and tag2 > 0:
+        print(tag1,tag2)
+        if tag1 > 0 or tag2 > 0:
             # if k1 < 0 or k2 < 0:
             print('remove:', s)
             stock_array.remove(s)

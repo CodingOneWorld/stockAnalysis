@@ -42,7 +42,7 @@ def get_stock_price(code, type, mode='DB'):
     return stock_price
 
 
-def cal_stock_price_trend(stock_price, latest_days):
+def cal_stock_price_trend(stock_price, latest_days,is_image=0):
     # 构建线性回归样本，计算斜率
     latest_days = latest_days if len(stock_price) > latest_days else len(stock_price)
     x = [i for i in range(1, latest_days + 1)]
@@ -59,11 +59,13 @@ def cal_stock_price_trend(stock_price, latest_days):
     # print(model.coef_[0][0])  # 线性模型的系数
     y2 = model.predict(x)
 
-    # 绘制散点图与拟合直线图
-    # plt.plot(x, y, 'k.')
-    # plt.plot(x, y2, 'g-')
-    # plt.show()
     # print(model.coef_[0][0])
+
+    # 绘制散点图与拟合直线图
+    if is_image==1:
+        plt.plot(x, y, 'k.')
+        plt.plot(x, y2, 'g-')
+        plt.show()
     return model.coef_[0][0]
 
 

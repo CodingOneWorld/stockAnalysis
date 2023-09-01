@@ -34,7 +34,38 @@ def output_doc(df, file_path):
     doc.save(file_path)
 
 
-def mean_price_compare(doc,stock):
+# 指定均线进行比较
+def mav_compare(code,mav_list):
+    '''
+    :param code: 股票代码 6位数
+    :param mav_list:  需要比较的均线列表
+    :return:
+    '''
+    # 获取股票交易数据
+    his_price_df = get_stock_price(code, 'close')[-100:]
+    his_price = his_price_df['close'].values
+    print(his_price)
+    # 计算均线
+    stock_mean_list=[]
+    for mav in mav_list:
+        his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
+        print(his_price_df)
+        # 当前价格与均线进行比较
+        cur_price=his_price[-1]
+        mean=his_price_df['mean' + str(mav)].values[-1]
+        print(cur_price,mean)
+        if mean * 0.5 <= cur_price <= mean * 1.5:
+            stock_mean_list.append(mean)
+    print(stock_mean_list)
+    if len(stock_mean_list)>0:
+        print('%s接近以下均线%s' % (code,','.join([str(i) for i in stock_mean_list])))
+
+    return stock_mean_list
+
+
+
+# 计算全部均线进行比较
+def all_mean_price_compare(doc,stock):
     # doc = Doc()
 
     code = stock[0]
@@ -84,7 +115,7 @@ def extreme_price_compare(code):
 
     ex_price_list = []
     for price in ex_price:
-        if price * 0.95 <= current_price <= price * 1.05:
+        if price * 0.5 <= current_price <= price * 1.5:
             ex_price_list.append(price)
 
     if len(ex_price_list) > 0:
@@ -92,15 +123,17 @@ def extreme_price_compare(code):
 
 
 if __name__ == '__main__':
-    # 获取自选股票池
-    file = '自选股.csv'
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # df['symbol']=df['symbol'].astype('string')
-    stock_list = df.values
-    # print(stock_list)
-    # doc = Doc()
-    for s in stock_list:
-        print(s)
-        extreme_price_compare(s[0])
-    # 保存文档
-    # doc.save('./关键价格监控.docx')
+    # # 获取自选股票池
+    # file = '自选股.csv'
+    # df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    # # df['symbol']=df['symbol'].astype('string')
+    # stock_list = df.values
+    # # print(stock_list)
+    # # doc = Doc()
+    # for s in stock_list:
+    #     print(s)
+    #     extreme_price_compare(s[0])
+    # # 保存文档
+    # # doc.save('./关键价格监控.docx')
+
+    mav_compare('002028', [60])
