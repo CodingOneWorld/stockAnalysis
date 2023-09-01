@@ -62,7 +62,7 @@ def compare2mean(mav, his_price_df, latest_days):
 
 
 # l10上升通道
-def get_l10_up_stock(code,mav=10,latest_days=10):
+def get_l10_up_stock(code, mav=10, latest_days=10):
     # 获取股票历史价格
     his_price_df = get_stock_price(code, 'close')[-200:]
     his_price = his_price_df['close'].values
@@ -70,18 +70,18 @@ def get_l10_up_stock(code,mav=10,latest_days=10):
     k1 = cal_trend_common(his_price[-10:])
     # -50：-20 斜率 <0 保证是刚起涨
     k2 = cal_trend_common(his_price[-40:-10])
-    print(k1,k2)
+    print(k1, k2)
     # 均线比较
     mean_tag = compare2mean(mav, his_price_df, latest_days)
     # mean_tag = 1
 
-    if k1 > 0 and k2<0 and mean_tag == 1:
+    if k1 > 0 and k2 < 0 and mean_tag == 1:
         return 1
     return 0
 
 
 # l20上升通道
-def get_l20_up_stock(code,mav=20,latest_days=20):
+def get_l20_up_stock(code, mav=20, latest_days=20):
     # 最近100天的斜率大于0
     # 获取股票历史价格
     his_price_df = get_stock_price(code, 'close')[-200:]
@@ -90,15 +90,14 @@ def get_l20_up_stock(code,mav=20,latest_days=20):
     k1 = cal_trend_common(his_price[-20:])
     # -50：-20 斜率 <0 保证是刚起涨
     k2 = cal_trend_common(his_price[-50:-20])
-    print(k1,k2)
+    print(k1, k2)
     # 均线比较
     mean_tag = compare2mean(mav, his_price_df, latest_days)
     # mean_tag = 1
 
-    if k1 > 0 and k2<0 and mean_tag == 1:
+    if k1 > 0 and k2 < 0 and mean_tag == 1:
         return 1
     return 0
-
 
 
 # l50上升通道
@@ -108,13 +107,14 @@ def get_l50_up_stock(code):
     his_price_df = get_stock_price(code, 'close')[-200:]
     his_price = his_price_df['close'].values
     # 斜率
-    k50 = cal_stock_price_trend(his_price, 50)
-    print(k50)
+    k1 = cal_trend_common(his_price[-50:])
+    k2 = cal_trend_common(his_price[-100:-50])
+    print(k1, k2)
     # 均线比较
     mean_tag = compare2mean(30, his_price_df, 50)
     # mean_tag = 1
 
-    if k50 > 0 and mean_tag == 1:
+    if k1 > 0 and k2 < 0 and mean_tag == 1:
         return 1
     return 0
 
@@ -126,14 +126,14 @@ def get_l100_up_stock(code):
     his_price_df = get_stock_price(code, 'close')[-200:]
     his_price = his_price_df['close'].values
     # 斜率
-    k100 = cal_stock_price_trend(his_price, 100)
-    # k200 = cal_stock_price_trend(his_price, 100)
-    print(k100)
+    k1 = cal_trend_common(his_price[-100:])
+    k2 = cal_trend_common(his_price[-200:-100])
+    print(k1, k2)
     # 均线比较
     mean_tag = compare2mean(60, his_price_df, 100)
     # mean_tag = 1
 
-    if k100 > 0  and mean_tag == 1:
+    if k1 > 0 and k2 < 0 and mean_tag == 1:
         return 1
     return 0
 
@@ -165,25 +165,24 @@ if __name__ == '__main__':
         print(s)
         code = s[0]
         # 10日短线上升通道
-        tagl10 = get_l10_up_stock(code,10,10)
+        tagl10 = get_l10_up_stock(code, 10, 10)
         if tagl10 == 1:
             l10_up_stock.append(s)
 
+        # l20上升通道
+        tagl20 = get_l20_up_stock(code,20,20)
+        if tagl20 == 1:
+            l20_up_stock.append(s)
 
-        # # l20上升通道
-        # tagl20 = get_l20_up_stock(code,10,10)
-        # if tagl20 == 1:
-        #     l20_up_stock.append(s)
+        # l50上升通道
+        tagl50 = get_l50_up_stock(code)
+        if tagl50 == 1:
+            l50_up_stock.append(s)
 
-        # # l50上升通道
-        # tagl50 = get_l50_up_stock(code)
-        # if tagl50 == 1:
-        #     l50_up_stock.append(s)
-
-        # # l100上升通道
-        # tagl100 = get_l100_up_stock(code)
-        # if tagl100 == 1:
-        #     l100_up_stock.append(s)
+        # l100上升通道
+        tagl100 = get_l100_up_stock(code)
+        if tagl100 == 1:
+            l100_up_stock.append(s)
 
     if len(l10_up_stock) > 0:
         df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])
