@@ -15,8 +15,8 @@ import math
 # 最近20天 股价极低值一个比一个高
 
 
-# 计算某短时间股价是否大于某一均线
-def compare2mean(mav, his_price_df, latest_days):
+# 计算某短时间窗window股价是否大于某一均线
+def compare2mean_window(mav, his_price_df, latest_days):
     '''
     :param latest_days: 需要比较均线的时间跨度
     :param mav: 几日均线
@@ -72,7 +72,7 @@ def get_l10_up_stock(code, mav=10, latest_days=10):
     k2 = cal_trend_common(his_price[-40:-10])
     print(k1, k2)
     # 均线比较
-    mean_tag = compare2mean(mav, his_price_df, latest_days)
+    mean_tag = compare2mean_window(mav, his_price_df, latest_days)
     # mean_tag = 1
 
     if k1 > 0 and k2 < 0 and mean_tag == 1:
@@ -92,7 +92,7 @@ def get_l20_up_stock(code, mav=20, latest_days=20):
     k2 = cal_trend_common(his_price[-50:-20])
     print(k1, k2)
     # 均线比较
-    mean_tag = compare2mean(mav, his_price_df, latest_days)
+    mean_tag = compare2mean_window(mav, his_price_df, latest_days)
     # mean_tag = 1
 
     if k1 > 0 and k2 < 0 and mean_tag == 1:
@@ -111,7 +111,7 @@ def get_l50_up_stock(code):
     k2 = cal_trend_common(his_price[-100:-50])
     print(k1, k2)
     # 均线比较
-    mean_tag = compare2mean(30, his_price_df, 50)
+    mean_tag = compare2mean_window(30, his_price_df, 50)
     # mean_tag = 1
 
     if k1 > 0 and k2 < 0 and mean_tag == 1:
@@ -130,7 +130,7 @@ def get_l100_up_stock(code):
     k2 = cal_trend_common(his_price[-200:-100])
     print(k1, k2)
     # 均线比较
-    mean_tag = compare2mean(60, his_price_df, 100)
+    mean_tag = compare2mean_window(60, his_price_df, 100)
     # mean_tag = 1
 
     if k1 > 0 and k2 < 0 and mean_tag == 1:
@@ -140,8 +140,8 @@ def get_l100_up_stock(code):
 
 if __name__ == '__main__':
     # stock_list = ['002918']
-    file = 'stock_pool2023.txt'
-    # file = '自选股.csv'
+    # file = 'stock_pool2023.txt'
+    file = '自选股202308.csv'
 
     file_name = file.split('.')[0]
 
@@ -186,6 +186,7 @@ if __name__ == '__main__':
 
     if len(l10_up_stock) > 0:
         df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])
+        # 将股票列表写入文件，用于追踪监控
         # 将股票列表写入数据库
         output_doc(df, l10_path)
 

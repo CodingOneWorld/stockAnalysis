@@ -115,13 +115,13 @@ def get_profit_of_latest_years(code, latest_years):
     conn = sqlite3.connect(DB_PATH)
     stock_profit_data = pd.read_sql('select * from profit_all_stocks', conn)
     stock_profit_list = stock_profit_data['code'].values
-    print(stock_profit_data.columns)
+    # print(stock_profit_data.columns)
     if stock_profit_list.__contains__(code):
         profit_data = stock_profit_data[stock_profit_data['code'] == code].iloc[:, -latest_years:].values[0]
         # print(profit_data)
     else:
         profit_data = [0]
-    # print(profit_data)
+    print(profit_data)
     return profit_data
 
 
@@ -129,13 +129,9 @@ if __name__ == '__main__':
     # profit_of_all_stocks2db()
 
     # get_profit_latest_years_online(5)
-    # get_profit_of_latest_years('601900',5)
+    get_profit_of_latest_years('600604',5)
 
-    # getProfitOf5Year(file_path)
-
-    # profit_of_all_stocks2db()
-
-    income_data=get_profit_of_latest_years('002714',5)
-    print(income_data)
-    k = cal_trend_common(income_data)
-    print(k)
+    # income_data=get_profit_of_latest_years('002714',5)
+    # print(income_data)
+    # k = cal_trend_common(income_data)
+    # print(k)

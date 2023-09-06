@@ -29,6 +29,10 @@ def output_doc(df, file_path):
         doc.add_heading('，'.join(line))
         symbol = line[0]
 
+        # 添加段落
+        # if len(paragraph)>0:
+        #     doc.add_paragraph(paragraph)
+
         # 画出其最近100天，300天，1000天日线图
         save_k_line(symbol, 100, './resources/kline100.png')
         save_k_line(symbol, 300, './resources/kline300.png')

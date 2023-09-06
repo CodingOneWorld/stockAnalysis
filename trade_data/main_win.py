@@ -30,21 +30,23 @@ import time
 
 
 def update_trade_data2db(DB_PATH):
+    t1 = datetime.datetime.now()
     get_daily_data_tspro2DB(DB_PATH,0 , 0)
     # get_stock_basic_list_tspro2DB(DB_PATH)
 
+    t2 = datetime.datetime.now()
+    print(t2 - t1)
+
 
 if __name__ == '__main__':
-    t1 = datetime.datetime.now()
     DB_PATH = get_dbpath_by_repo()
-    # print(DB_PATH)
-    # schedule.every().day.at("19:00").do(update_trade_data2db, DB_PATH)
+    print(DB_PATH)
+    # schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
     # while True:
     #     schedule.run_pending()
     #     time.sleep(1)
 
     update_trade_data2db(DB_PATH)
 
-    t2 = datetime.datetime.now()
-    print(t2 - t1)
+
 

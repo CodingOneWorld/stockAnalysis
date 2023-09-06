@@ -15,21 +15,23 @@ if __name__ == '__main__':
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
-    print(stock_list)
+    # print(stock_list)
 
     low_price_s = []
 
     for line in stock_list:
+    # for line in [['600031','三一重工']]:
         print(line)
         s = line[0]
         # 获取股票历史价格
         # pct=cal_price_pct(s,3000)
         # 计算股票回撤幅度
-        pct = cal_price_withdraw_pct(s, 3000)
+        pct = cal_price_withdraw_pct(s, 1000)
         # 计算趋势
         stock_price = get_stock_price(s, 'close')['close'].values
         k = cal_stock_price_trend(stock_price, 3000)
-        if pct >= 0.5 and k > 0.01:
+        print(pct,k)
+        if pct >= 0.5 and k > 0:
             print('符合要求')
             low_price_s.append(list(line))
 
@@ -37,4 +39,4 @@ if __name__ == '__main__':
 
     df=pd.DataFrame(low_price_s,columns=['symbol','stock_name'])
     print(df)
-    df.to_csv('大幅回撤股票.txt',index=0)
+    df.to_csv('大幅回撤股票2023.txt',index=0)
