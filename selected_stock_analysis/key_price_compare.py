@@ -89,7 +89,7 @@ def all_mean_price_compare(doc,stock):
                 stock_mean_list.append(mean)
 
         doc.add_heading('，'.join(','.join(stock)))
-        if len(stock_mean_list) > 0 or len(ex_price_list) > 0:
+        if len(stock_mean_list) > 0:
             if len(stock_mean_list) > 0:
                 print(code + ": " + "接近以下均线: " + ','.join(stock_mean_list))
                 doc.add_heading("接近以下均线: " + ','.join(stock_mean_list))
@@ -123,17 +123,20 @@ def extreme_price_compare(code):
 
 
 if __name__ == '__main__':
-    # # 获取自选股票池
-    # file = '自选股.csv'
-    # df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # # df['symbol']=df['symbol'].astype('string')
-    # stock_list = df.values
-    # # print(stock_list)
-    # # doc = Doc()
-    # for s in stock_list:
-    #     print(s)
-    #     extreme_price_compare(s[0])
-    # # 保存文档
-    # # doc.save('./关键价格监控.docx')
+    # 获取自选股票池
+    file = '自选股.csv'
+    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    stock_list = df.values
+    selected_stock=[]
+    for s in stock_list:
+        print(s)
+        stock_mean_list=mav_compare(s[0],[60,140])
+        if len(stock_mean_list)>0:
+            res='%s接近以下均线%s' % (s[0],','.join([str(i) for i in stock_mean_list]))
+            selected_stock.append([s[0],s[1],])
+
+    # 保存文档
+    path='关键价格及均线比较.docx'
+    output_doc(df, path)
 
     mav_compare('002028', [60])
