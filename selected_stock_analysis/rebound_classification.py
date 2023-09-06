@@ -67,7 +67,7 @@ def get_l10_rebound_stock(file, path):
         # 确保反弹前的下降通道
         if k5 > 0 and k10 > 0 and k20 < -0.05 and k100 < 0:
             # 反弹，均在5日线上
-            is_true = compare2mean(5, his_price_df)
+            is_true = compare2mean(5, his_price_df,10)
 
             if is_true is True:
                 print(s)

@@ -63,7 +63,7 @@ def get_stock_trade_data_latestdays(code, latestdays):
 
 # 获取股票的日线数据-前复权数据 ts_pro
 # 全量更新
-def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
+def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
     # ts token
     ts.set_token('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
     pro = ts.pro_api('ad065353df4c0c0be4cb76ee375140b21e37a434b33973a03ecd553f')
@@ -80,7 +80,6 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     # print(len(stocks_old))
 
     # 查询最新的股票列表，并写入数据库
-    source = 'online'
     # 从文件中查询上一次查询时间
     # 如果距离上一次查询不到一个小时，则在DB查询
     with open('last_datetime.txt', 'r') as file:
