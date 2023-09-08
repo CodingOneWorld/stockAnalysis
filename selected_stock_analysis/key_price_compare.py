@@ -35,7 +35,7 @@ def output_doc(df, file_path):
 
 
 # 指定均线进行比较
-def mav_compare(code,mav_list):
+def mav_compare(code, mav_list):
     '''
     :param code: 股票代码 6位数
     :param mav_list:  需要比较的均线列表
@@ -46,26 +46,25 @@ def mav_compare(code,mav_list):
     his_price = his_price_df['close'].values
     print(his_price)
     # 计算均线
-    stock_mean_list=[]
+    stock_mean_list = []
     for mav in mav_list:
         his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
         print(his_price_df)
         # 当前价格与均线进行比较
-        cur_price=his_price[-1]
-        mean=his_price_df['mean' + str(mav)].values[-1]
-        print(cur_price,mean)
-        if mean * 0.5 <= cur_price <= mean * 1.5:
-            stock_mean_list.append(mean)
+        cur_price = his_price[-1]
+        mean = his_price_df['mean' + str(mav)].values[-1]
+        print(cur_price, mean)
+        if mean * 0.95 <= cur_price <= mean * 1.05:
+            stock_mean_list.append(mav)
     print(stock_mean_list)
-    if len(stock_mean_list)>0:
-        print('%s接近以下均线%s' % (code,','.join([str(i) for i in stock_mean_list])))
+    if len(stock_mean_list) > 0:
+        print('%s接近以下均线%s' % (code, ','.join([str(i) for i in stock_mean_list])))
 
     return stock_mean_list
 
 
-
 # 计算全部均线进行比较
-def all_mean_price_compare(doc,stock):
+def all_mean_price_compare(doc, stock):
     # doc = Doc()
 
     code = stock[0]
@@ -115,7 +114,7 @@ def extreme_price_compare(code):
 
     ex_price_list = []
     for price in ex_price:
-        if price * 0.5 <= current_price <= price * 1.5:
+        if price * 0.95 <= current_price <= price * 1.05:
             ex_price_list.append(price)
 
     if len(ex_price_list) > 0:
@@ -124,19 +123,21 @@ def extreme_price_compare(code):
 
 if __name__ == '__main__':
     # 获取自选股票池
-    file = '自选股.csv'
+    # file = '自选股.csv'
+    file = 'stock_pool2023.txt'
     df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
     stock_list = df.values
-    selected_stock=[]
+    selected_stock = []
     for s in stock_list:
         print(s)
-        stock_mean_list=mav_compare(s[0],[60,140])
-        if len(stock_mean_list)>0:
-            res='%s接近以下均线%s' % (s[0],','.join([str(i) for i in stock_mean_list]))
-            selected_stock.append([s[0],s[1],])
+        stock_mean_list = mav_compare(s[0], [140])
+        if len(stock_mean_list) > 0:
+            res = '%s接近以下均线%s' % (s[0], ','.join([str(i) for i in stock_mean_list]))
+            selected_stock.append([s[0], s[1], res])
 
     # 保存文档
-    path='关键价格及均线比较.docx'
+    path = '关键价格及均线比较.docx'
+    df = pd.DataFrame(selected_stock, columns=['code', 'name', 'mean'])
     output_doc(df, path)
 
-    mav_compare('002028', [60])
+    # mav_compare('002028', [60])

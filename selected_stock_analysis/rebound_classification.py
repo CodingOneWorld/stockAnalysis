@@ -2,7 +2,7 @@
 from analysis_util.cal_key_price import cal_extreme_min_value
 from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
 from analysis_util.output_document import output_doc
-from selected_stock_analysis.up_classification import compare2mean
+from selected_stock_analysis.up_classification import compare2mean_window
 from trade_data.get_trade_data import get_stock_trade_data
 from util.math_util import List_util
 import pandas as pd
@@ -67,7 +67,7 @@ def get_l10_rebound_stock(file, path):
         # 确保反弹前的下降通道
         if k5 > 0 and k10 > 0 and k20 < -0.05 and k100 < 0:
             # 反弹，均在5日线上
-            is_true = compare2mean(5, his_price_df,10)
+            is_true = compare2mean_window(5, his_price_df,10)
 
             if is_true is True:
                 print(s)
