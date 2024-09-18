@@ -20,7 +20,7 @@ def analysis():
 
 
 def get_stocklist(file):
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    df = pd.read_csv(file, dtype={'symbol': np.str_}, delimiter=',')
     stock_list = df.values
     return stock_list
 

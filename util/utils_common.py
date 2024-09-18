@@ -28,10 +28,13 @@ def get_engine(path):
 def get_dbpath_by_repo():
     cur_repo=get_cur_repo()
     if cur_repo=='mac':
-        return "/Users/beyondzq/DB/stock_data.db"
+        return "/Users/beyond/DB/stock_data.db"
     else:
         return "E:/Money/stock_data.db"
 
 
 if __name__ == '__main__':
-    print(get_dbpath_by_repo())
+    # print(get_dbpath_by_repo())
+
+    cur_repo = get_cur_repo()
+    print(cur_repo)
