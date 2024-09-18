@@ -97,7 +97,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del):
     stock_basic = get_stock_basic_list_2DB(source)
     # 更新交易数据，去除创业板和科创板
     stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
-            stock_basic.symbol.str.startswith('688') == False]
+            stock_basic.symbol.str.startswith('688') == False][stock_basic.symbol.str.startswith('8') == False]
     # print(stock_basic)
     stocks_tspro = stock_basic['ts_code'].values
     print("ts_pro中最新股票列表数")
