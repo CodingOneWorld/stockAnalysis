@@ -38,7 +38,7 @@ def load_data_latestdays(code, latest_days):
     return stock_trade_data
 
 
-def plot_k_line_latestdays(symbol, latest_days):
+def plot_k_line_latestdays(symbol, latest_days,mav=(5, 10, 20, 30, 60, 140)):
     stock_trade_data = load_data_latestdays(symbol, latest_days)
     # OHLC图
     # # 设置mplfinance的蜡烛颜色，up为阳线颜色，down为阴线颜色
@@ -54,7 +54,7 @@ def plot_k_line_latestdays(symbol, latest_days):
     # mpf.plot(stock_trade_data)
     # K线图，附带均线，成交量
     # mpf.plot(stock_trade_data, type='candle', style=my_style, mav=(5, 10, 20, 30, 60, 140), volume=True)
-    mpf.plot(stock_trade_data, type='candle', mav=(5, 10, 20, 30, 60, 140), volume=True)
+    mpf.plot(stock_trade_data, type='candle', mav=mav, volume=True)
 
 
 # 起止日，到终止日
@@ -98,6 +98,6 @@ def save_k_line(code, latest_days, save_path):
 
 
 if __name__ == '__main__':
-    s = get_stock_code('神州数码')
-    plot_k_line_latestdays(s, 400)
+    s = get_stock_code('三一重工')
+    plot_k_line_latestdays(s, 100)
     # plot_k_line(s,'20220929','20230531')

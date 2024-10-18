@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from analysis_util.cal_key_price import cal_extreme_min_value
 from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend, cal_trend_common
+from analysis_util.general_utils import get_stock_code
 from analysis_util.output_document import output_doc
+from analysis_util.plot_k_line import plot_k_line_latestdays
 from trade_data.get_trade_data import get_stock_trade_data
 from util.math_util import List_util
 import pandas as pd
 import numpy as np
 import math
 
+# 以均线判断上升通道
 
 # 中线（20d）上升通道的股票
 # 最近20天 股价斜率大于0
@@ -60,8 +63,26 @@ def compare2mean_window(mav, his_price_df, latest_days):
 #                 return 1
 #     return 0
 
+# 判断最近n天的股价是否在m日均线以上，上升通道
+def is_up_stock(code, mav=10, latest_days=10):
+    # 获取股票历史价格
+    his_price_df = get_stock_price(code, 'close')[-200:]
+    his_price = his_price_df['close'].values
+    # -10-0 最近10天斜率 >0
+    # k1 = cal_trend_common(his_price[-10:])
+    # -50：-20 斜率 <0 保证是刚起涨
+    # k2 = cal_trend_common(his_price[-40:-10])
+    # print(k1, k2)
+    # 均线比较
+    mean_tag = compare2mean_window(mav, his_price_df, latest_days)
+    print(mean_tag)
+    # mean_tag = 1
 
-# l10上升通道
+    if mean_tag == 1:
+        return 1
+    return 0
+
+# 判断最近n天的股价是否在m日均线以上，上升通道
 def get_l10_up_stock(code, mav=10, latest_days=10):
     # 获取股票历史价格
     his_price_df = get_stock_price(code, 'close')[-200:]
@@ -141,66 +162,74 @@ def get_l100_up_stock(code):
 if __name__ == '__main__':
     # stock_list = ['002918']
     # file = 'stock_pool2023.txt'
-    file = '自选股202308.csv'
+    # # file = '自选股202308.csv'
+    #
+    # file_name = file.split('.')[0]
+    #
+    # df = pd.read_csv(file, dtype={'symbol': np.str_}, delimiter=',')
+    # # df['symbol']=df['symbol'].astype('string')
+    # stock_list = df.values
+    # # print(stock_list)
+    #
+    # l10_up_stock = []
+    # l10_path = file_name + '_10日短线上升通道股票.docx'
+    #
+    # l20_up_stock = []
+    # l20_path = file_name + '_20日短线上升通道股票.docx'
+    #
+    # l50_up_stock = []
+    # l50_path = file_name + '_50日长线上升通道股票.docx'
+    #
+    # l100_up_stock = []
+    # l100_path = file_name + '_100日长线上升通道股票.docx'
+    # for s in stock_list:
+    #     print(s)
+    #     code = s[0]
+    #     # 10日短线上升通道
+    #     # tagl10 = get_l10_up_stock(code, 10, 10)
+    #     tagl10 = is_up_stock(code, 10, 10)
+    #     if tagl10 == 1:
+    #         l10_up_stock.append(s)
+    #
+    #     # l20上升通道
+    #     # tagl20 = get_l20_up_stock(code,20,20)
+    #     tagl20 = is_up_stock(code,20,20)
+    #     if tagl20 == 1:
+    #         l20_up_stock.append(s)
+    #
+    #     # l50上升通道
+    #     # tagl50 = get_l50_up_stock(code)
+    #     tagl50 = is_up_stock(code,30,50)
+    #     if tagl50 == 1:
+    #         l50_up_stock.append(s)
+    #
+    #     # l100上升通道
+    #     # tagl100 = get_l100_up_stock(code)
+    #     tagl100 = is_up_stock(code,60,100)
+    #     if tagl100 == 1:
+    #         l100_up_stock.append(s)
+    #
+    # if len(l10_up_stock) > 0:
+    #     df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])
+    #     # 将股票列表写入文件，用于追踪监控
+    #     # 将股票列表写入数据库
+    #     output_doc(df, l10_path)
+    #
+    # if len(l20_up_stock) > 0:
+    #     df = pd.DataFrame(l20_up_stock, columns=['code', 'name'])
+    #     # 将股票列表写入数据库
+    #     output_doc(df, l20_path)
+    #
+    # if len(l50_up_stock) > 0:
+    #     df = pd.DataFrame(l50_up_stock, columns=['code', 'name'])
+    #     # 将股票列表写入数据库
+    #     output_doc(df, l50_path)
+    #
+    # if len(l100_up_stock) > 0:
+    #     df = pd.DataFrame(l100_up_stock, columns=['code', 'name'])
+    #     # 将股票列表写入数据库
+    #     output_doc(df, l100_path)
+    code = get_stock_code('三一重工')
+    is_up_stock(code, 12, 10)
+    plot_k_line_latestdays(code, 100,mav=(5,10,12,30))
 
-    file_name = file.split('.')[0]
-
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
-    # df['symbol']=df['symbol'].astype('string')
-    stock_list = df.values
-    # print(stock_list)
-
-    l10_up_stock = []
-    l10_path = file_name + '_10日短线上升通道股票.docx'
-
-    l20_up_stock = []
-    l20_path = file_name + '_20日短线上升通道股票.docx'
-
-    l50_up_stock = []
-    l50_path = file_name + '_50日长线上升通道股票.docx'
-
-    l100_up_stock = []
-    l100_path = file_name + '_100日长线上升通道股票.docx'
-    for s in stock_list:
-        print(s)
-        code = s[0]
-        # 10日短线上升通道
-        tagl10 = get_l10_up_stock(code, 10, 10)
-        if tagl10 == 1:
-            l10_up_stock.append(s)
-
-        # l20上升通道
-        tagl20 = get_l20_up_stock(code,20,20)
-        if tagl20 == 1:
-            l20_up_stock.append(s)
-
-        # l50上升通道
-        tagl50 = get_l50_up_stock(code)
-        if tagl50 == 1:
-            l50_up_stock.append(s)
-
-        # l100上升通道
-        tagl100 = get_l100_up_stock(code)
-        if tagl100 == 1:
-            l100_up_stock.append(s)
-
-    if len(l10_up_stock) > 0:
-        df = pd.DataFrame(l10_up_stock, columns=['code', 'name'])
-        # 将股票列表写入文件，用于追踪监控
-        # 将股票列表写入数据库
-        output_doc(df, l10_path)
-
-    if len(l20_up_stock) > 0:
-        df = pd.DataFrame(l20_up_stock, columns=['code', 'name'])
-        # 将股票列表写入数据库
-        output_doc(df, l20_path)
-
-    if len(l50_up_stock) > 0:
-        df = pd.DataFrame(l50_up_stock, columns=['code', 'name'])
-        # 将股票列表写入数据库
-        output_doc(df, l50_path)
-
-    if len(l100_up_stock) > 0:
-        df = pd.DataFrame(l100_up_stock, columns=['code', 'name'])
-        # 将股票列表写入数据库
-        output_doc(df, l100_path)

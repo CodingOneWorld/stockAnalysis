@@ -126,9 +126,9 @@ def extreme_price_compare(code):
 
 if __name__ == '__main__':
     # 获取自选股票池
-    # file = '自选股.csv'
-    file = 'stock_pool2023.txt'
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    file = '自选股202308.csv'
+    # file = 'stock_pool2023.txt'
+    df = pd.read_csv(file, dtype={'symbol': np.str_}, delimiter=',')
     stock_list = df.values
     selected_stock = []
     for s in stock_list:

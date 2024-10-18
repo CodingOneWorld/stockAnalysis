@@ -82,7 +82,7 @@ def get_l10_rebound_stock(file, path):
 if __name__ == '__main__':
     # stock_list=['600660']
     # file = 'stock_pool2023.txt'
-    file = '自选股.csv'
+    file = '自选股202308.csv'
 
     file_name = file.split('.')[0]
     path = file_name + '_10日短线反弹股票.docx'

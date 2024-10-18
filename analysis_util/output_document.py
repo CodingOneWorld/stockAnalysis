@@ -50,7 +50,7 @@ def example():
     document = Document()
     # type: Doc
     # 添加大标
-    document.add_heading('快快乐乐学Python', 0)
+    document.add_heading('自', 0)
     # 添加段落
     p = document.add_paragraph('Python是一门非常流行的编程语言')
     run = p.add_run('very easy')
@@ -80,7 +80,7 @@ def example():
         'second item in ordered list', style='List Number'
     )
     # 添加图片（注意路径和图片必须要存在）
-    document.add_picture('a.jpg', width=Cm(5.2))
+    # document.add_picture('a.jpg', width=Cm(5.2))
 
     # 添加分节符
     document.add_section()

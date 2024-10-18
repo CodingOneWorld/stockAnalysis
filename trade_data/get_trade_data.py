@@ -86,7 +86,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
         dtime = datetime.datetime.strptime(file.readlines()[0], "%Y-%m-%d %H:%M:%S")
         dtime2 = datetime.datetime.now()
         print(dtime,dtime2)
-        if (dtime2 - dtime).seconds / 3600 < 1:
+        if (dtime2 - dtime).total_seconds() / 3600 < 1:
             source = 'DB'
     # 将当前时间写入文件
     dtime = datetime.datetime.now()
@@ -96,7 +96,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
     stock_basic = get_stock_basic_list_2DB(source)
     # 更新交易数据，去除创业板和科创板
     stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
-            stock_basic.symbol.str.startswith('688') == False][stock_basic.symbol.str.startswith('8') == False]
+            stock_basic.symbol.str.startswith('688') == False][stock_basic.ts_code.str.contains('BJ') == False]
     # print(stock_basic)
     stocks_tspro = stock_basic['ts_code'].values
     print("ts_pro中最新股票列表数")
@@ -123,7 +123,8 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
         except Exception as e:
             print('获取交易数据失败', e, traceback.format_exc())
-            continue
+            time.sleep(60)
+            df = ts.pro_bar(ts_code=ts_code, adj='qfq')
         if df is None:
             continue
         df = df.dropna(axis=0, subset=["close"])

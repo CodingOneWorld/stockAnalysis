@@ -7,16 +7,16 @@ import numpy as np
 
 from analysis_util.cal_hist_price import cal_price_pct
 from analysis_util.cal_stock_trend import cal_stock_price_trend, get_stock_price, cal_trend_common
+from analysis_util.plot_k_line import plot_k_line
 
 # 获取上升通道股票
-from analysis_util.plot_k_line import plot_k_line
+# 以股价走势斜率判断上升通道
 
 path = './classification/'
 
-
 def get_up_trend_stocks(file):
     # 获取自选股票池
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    df = pd.read_csv(file, dtype={'symbol': np.str_}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     print(stock_list)
@@ -137,7 +137,7 @@ def get_low_price_stocks(df, latestdays=3000):
 
 # 获取反弹股
 if __name__ == '__main__':
-    file = '自选股.csv'
+    file = '自选股202308.csv'
     # file = 'stock_pool.txt'
     get_up_trend_stocks(file)
 

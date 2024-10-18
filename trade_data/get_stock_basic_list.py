@@ -28,7 +28,7 @@ pd.set_option('expand_frame_repr', False)
 def get_stock_basic_list(source='DB'):
     if source == 'file':
         # stock_basic=pd.read_csv('stock_list.csv',dtype={'symbol': np.str}, delimiter=',')
-        stock_basic = pd.read_csv('stock_list.csv', dtype={'symbol': np.str}, delimiter=',')
+        stock_basic = pd.read_csv('stock_list.csv', dtype={'symbol': np.str_}, delimiter=',')
         # 去除创业板和科创板
         stock_basic = stock_basic[stock_basic.symbol.str.startswith('3') == False][
             stock_basic.symbol.str.startswith('688') == False]
@@ -78,8 +78,11 @@ if __name__ == '__main__':
     # get_stock_basic_list_tspro2DB(DB_PATH)
     df = get_stock_basic_list('file')
     print(df.head())
-    df = df[df.symbol.str.startswith('3') == False]
-    print(df.count())
+    df = df[df.symbol.str.startswith('3') == False][
+        df.symbol.str.startswith('688') == False][df.ts_code.str.contains('BJ') == False]
+    # print(stock_basic)
+    stocks_tspro = df['ts_code'].values
+    print(len(df))
 
 # 废弃 ts 获取股票基本信息表
 # 获取股票的基础数据，按天来存储

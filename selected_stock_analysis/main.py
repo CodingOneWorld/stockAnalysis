@@ -31,32 +31,32 @@ if __name__ == '__main__':
         get_up_trend_stocks(file)
 
         # 超短线上升通道
-        df = pd.read_csv(path + '超短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '超短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '超短线上升通道%s.docx' % (file.split('.')[0]))
 
         # 短线上升通道
-        df = pd.read_csv(path + '短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '短线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '短线上升通道%s.docx' % (file.split('.')[0]))
 
         # 中线上升通道
-        df = pd.read_csv(path + '中线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '中线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '中线上升通道%s.docx' % (file.split('.')[0]))
 
         # 中长线上升通道
-        df = pd.read_csv(path + '中长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '中长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '中长线上升通道%s.docx' % (file.split('.')[0]))
 
         # 长线上升通道
-        df = pd.read_csv(path + '长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '长线上升通道%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '长线上升通道%s.docx' % (file.split('.')[0]))
 
         # 中期反弹
-        df = pd.read_csv(path + '中期反弹%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str})
+        df = pd.read_csv(path + '中期反弹%s.csv' % (file.split('.')[0]), dtype={'symbol': np.str_})
         # 输出到文档
         output_doc(df, path + '中期反弹%s.docx' % (file.split('.')[0]))
 
@@ -64,4 +64,4 @@ if __name__ == '__main__':
         get_l10_rebound_stock(file, path + '%s_10日短线反弹股票.docx' % (file.split('.')[0]))
 
         # 10日短线上升通道
-        get_l10_up_stock(file, path + '%s_10日短线上升通道股票.docx' % (file.split('.')[0]))
+        # get_l10_up_stock(file, path + '%s_10日短线上升通道股票.docx' % (file.split('.')[0]))
