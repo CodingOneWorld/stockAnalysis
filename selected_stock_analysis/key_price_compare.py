@@ -8,30 +8,10 @@ from analysis_util.cal_stock_trend import get_stock_price, cal_stock_price_trend
 from analysis_util.plot_k_line import plot_k_line, plot_k_line_latestdays, save_k_line
 
 from docx.shared import Cm
-from analysis_util.output_document import Doc
+from analysis_util.output_document import Doc, output_doc
 
 import pandas as pd
 import numpy as np
-
-
-def output_doc(df, file_path):
-    # doc文档
-    doc = Doc()
-    for line in df.values:
-        print(line)
-        doc.add_heading('，'.join(line))
-        symbol = line[0]
-
-        # 画出其最近100天，300天，1000天日线图
-        save_k_line(symbol, 100, './resources/kline100.png')
-        save_k_line(symbol, 300, './resources/kline300.png')
-        save_k_line(symbol, 1000, './resources/kline1000.png')
-        doc.add_picture('./resources/kline100.png', width=Cm(10))
-        doc.add_picture('./resources/kline300.png', width=Cm(10))
-        doc.add_picture('./resources/kline1000.png', width=Cm(10))
-
-    # 保存文档
-    doc.save(file_path)
 
 
 # 指定均线进行比较
