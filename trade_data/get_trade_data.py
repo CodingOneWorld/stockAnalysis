@@ -153,7 +153,9 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
 
 
 if __name__ == '__main__':
-    get_stock_trade_data('000001','20230101','20230801')
+    # get_stock_trade_data('000001','20230101','20230801')
+    df=get_stock_trade_data('689009')
+    print(df[-10:])
     # get_stock_trade_data_latestdays('000001', 50)
 
 # 旧方法，保留已有数据，每次累加数据，会有错误，因为每次前复权的价格都是以当前价格重新进行的计算，累加数据会有错误

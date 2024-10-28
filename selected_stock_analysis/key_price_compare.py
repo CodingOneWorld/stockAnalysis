@@ -16,30 +16,46 @@ import numpy as np
 
 # 指定均线进行比较
 # 均线应呈上升趋势，然后股价呈下降趋势，此时存在支撑
+def mav_compare_df(df, mav):
+    '''
+    :param df: 股票交易数据
+    :param mav_list:  需要比较的均线列表
+    :return:
+    '''
+    # 获取股票交易数据
+    his_price_df = df
+    his_price = his_price_df['close'].values
+    # print(his_price)
+    # 计算均线
+    stock_mean_list = []
+    his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
+    # print(his_price_df.head())
+    # 均线应呈上升趋势
+    # k=cal_trend_common(his_price_df['mean' + str(mav)][-mav:].values)
+    # 当前价格与均线进行比较
+    cur_price = his_price[-1]
+    mean = his_price_df['mean' + str(mav)].values[-1]
+    print(cur_price, mean)
+    print((cur_price-mean)/mean)
+    if mean * 0.99 <= cur_price <= mean * 1.01:
+        return 1
+
+    return 0
+
 def mav_compare(code, mav_list):
     '''
     :param code: 股票代码 6位数
     :param mav_list:  需要比较的均线列表
     :return:
     '''
+    stock_mean_list=[]
     # 获取股票交易数据
     his_price_df = get_stock_price(code, 'close')[-300:]
-    his_price = his_price_df['close'].values
-    print(his_price)
-    # 计算均线
-    stock_mean_list = []
     for mav in mav_list:
-        his_price_df['mean' + str(mav)] = his_price_df.close.rolling(window=mav).mean().fillna(0)
-        print(his_price_df.head())
-        # 均线应呈上升趋势
-        k=cal_trend_common(his_price_df['mean' + str(mav)][-mav:].values)
-        # 当前价格与均线进行比较
-        cur_price = his_price[-1]
-        mean = his_price_df['mean' + str(mav)].values[-1]
-        print(cur_price, mean)
-        if mean * 0.95 <= cur_price <= mean * 1.05 and k>0:
+        if mav_compare_df(his_price_df,mav)==1:
             stock_mean_list.append(mav)
-    print(stock_mean_list)
+
+
     if len(stock_mean_list) > 0:
         print('%s接近以下均线%s' % (code, ','.join([str(i) for i in stock_mean_list])))
 

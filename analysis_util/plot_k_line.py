@@ -64,8 +64,8 @@ def plot_k_line(code, start_date, end_date, mav=None):
     stock_trade_data = load_data(code, start_date, end_date)
     # OHLC图
     # # 设置mplfinance的蜡烛颜色，up为阳线颜色，down为阴线颜色
-    # my_color = mpf.make_marketcolors(up='r',
-    #                                  down='b',
+    # my_color = mpf.make_marketcolors(up='',
+    #                                  down='black',
     #                                  edge='inherit',
     #                                  wick='inherit',
     #                                  volume='inherit')
@@ -73,7 +73,32 @@ def plot_k_line(code, start_date, end_date, mav=None):
     # my_style = mpf.make_mpf_style(marketcolors=my_color,
     #                               figcolor='(0.82, 0.83, 0.85)',
     #                               gridcolor='(0.82, 0.83, 0.85)')
-    # mpf.plot(stock_trade_data)
+    # # mpf.plot(stock_trade_data)
+    # K线图，附带均线，成交量
+    # mpf.plot(stock_trade_data, type='candle', style=my_style, mav=mav, volume=True)
+    mpf.plot(stock_trade_data, type='candle', mav=mav, volume=True)
+
+def plot_k_line_df(df, mav=None):
+    if mav is None:
+        mav = [5, 10, 20, 30, 40, 60, 140]
+    df['trade_date'] = df['trade_date'].apply(
+        lambda x: datetime.datetime.strptime(str(x), '%Y%m%d'))
+    df.set_index("trade_date", inplace=True)
+    stock_trade_data = df[["open", "high", "close", "low", "vol"]]
+    stock_trade_data.rename(columns={'vol': 'volume'}, inplace=True)
+    # print(stock_trade_data.head())
+    # OHLC图
+    # # 设置mplfinance的蜡烛颜色，up为阳线颜色，down为阴线颜色
+    # my_color = mpf.make_marketcolors(up='',
+    #                                  down='black',
+    #                                  edge='inherit',
+    #                                  wick='inherit',
+    #                                  volume='inherit')
+    # # 设置图表的背景色
+    # my_style = mpf.make_mpf_style(marketcolors=my_color,
+    #                               figcolor='(0.82, 0.83, 0.85)',
+    #                               gridcolor='(0.82, 0.83, 0.85)')
+    # # mpf.plot(stock_trade_data)
     # K线图，附带均线，成交量
     # mpf.plot(stock_trade_data, type='candle', style=my_style, mav=mav, volume=True)
     mpf.plot(stock_trade_data, type='candle', mav=mav, volume=True)
@@ -100,4 +125,4 @@ def save_k_line(code, latest_days, save_path):
 if __name__ == '__main__':
     s = get_stock_code('三一重工')
     # plot_k_line_latestdays(s, 200)
-    plot_k_line(s,'20240101','20240417')
+    plot_k_line(s,'20230601','20240417')
