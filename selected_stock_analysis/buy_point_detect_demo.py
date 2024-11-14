@@ -57,10 +57,32 @@ if __name__ == '__main__':
 
     # 检测前低
     # 检测前低，与当前价格比较   检测前100天的极低点
-    data=df['low'].values[0:200]
-    y = cal_extreme_min_value(data)
-    y2 = cal_extreme_min_value(y[1])
-    print(y2)
+    # data=df['low'].values[0:200]
+    # y = cal_extreme_min_value(data)
+    # y2 = cal_extreme_min_value(y[1])
+    # print(y2[1])
+
+    # 最近5天是下降趋势，股价接近极低点
+    for i in range(150,212):
+        df2=df[0:i]
+        # 计算极低点
+        data = df2['low'].values[0:200]
+        y = cal_extreme_min_value(data)
+        y2 = cal_extreme_min_value(y[1])
+        exm_min_list=y2[1]
+        # 检测斜率 最近5天的斜率<0
+        k=cal_trend_common(df2['close'][-10:])
+        print('k:',k)
+        # 下降通道，接近极低点
+        exm_min_res = []
+        if k<0:
+            for tag in exm_min_list:
+                cur_price=df2['low'].values[-1]
+                if tag * 0.99 <= cur_price <= tag * 1.01:
+                    exm_min_res.append(tag)
+        print(exm_min_res)
+        plot_k_line_df(df2)
+
 
 
 

@@ -14,6 +14,13 @@ import pandas as pd
 import numpy as np
 
 
+def price_compare(cur_price,tag):
+    # print(cur_price, tag)
+    # print((cur_price - tag) / tag)
+    if tag * 0.99 <= cur_price <= tag * 1.01:
+        return 1
+    return 0
+
 # 指定均线进行比较
 # 均线应呈上升趋势，然后股价呈下降趋势，此时存在支撑
 def mav_compare_df(df, mav):
@@ -35,12 +42,9 @@ def mav_compare_df(df, mav):
     # 当前价格与均线进行比较
     cur_price = his_price[-1]
     mean = his_price_df['mean' + str(mav)].values[-1]
-    print(cur_price, mean)
-    print((cur_price-mean)/mean)
-    if mean * 0.99 <= cur_price <= mean * 1.01:
-        return 1
-
-    return 0
+    # print(cur_price, mean)
+    # print((cur_price-mean)/mean)
+    return price_compare(cur_price,mean)
 
 def mav_compare(code, mav_list):
     '''
