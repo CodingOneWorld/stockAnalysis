@@ -6,7 +6,7 @@ import pandas as pd
 import datetime
 import schedule
 import time
-
+import os
 from util.utils_common import get_dbpath_by_repo
 
 
@@ -24,19 +24,22 @@ def update_trade_data2db(DB_PATH):
     # update_date = (day0 + delta_1d).strftime('%Y%m%d')
     # # update_date = '20220402'
     # print(update_date)
-
+    t1 = datetime.datetime.now()
     get_daily_data_tspro2DB(DB_PATH, 0, 0)
+    t2 = datetime.datetime.now()
+    print("耗时：",t2 - t1)
 
 
 if __name__ == '__main__':
-    t1= datetime.datetime.now()
     DB_PATH = get_dbpath_by_repo()
-    # schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    if 'beyond19' in os.getcwd():
+        schedule.every().day.at("19:00").do(update_trade_data2db, DB_PATH)
+    else:
+        schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-    update_trade_data2db(DB_PATH)
+    # update_trade_data2db(DB_PATH)
 
-    t2= datetime.datetime.now()
-    print(t2-t1)
+
