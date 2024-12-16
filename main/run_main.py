@@ -9,7 +9,7 @@ from trade_data.get_trade_data import get_daily_data_tspro2DB
 from util.utils_common import get_dbpath_by_repo
 
 
-def schedule_run():
+def schedule_run(DB_PATH):
     '''
     需要定时运行的任务
     :return: null
@@ -27,10 +27,12 @@ def schedule_run():
 
 if __name__ == '__main__':
     DB_PATH = get_dbpath_by_repo()
-    if 'beyond19' in os.getcwd():
-        schedule.every().day.at("19:00").do(schedule_run, DB_PATH)
-    else:
-        schedule.every().day.at("17:00").do(schedule_run, DB_PATH)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # if 'beyond19' in os.getcwd():
+    #     schedule.every().day.at("19:00").do(schedule_run, DB_PATH)
+    # else:
+    #     schedule.every().day.at("22:03").do(schedule_run, DB_PATH)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
+
+    schedule_run(DB_PATH)
