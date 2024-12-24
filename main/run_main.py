@@ -27,12 +27,12 @@ def schedule_run(DB_PATH):
 
 if __name__ == '__main__':
     DB_PATH = get_dbpath_by_repo()
-    # if 'beyond19' in os.getcwd():
-    #     schedule.every().day.at("19:00").do(schedule_run, DB_PATH)
-    # else:
-    #     schedule.every().day.at("22:03").do(schedule_run, DB_PATH)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    if 'beyond19' in os.getcwd():
+        schedule.every().day.at("19:00").do(schedule_run, DB_PATH)
+    else:
+        schedule.every().day.at("17:01").do(schedule_run, DB_PATH)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-    schedule_run(DB_PATH)
+    # schedule_run(DB_PATH)
