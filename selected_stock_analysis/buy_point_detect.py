@@ -5,8 +5,8 @@
 上升通道回调
 下降通道到关键点位
 '''
+import datetime
 
-import pandas as pd
 import numpy as np
 import pandas as pd
 
@@ -21,16 +21,22 @@ from trade_data.get_trade_data import get_stock_trade_data
 
 import warnings
 
+from util.date_util import get_today_date, date_add
+
 warnings.filterwarnings("ignore")
 
 
-def buy_point_detect():
+def buy_point_detect(left_shift=0):
+    '''
+    :param left_shift: 取交易数据时，日期范围，最后一天日期往前推几天，比如当前交易数据到0110，left_shift=1，就是取截止到0109的数据
+    :return:
+    '''
     # 遍历股票，检测买点，输出到doc
     # 获取自选股票池
     file = '自选股202308.csv'
     df = pd.read_csv(file, dtype={'symbol': np.str_}, delimiter=',')
     stock_list = df.values
-    print(stock_list)
+    # print(stock_list)
 
     up_trend_correction_ls = []  # 上升通道回调
     down_trend_key_mav_ls = []  # 下降通道关键均线
@@ -39,7 +45,12 @@ def buy_point_detect():
         print(line)
         s = line[0]
         # 获取交易数据
-        df = get_stock_trade_data(s)[-300:]
+        df = get_stock_trade_data(s)
+        df=df[:len(df)-left_shift]
+        df=df[-300:]
+        print(df[-1:])
+        day_str=str(df[-1:]['trade_date'].values[0])
+        print(day_str)
 
         # 上升通道回调
         # 检测均线 10 20 30
@@ -55,9 +66,9 @@ def buy_point_detect():
                 if mean_tag == 1:
                     mean_near_list.append(mav)
             if len(mean_near_list) > 0:
-                res = '接近均线%s' % (','.join([str(i) for i in mean_near_list]))
+                res = '接近均线%s' % ('/'.join([str(i) for i in mean_near_list]))
                 print(res)
-                up_trend_correction_ls.append([line[0], line[1], res])
+                up_trend_correction_ls.append([line[0], line[1], res,day_str])
                 print(up_trend_correction_ls)
         # plot_k_line_df(df)
 
@@ -78,35 +89,41 @@ def buy_point_detect():
                 if tag * 0.99 <= cur_price <= tag * 1.01:
                     pre_lowest_ls.append(tag)
             if len(pre_lowest_ls) > 0:
-                res = '接近前低%s' % (','.join([str(i) for i in pre_lowest_ls]))
+                res = '接近前低%s' % ('/'.join([str(i) for i in pre_lowest_ls]))
                 print(res)
-                down_trend_pre_lowest_ls.append([line[0], line[1], res])
+                down_trend_pre_lowest_ls.append([line[0], line[1], res,day_str])
                 print(down_trend_pre_lowest_ls)
 
             # 计算60，140均线，比较
             key_mav_ls = []
-            for mav in [60, 140]:
+            for mav in [60, 140,250]:
                 mean_tag = mav_compare_df(df, mav)
                 if mean_tag == 1:
                     key_mav_ls.append(mav)
             if len(key_mav_ls) > 0:
-                res = '接近均线%s' % (','.join([str(i) for i in key_mav_ls]))
+                res = '接近均线%s' % ('/'.join([str(i) for i in key_mav_ls]))
                 print(res)
-                down_trend_key_mav_ls.append([line[0], line[1], res])
+                down_trend_key_mav_ls.append([line[0], line[1], res,day_str])
                 print(down_trend_key_mav_ls)
 
-    # 保存文档
+    # 保存文档,保存到csv文件中
     path = '上升通道回调.docx'
-    df = pd.DataFrame(up_trend_correction_ls, columns=['code', 'name', 'desc'])
+    df = pd.DataFrame(up_trend_correction_ls, columns=['code', 'name', 'desc','date'])
     output_doc(df, path)
+    df.to_csv(path_or_buf='上升通道回调.csv',index=0,mode='a',header=0)
 
     path = '下降通道到前低.docx'
-    df = pd.DataFrame(down_trend_pre_lowest_ls, columns=['code', 'name', 'desc'])
+    df = pd.DataFrame(down_trend_pre_lowest_ls, columns=['code', 'name', 'desc','date'])
     output_doc(df, path)
+    df.to_csv(path_or_buf='下降通道到前低.csv',index=0,mode='a',header=0)
+
 
     path = '下降通道到关键均线.docx'
-    df = pd.DataFrame(down_trend_key_mav_ls, columns=['code', 'name', 'desc'])
+    df = pd.DataFrame(down_trend_key_mav_ls, columns=['code', 'name', 'desc','date'])
     output_doc(df, path)
+    df.to_csv(path_or_buf='下降通道到关键均线.csv',index=0,mode='a',header=0)
+
+
 
 
 if __name__ == '__main__':

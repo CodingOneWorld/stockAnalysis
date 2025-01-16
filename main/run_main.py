@@ -30,7 +30,7 @@ if __name__ == '__main__':
     if 'beyond19' in os.getcwd():
         schedule.every().day.at("19:00").do(schedule_run, DB_PATH)
     else:
-        schedule.every().day.at("17:01").do(schedule_run, DB_PATH)
+        schedule.every().day.at("17:30").do(schedule_run, DB_PATH)
     while True:
         schedule.run_pending()
         time.sleep(1)
