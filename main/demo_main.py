@@ -9,8 +9,8 @@ if __name__ == '__main__':
     # 买点检测
     # for i in range(60):
     #     buy_point_detect(60-i)
-    buy_point_detect()
 
+    buy_point_detect(1)
 
     # # 效果追踪
     # # 获取买点csv文件中数据的日期，计算下一天的涨跌
