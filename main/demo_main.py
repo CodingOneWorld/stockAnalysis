@@ -1,16 +1,37 @@
+import datetime
+
 from analysis_util.cal_stock_trend import cal_trend_common
 from selected_stock_analysis.buy_point_detect import buy_point_detect
-from trade_data.get_trade_data import get_stock_trade_data_latestdays
+from trade_data.get_trade_data import get_stock_trade_data_latestdays, get_daily_data_tspro2DB
 
 import pandas as pd
 import numpy as np
 
+from util.utils_common import get_dbpath_by_repo
+
+
+def schedule_run(DB_PATH):
+    '''
+    需要定时运行的任务
+    :return: null
+    '''
+    # 交易数据获取
+    t1 = datetime.datetime.now()
+    get_daily_data_tspro2DB(DB_PATH, 1329, 0)
+    t2 = datetime.datetime.now()
+    print("耗时：", t2 - t1)
+
+    # 买点检测
+    buy_point_detect()
+
 if __name__ == '__main__':
+    DB_PATH = get_dbpath_by_repo()
+    schedule_run(DB_PATH)
     # 买点检测
     # for i in range(60):
     #     buy_point_detect(60-i)
 
-    buy_point_detect(1)
+    # buy_point_detect(1)
 
     # # 效果追踪
     # # 获取买点csv文件中数据的日期，计算下一天的涨跌
