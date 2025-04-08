@@ -17,7 +17,7 @@ def schedule_run(DB_PATH):
     '''
     # 交易数据获取
     t1 = datetime.datetime.now()
-    get_daily_data_tspro2DB(DB_PATH, 1329, 0)
+    get_daily_data_tspro2DB(DB_PATH, 0, 0)
     t2 = datetime.datetime.now()
     print("耗时：", t2 - t1)
 
