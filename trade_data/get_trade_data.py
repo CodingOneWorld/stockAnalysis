@@ -115,7 +115,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
         count -= 1
         if count < 0:
             time.sleep(5)
-            count = 200
+            count = 50
         name = stock_basic['name'].loc[stock_basic['ts_code'] == ts_code].values[0]
         print(name)
         # 加入try catch
@@ -123,7 +123,7 @@ def get_daily_data_tspro2DB(filepath, cou_new, cou_del,source='online'):
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
         except Exception as e:
             print('获取交易数据失败', e, traceback.format_exc())
-            time.sleep(60)
+            time.sleep(40)
             df = ts.pro_bar(ts_code=ts_code, adj='qfq')
         if df is None:
             continue
