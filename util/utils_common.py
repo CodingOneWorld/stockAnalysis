@@ -27,10 +27,10 @@ def get_engine(path):
 # 根据不同的仓库返回不同的DB_PATH
 def get_dbpath_by_repo():
     # cur_repo=get_cur_repo()
-    if 'beyond19' in os.getcwd():
-        return "/Users/beyond19/DB/stock_data.db"
-    elif 'beyond' in os.getcwd():
+    if 'beyond' in os.getcwd():
         return "/Users/beyond/DB/stock_data.db"
+    elif 'smith' in os.getcwd():
+        return "/Users/smith/DB/stock_data.db"
     else:
         return "E:/Money/stock_data.db"
 
