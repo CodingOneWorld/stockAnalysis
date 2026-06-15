@@ -28,8 +28,8 @@ def schedule_run(DB_PATH):
 if __name__ == '__main__':
     DB_PATH = get_dbpath_by_repo()
     print(DB_PATH)
-    if 'beyond' in os.getcwd():
-        schedule.every().day.at("17:30").do(schedule_run, DB_PATH)
+    if 'Users' in os.getcwd():
+        schedule.every().day.at("17:00").do(schedule_run, DB_PATH)
     else:
         schedule.every().day.at("19:30").do(schedule_run, DB_PATH)
     while True:

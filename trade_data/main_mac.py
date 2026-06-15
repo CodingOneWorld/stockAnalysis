@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+
+from trade_data.etf_main import run_etf_update
 from trade_data.get_trade_data import get_daily_data_tspro2DB
 import pandas as pd
 import datetime
@@ -26,16 +28,18 @@ def update_trade_data2db(DB_PATH):
     # print(update_date)
     t1 = datetime.datetime.now()
     get_daily_data_tspro2DB(DB_PATH, 0, 0)
+    time.sleep(5)
+    run_etf_update(source='online')
     t2 = datetime.datetime.now()
     print("耗时：",t2 - t1)
 
 
 if __name__ == '__main__':
     DB_PATH = get_dbpath_by_repo()
-    if 'beyond19' in os.getcwd():
-        schedule.every().day.at("19:00").do(update_trade_data2db, DB_PATH)
-    else:
+    if 'Users' in os.getcwd():
         schedule.every().day.at("17:00").do(update_trade_data2db, DB_PATH)
+    else:
+        schedule.every().day.at("19:00").do(update_trade_data2db, DB_PATH)
     while True:
         schedule.run_pending()
         time.sleep(1)

@@ -12,6 +12,61 @@ import math
 
 # 以均线判断上升通道
 
+
+# ──────────────────────────────────────────────
+# 成交量工具函数
+# ──────────────────────────────────────────────
+
+def cal_volume_ratio(his_price_df: pd.DataFrame, recent_days: int = 5,
+                     base_days: int = 20) -> float:
+    """
+    计算量比：最近 recent_days 日均量 / 其前 (base_days - recent_days) 日均量。
+
+    例：recent_days=5, base_days=20 → 近5日均量 / 前15日均量
+    > 1.5 : 近期明显放量
+    < 0.7 : 近期明显缩量
+    返回 1.0 表示数据不足（中性）。
+    """
+    if 'vol' not in his_price_df.columns:
+        return 1.0
+    vol = his_price_df['vol'].values.astype(float)
+    if len(vol) < base_days:
+        return 1.0
+    recent_avg = vol[-recent_days:].mean()
+    # 基准取 recent_days 之前的 (base_days - recent_days) 根 K 线
+    base_avg = vol[-(base_days):-recent_days].mean()
+    if base_avg == 0:
+        return 1.0
+    return float(recent_avg / base_avg)
+
+
+def cal_single_day_vol_ratio(his_price_df: pd.DataFrame, base_days: int = 5) -> float:
+    """
+    计算当日（最后一根 K 线）成交量 / 过去 base_days 日均量。
+    常见判断：> 1.5 当日放量；< 0.5 当日极度缩量。
+    """
+    if 'vol' not in his_price_df.columns:
+        return 1.0
+    vol = his_price_df['vol'].values.astype(float)
+    if len(vol) < base_days + 1:
+        return 1.0
+    today_vol = vol[-1]
+    base_avg  = vol[-(base_days + 1):-1].mean()
+    if base_avg == 0:
+        return 1.0
+    return float(today_vol / base_avg)
+
+
+def cal_volume_trend(his_price_df: pd.DataFrame, days: int = 10) -> float:
+    """
+    计算成交量趋势斜率（归一化收益率回归）：对最近 days 天成交量做线性回归。
+    > 0 表示量在放大；< 0 表示量在萎缩。
+    """
+    if 'vol' not in his_price_df.columns or len(his_price_df) < days:
+        return 0.0
+    vol = his_price_df['vol'].values[-days:].astype(float)
+    return cal_trend_common(vol)
+
 # 中线（20d）上升通道的股票
 # 最近20天 股价斜率大于0
 # 最近20天 股价均高于20日均线
@@ -165,8 +220,8 @@ if __name__ == '__main__':
     # is_up_stock(code, 12, 10)
     # plot_k_line_latestdays(code, 100, mav=(5, 10, 12, 30))
 
-    file = 'stock_pool2023.txt'
-    # file = '自选股202308.csv'
+    # file = 'stock_pool2023.txt'
+    file = '自选股202308.csv'
 
     file_name = file.split('.')[0]
 

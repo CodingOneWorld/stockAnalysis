@@ -26,7 +26,7 @@ def select_up_trend_stocks(stock_list,latest_days):
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('stock_pool.txt', delimiter=',', dtype={'symbol': np.str})
+    df = pd.read_csv('stock_pool.txt', delimiter=',', dtype={'symbol': str})
     print(df.head())
     stock_list = list(df.values)
     stock_array=select_up_trend_stocks(stock_list,20)

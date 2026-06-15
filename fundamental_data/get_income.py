@@ -1,118 +1,190 @@
 # -*- coding: utf-8 -*-
+"""
+获取全量 A 股历史年度营业收入，写入数据库 income_all_stocks 表。
+数据源：AKShare 东方财富年度利润表（stock_profit_sheet_by_yearly_em）
+输出宽表格式：symbol, name, income_YYYY, income_YYYY+1, ...
 
-import tushare as ts
-import pandas as pd
-from datetime import date
+对外接口：
+  income_of_all_stocks2db(max_workers)  全量并发写库（主入口）
+  get_income_of_latest_years(code, n)   从数据库取单只最近 n 年收入数组
+"""
+
 import sqlite3
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from analysis_util.cal_stock_trend import cal_trend_common
-from util.utils_common import code2ts_code, get_dbpath_by_repo
+import akshare as ak
+import pandas as pd
+
+from util.utils_common import get_dbpath_by_repo
 
 DB_PATH = get_dbpath_by_repo()
 
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
-# 显示所有列
 pd.set_option('display.max_rows', None)
-# 设置数据的显示长度，默认为50
-pd.set_option('max_colwidth', 1000)
-# 禁止自动换行(设置为Flase不自动换行，True反之)
+pd.set_option('max_colwidth', 200)
 pd.set_option('expand_frame_repr', False)
-# 设置显示宽度为1000，避免其换行
-pd.set_option('display.width', 1000)
 
 
-# 获取收入数据
-# 获取某年到现在的年收入数据
-def query_income_since(year1):
-    year2 = date.today().year - 1
+# ──────────────────────────────────────────────
+# 内部：拉取单只股票历史年度营业收入
+# ──────────────────────────────────────────────
 
-    # ts_code转化 code2ts_code(x)
-    # 获取第一年的收入数据，只获取股票名称
-    df_income = ts.get_profit_data(year1, 4).loc[:, ['code', 'name']]
-    # df_Income['code'] = df_Income['code'].apply(lambda x: str(x))
-    df_income['ts_code'] = df_income['code'].apply(lambda x: code2ts_code(x))
+def _fetch_income_one(symbol: str, name: str) -> dict | None:
+    """
+    拉取单只股票所有年报营业总收入（TOTAL_OPERATE_INCOME）。
+    返回 dict：{'symbol': ..., 'name': ..., 'income_YYYY': float, ...}
+    失败返回 None。
+    symbol：6位纯数字代码，如 '000001'
+    """
+    prefix = 'SH' if symbol.startswith('6') else 'SZ'
+    em_code = prefix + symbol
+    try:
+        df = ak.stock_profit_sheet_by_yearly_em(symbol=em_code)
+        if df is None or df.empty:
+            return None
+        if 'REPORT_DATE' not in df.columns:
+            return None
 
-    for year in range(year1, year2):
-        df1 = ts.get_profit_data(year, 4).loc[:, ['code', 'name', 'business_income']]
-        # df1['code'] = df1['code'].apply(lambda x: str(x).split('.')[0])
-        df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-        df1.rename(columns={'business_income': 'income_' + str(year)}, inplace=True)
-        # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-        df_income = df_income.merge(df1, how="outer")
-        # df_profile.drop_duplicates()
-        print()
-        print(df_income.head())
-        df_income.drop_duplicates(['name'], inplace=True)
+        # 营业收入字段：普通股票用 TOTAL_OPERATE_INCOME，银行类用 OPERATE_INCOME 回退
+        income_col = None
+        for col in ['TOTAL_OPERATE_INCOME', 'OPERATE_INCOME']:
+            if col in df.columns:
+                # 检查该列是否有非空值
+                if df[col].notna().any():
+                    income_col = col
+                    break
+        if income_col is None:
+            return None
 
-    # 最后一年数据可能不全，单独处理并做外连接
-    df1 = ts.get_profit_data(year2, 4).loc[:, ['code', 'name', 'business_income']]
-    df1['code'] = df1['code'].apply(lambda x: str(x))
-    df1['ts_code'] = df1['code'].apply(lambda x: code2ts_code(x))
-    df1.rename(columns={'business_income': 'income_' + str(year2)}, inplace=True)
-    # df1.rename(columns={'net_profits': 'net_profits' + str(year)}, inplace=True)
-    df_income = df_income.merge(df1, how="outer")
-    df_income.drop_duplicates(['name'], inplace=True)
+        # 只取年报（REPORT_DATE 月日为 12-31），避免 DataFrame 碎片化警告
+        dates = pd.to_datetime(df['REPORT_DATE'])
+        mask = (dates.dt.month == 12) & (dates.dt.day == 31)
+        annual = df[mask].copy()
+        annual_dates = dates[mask]
+        if annual.empty:
+            return None
 
-    # 缺失值处理，参考同一行中NaN前面的值来填充，其他再填充0
-    df_income = df_income.fillna(method="backfill", axis=1)
-    # df_income = df_income.fillna(method='pad', axis = 1)
-    df_income = df_income.fillna(0)
-    print(df_income[['code', 'name']])
-    return df_income
+        # 接口返回倒序（最新在前），需升序排列保证 year 列顺序正确
+        sort_order = annual_dates.argsort()
+        annual = annual.iloc[sort_order.values]
+        annual_dates = annual_dates.iloc[sort_order.values]
+
+        row = {'symbol': symbol, 'name': name}
+        for idx, r in annual.iterrows():
+            year = str(annual_dates[idx].year)
+            val = r[income_col]
+            try:
+                row[f'income_{year}'] = float(val) if pd.notna(val) else 0.0
+            except (ValueError, TypeError):
+                row[f'income_{year}'] = 0.0
+        return row
+
+    except Exception:
+        return None
 
 
-# 获取最近n年收入数据  latest_years=n
-def get_income_latest_years_online(latest_years):
-    year2 = date.today().year - 1
-    year1 = year2 - latest_years
-    df_income = query_income_since(year1)
-    return df_income
+# ──────────────────────────────────────────────
+# 全量并发写库
+# ──────────────────────────────────────────────
 
-
-# 获取所有股票的全部历史收入信息,并写入数据库
-def income_of_all_stocks2db():
-    # 获取股票列表及其上市时间
-    # pandas连接数据库
-    year = 1989
-    print(year)
-    df_income = query_income_since(year)
-    print(df_income)
-    print(df_income.count())
-
-    # 连接sqlite数据库
+def income_of_all_stocks2db(max_workers: int = 10):
+    """
+    并发拉取全量 A 股历史年度营业收入，写入数据库 income_all_stocks 表。
+    max_workers : 并发线程数（默认 10）
+    """
     conn = sqlite3.connect(DB_PATH)
-    print("Open database successfully")
-    df_income.to_sql('income_all_stocks', con=conn, if_exists='replace', index=False)
-    print("insert database successfully")
+    try:
+        stock_list = pd.read_sql('SELECT symbol, name FROM stock_list', conn)
+    except Exception:
+        print('[get_income] 读取 stock_list 失败，请先运行 trade_data 更新股票列表')
+        conn.close()
+        return
+    conn.close()
 
+    stocks = list(zip(stock_list['symbol'], stock_list['name']))
+    total = len(stocks)
+    print(f'[get_income] 待拉取股票数：{total}，并发线程：{max_workers}')
 
-def get_income_of_latest_years(code, latest_years):
-    # pandas连接数据库
+    results = []
+    done = 0
+    failed = 0
+    start_time = time.time()
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(_fetch_income_one, sym, name): sym
+            for sym, name in stocks
+        }
+        for future in as_completed(futures):
+            done += 1
+            try:
+                row = future.result()
+                if row:
+                    results.append(row)
+                else:
+                    failed += 1
+            except Exception:
+                failed += 1
+
+            if done % 50 == 0 or done == total:
+                elapsed = time.time() - start_time
+                rate = done / elapsed * 60
+                eta = (total - done) / (done / elapsed) if done > 0 else 0
+                print(f'[get_income] [{done}/{total}] 成功:{done - failed} 失败:{failed} '
+                      f'速率:{rate:.1f}只/分 剩余:{eta/60:.1f}分钟')
+
+    if not results:
+        print('[get_income] 未获取到任何数据，退出')
+        return
+
+    df_all = pd.DataFrame(results)
+    year_cols = sorted([c for c in df_all.columns if c.startswith('income_')])
+    df_all = df_all[['symbol', 'name'] + year_cols].fillna(0)
+
     conn = sqlite3.connect(DB_PATH)
-    stock_income_data = pd.read_sql('select * from income_all_stocks', conn)
-    # print(stock_income_data.columns)
-    # 判断需要查的股票代码是否在数据库中
-    stock_income_list = stock_income_data['code'].values
-    if stock_income_list.__contains__(code):
-        return stock_income_data[stock_income_data['code'] == code].iloc[:, -latest_years:].values[0]
-        # print(income_data)
-    else:
+    df_all.to_sql('income_all_stocks', con=conn, if_exists='replace', index=False)
+    conn.close()
+
+    elapsed = time.time() - start_time
+    print(f'\n[get_income] 完成！写入 {len(df_all)} 只，历史年份：{len(year_cols)} 年，'
+          f'耗时 {elapsed/60:.1f} 分钟')
+    print(f'[get_income] 年份范围：{year_cols[0] if year_cols else "无"} ~ {year_cols[-1] if year_cols else "无"}')
+
+
+# ──────────────────────────────────────────────
+# 对外查询接口（与原版兼容）
+# ──────────────────────────────────────────────
+
+def get_income_of_latest_years(code: str, latest_years: int) -> list:
+    """
+    从数据库 income_all_stocks 表取指定股票最近 latest_years 年的年度营业收入列表。
+    code：6位纯数字代码，如 '000001'
+    返回：数值列表（升序），若无数据返回 [0]
+    """
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        # 只查当前股票行，不把全表加载到内存
+        row_df = pd.read_sql(
+            'SELECT * FROM income_all_stocks WHERE symbol=?', conn,
+            params=(code,)
+        )
+    except Exception:
         return [0]
+    finally:
+        conn.close()
+
+    if row_df.empty:
+        return [0]
+
+    year_cols = sorted([c for c in row_df.columns if c.startswith('income_')])
+    values = row_df.iloc[0][year_cols].values.tolist()
+    if len(values) >= latest_years:
+        return [float(v) for v in values[-latest_years:]]
+    return [float(v) for v in values] if values else [0]
 
 
 if __name__ == '__main__':
-    income_of_all_stocks2db()
-
-    # get_income_latest_years_online(5)
-
-
-    # income = get_income_of_latest_years('002714', 5)
-    # print(income)
-    # k = cal_trend_common(income)
-    # print(k)
-
-    # ts获取某年利润数据，
-    # df_Income = ts.get_profit_data(2015, 4).loc[:, ['code', 'name', 'business_income']]
-    # df = df_Income[df_Income['name']=='兆易创新']
-    # print(df)
+    # income_of_all_stocks2db(max_workers=10)
+    df=get_income_of_latest_years('000001', 5)
+    print(df)

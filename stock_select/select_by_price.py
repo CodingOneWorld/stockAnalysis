@@ -12,7 +12,7 @@ if __name__ == '__main__':
     file = 'stock_pool2023.txt'
 
     # 遍历股票池，计算当前股价所处的位置
-    df = pd.read_csv(file, dtype={'symbol': np.str}, delimiter=',')
+    df = pd.read_csv(file, dtype={'symbol': str}, delimiter=',')
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     # print(stock_list)

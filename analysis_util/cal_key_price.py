@@ -7,8 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.interpolate import interp1d
-from scipy.misc import derivative
-
 from analysis_util.cal_stock_trend import get_stock_price
 from analysis_util.general_utils import get_stock_code
 

@@ -31,6 +31,8 @@ def get_dbpath_by_repo():
         return "/Users/beyond/DB/stock_data.db"
     elif 'smith' in os.getcwd():
         return "/Users/smith/DB/stock_data.db"
+    elif 'zhangqi21' in os.getcwd():
+        return "/Users/zhangqi21/DB/stock_data.db"
     else:
         return "E:/Money/stock_data.db"
 

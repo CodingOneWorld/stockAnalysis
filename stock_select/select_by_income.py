@@ -1,62 +1,75 @@
 # -*- coding: utf-8 -*-
+"""
+精筛选第一步：按营业收入增速筛选（第二层）
 
-import pandas as pd
-import tushare as ts
+从财务数据库中筛选近 n_years 年收入持续增长的股票。
+当传入 symbol_list 时，只在候选池范围内筛选（对接预筛选结果）；
+不传则扫全库。
+"""
 import sqlite3
+import pandas as pd
 
 from util.utils_common import get_dbpath_by_repo
 
 DB_PATH = get_dbpath_by_repo()
 
-# 显示所有行(参数设置为None代表显示所有行，也可以自行设置数字)
 pd.set_option('display.max_columns', None)
-# 显示所有列
 pd.set_option('display.max_rows', None)
-# 设置数据的显示长度，默认为50
 pd.set_option('max_colwidth', 200)
-# 禁止自动换行(设置为Flase不自动换行，True反之)
 pd.set_option('expand_frame_repr', False)
 
 
-def select_by_income():
-    # pandas连接数据库
+def select_by_income(n_years: int = 5,
+                     min_growth_pct: float = 0.1,
+                     symbol_list: list = None) -> list:
+    """
+    筛选近 n_years 年营业收入持续增长（每年增速 >= min_growth_pct）的股票。
+
+    n_years        : 考察年数（默认5年）
+    min_growth_pct : 最低年增速门槛（默认10%）
+    symbol_list    : 候选股票代码列表（来自预筛选）；为 None 时扫全库
+
+    返回：满足条件的股票代码列表（symbol）
+    """
     conn = sqlite3.connect(DB_PATH)
-    incomeData = pd.read_sql('select * from income_all_stocks', conn)
-    # print(incomeData.head())
+    income_data = pd.read_sql('SELECT * FROM income_all_stocks', conn)
+    conn.close()
 
-    # 计算每年的收入增长幅度
-    # 计算每年的收入增长率
-    for i in range(4):
-        # 增长幅度
-        incomeData['change' + str(i + 1)] = incomeData['income_' + str(2017 + i + 1)] - incomeData[
-            'income_' + str(2017 + i)]
-        # 增长率
-        incomeData['pct_change' + str(i + 1)] = (incomeData['income_' + str(2017 + i + 1)] - incomeData[
-            'income_' + str(2017 + i)]) / incomeData['income_' + str(2017 + i)]
-    # print(incomeData.head())
+    # 若传入候选池，只保留候选范围内的股票
+    if symbol_list is not None:
+        income_data = income_data[income_data['symbol'].isin(symbol_list)]
+        print(f'[收入筛选] 候选池 {len(symbol_list)} 只 → 财务库匹配 {len(income_data)} 只')
 
-    # 筛选近五年收入持续增长的股票
-    data = \
-        incomeData.loc[incomeData['change1'] > 0].loc[incomeData['change2'] > 0].loc[
-            incomeData['change3'] > 0].loc[
-            incomeData['change4'] > 0]
-    # print(data.count())
-    # # 筛选5年收入增长率越来越高的股票
-    # data2 = \
-    #     data.loc[data['pct_change4'] > data['pct_change3']].loc[data['pct_change3'] > data['pct_change2']].loc[
-    #         data['pct_change2'] > data['pct_change1']]
-    # 筛选5年收入一直增长的股票
-    data2 = \
-        data.loc[data['pct_change4'] >= 0.1].loc[data['pct_change3'] >= 0.1].loc[
-            data['pct_change2'] >= 0.1].loc[data['pct_change1'] >= 0.1]
-    print(data2[['code','name','income_2017','income_2018','income_2019','income_2020','income_2021']])
-    data2[['code', 'name', 'income_2017', 'income_2018', 'income_2019', 'income_2020', 'income_2021']].reset_index(
-        drop=True).to_csv('select_by_income.csv',index=0)
-    return data2['code'].values
+    # 动态解析年份列
+    year_cols = sorted([c for c in income_data.columns if c.startswith('income_')])
+    years = [int(c.split('_')[1]) for c in year_cols]
+    recent_year_cols = year_cols[-n_years:]
+    recent_years = years[-n_years:]
+
+    # 计算相邻年份增长幅度和增速
+    for i in range(len(recent_years) - 1):
+        col_cur  = f'income_{recent_years[i + 1]}'
+        col_prev = f'income_{recent_years[i]}'
+        income_data[f'change_{i + 1}']     = income_data[col_cur] - income_data[col_prev]
+        income_data[f'pct_change_{i + 1}'] = income_data[f'change_{i + 1}'] / income_data[col_prev]
+
+    change_cols     = [f'change_{i + 1}'     for i in range(len(recent_years) - 1)]
+    pct_change_cols = [f'pct_change_{i + 1}' for i in range(len(recent_years) - 1)]
+
+    # 筛选：每年增长幅度 > 0 且增速 >= min_growth_pct
+    mask = pd.Series([True] * len(income_data), index=income_data.index)
+    for c in change_cols:
+        mask = mask & (income_data[c] > 0)
+    for c in pct_change_cols:
+        mask = mask & (income_data[c] >= min_growth_pct)
+
+    result = income_data.loc[mask, ['symbol', 'name'] + recent_year_cols].reset_index(drop=True)
+    print(f'[收入筛选] 近{n_years}年收入持续增长（增速≥{min_growth_pct:.0%}）：{len(result)} 只')
+    result.to_csv('select_by_income.csv', index=False)
+    return result['symbol'].tolist()
 
 
-
-
-stocks = select_by_income()
-print(stocks)
-# print(len(stocks))
+if __name__ == '__main__':
+    # 独立运行时扫全库
+    stocks = select_by_income()
+    print(stocks)

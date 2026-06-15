@@ -2,6 +2,8 @@
 
 # 将股票进行分类，即自选股分板块，如上升通道，低价股等等
 
+import os
+import pathlib
 import pandas as pd
 import numpy as np
 
@@ -12,7 +14,9 @@ from analysis_util.plot_k_line import plot_k_line
 # 获取上升通道股票
 # 以股价走势斜率判断上升通道
 
+# 输出目录，自动创建（相对于当前工作目录）
 path = './classification/'
+pathlib.Path(path).mkdir(parents=True, exist_ok=True)
 
 def get_up_trend_stocks(file):
     # 获取自选股票池
@@ -20,9 +24,15 @@ def get_up_trend_stocks(file):
     # df['symbol']=df['symbol'].astype('string')
     stock_list = df.values
     print(stock_list)
-    grad1 = 0.1
-    grad2 = 0.2
-    grad3 = 0.3
+    # ── 归一化斜率阈值（单位：收益率/天）──────────────────────────
+    # 斜率已归一化，可跨股票使用同一阈值：
+    #   强上升通道 k > 0.005  （日均 +0.5%，20日约 +10%）
+    #   弱上升通道 k > 0.002
+    #   强下降通道 k < -0.005
+    # 原版使用绝对价格斜率（0.1/0.2/0.3），已替换为归一化阈值
+    grad_up_strong = 0.005   # 强上升信号（原 grad2=0.2）
+    grad_up_weak   = 0.002   # 弱上升信号（原 grad1=0.1）
+    grad_dn_weak   = -0.002  # 弱下降信号
 
     # 趋势筛选，处于上升趋势
     # 超短线，最近3、5日处于上升趋势
@@ -49,35 +59,33 @@ def get_up_trend_stocks(file):
         s = line[0]
         # 获取股票历史价格
         stock_price = get_stock_price(s, 'close').values
-        k3 = cal_stock_price_trend(stock_price, 3)
-        k5 = cal_stock_price_trend(stock_price, 5)
-        k10 = cal_stock_price_trend(stock_price, 10)
-        k30 = cal_stock_price_trend(stock_price, 30)
-        k60 = cal_stock_price_trend(stock_price, 60)
-        k90 = cal_stock_price_trend(stock_price, 90)
+        k3   = cal_stock_price_trend(stock_price, 3)
+        k5   = cal_stock_price_trend(stock_price, 5)
+        k10  = cal_stock_price_trend(stock_price, 10)
+        k30  = cal_stock_price_trend(stock_price, 30)
+        k60  = cal_stock_price_trend(stock_price, 60)
+        k90  = cal_stock_price_trend(stock_price, 90)
         k120 = cal_stock_price_trend(stock_price, 120)
-        # k180 = cal_stock_price_trend(s, 180)
-        # k300 = cal_stock_price_trend(s, 300)
         k3000 = cal_stock_price_trend(stock_price, 4000)
 
-        # 上升趋势
-        if k3 > grad2 and k5 > grad2:
+        # 上升趋势（使用归一化阈值）
+        if k3 > grad_up_strong and k5 > grad_up_strong:
             super_short_stocks.append(line)
-        if k5 > grad2 and k10 > grad2:
+        if k5 > grad_up_strong and k10 > grad_up_strong:
             short_stocks.append(line)
-        if k30 > grad2 and k10 > grad2:
+        if k30 > grad_up_strong and k10 > grad_up_strong:
             medium_stocks.append(line)
-        if k60 > grad2 and k120 > grad2:
+        if k60 > grad_up_strong and k120 > grad_up_strong:
             medium_long_stocks.append(line)
-        if k3000 > grad1:
+        if k3000 > grad_up_weak:
             long_stock.append(line)
 
-        # 反弹
-        if k30 < 0 and k5 > grad1:
+        # 反弹（中长期下降 + 短期上升）
+        if k30 < grad_dn_weak and k5 > grad_up_weak:
             rebound_stocks_l.append(line)
-        if k60 < 0 and k10 > grad1:
+        if k60 < grad_dn_weak and k10 > grad_up_weak:
             rebound_stocks_m.append(line)
-        if k90 < 0 and k30 > grad1:
+        if k90 < grad_dn_weak and k30 > grad_up_weak:
             rebound_stocks_h.append(line)
 
     print("趋势股：")
